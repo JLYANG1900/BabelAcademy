@@ -4,20 +4,27 @@ import { PlayerProfile } from '../types';
 
 interface SidebarProps {
     profile: PlayerProfile;
+    isMobileEmbedded?: boolean;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ profile }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ profile, isMobileEmbedded = false }) => {
     return (
-        <aside className="w-full lg:w-80 h-full bg-[#e6dac0] border-r border-ink flex flex-col shadow-[10px_0_30px_-5px_rgba(0,0,0,0.4)] z-10 font-serif relative overflow-hidden select-none">
+        <aside className={`
+            bg-[#e6dac0] border-ink flex flex-col z-10 font-serif relative overflow-hidden select-none
+            ${isMobileEmbedded ? 'w-full h-auto border-none shadow-none' : 'w-full lg:w-80 h-full border-r shadow-[10px_0_30px_-5px_rgba(0,0,0,0.4)]'}
+        `}>
             {/* Paper texture overlay */}
             <div className="absolute inset-0 bg-noise opacity-30 pointer-events-none"></div>
             <div className="absolute inset-0 bg-paper-texture opacity-60 pointer-events-none mix-blend-multiply"></div>
 
-            {/* Vertical Separator Line (Simulating column fold) */}
-            <div className="absolute right-1 top-0 bottom-0 w-[1px] bg-ink/10"></div>
+            {/* Vertical Separator Line (Simulating column fold) - Only for desktop sidebar */}
+            {!isMobileEmbedded && <div className="absolute right-1 top-0 bottom-0 w-[1px] bg-ink/10"></div>}
 
             {/* Scrollable Container */}
-            <div className="flex-1 overflow-y-auto p-5 relative z-10 flex flex-col gap-6 hide-scrollbar">
+            <div className={`
+                relative z-10 flex flex-col gap-6 hide-scrollbar
+                ${isMobileEmbedded ? 'h-auto p-2' : 'flex-1 overflow-y-auto p-5'}
+            `}>
 
                 {/* Newspaper Header (Masthead) */}
                 <header className="flex flex-col items-center border-b-4 border-double border-ink pb-4">
