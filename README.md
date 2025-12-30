@@ -6,7 +6,7 @@
 
 **Babel Academy** 是一个由 Google Gemini 大语言模型驱动的沉浸式文字冒险游戏（RPG）。游戏背景设定在一个架空的维多利亚时代，你将扮演一名皇家翻译学院的学生，在学习古老语言与刻银术的同时，卷入帝国与革命派系的政治漩涡。
 
-🔗 **[在线游玩 (Github Pages)](https://JLYANG1900.github.io/BabelAcademy/)** (请替换为您的实际部署链接)
+🔗 **[在线游玩 (Github Pages)](https://JLYANG1900.github.io/BabelAcademy/)**
 
 ---
 
