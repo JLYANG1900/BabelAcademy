@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>巴别塔档案馆 | The Babel Archive</title>
+  <meta name="description" content="基于LLM的维多利亚工业哥特风格文字交互游戏 - 巴别塔 / 皇家翻译学院" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Courier+Prime&display=swap"
+    rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            parchment: '#f0e6d2',
+            ink: '#1a1a1a',
+            gold: '#bfa67a',
+            crimson: '#8b0000',
+            academy: '#2c3e50',
+            'parchment-dark': '#e6dac0',
+          },
+          fontFamily: {
+            display: ['"Cinzel"', 'serif'],
+            body: ['"Cormorant Garamond"', 'serif'],
+            mono: ['"Courier Prime"', 'monospace'],
+          },
+          backgroundImage: {
+            'paper-texture': "url('https://www.transparenttextures.com/patterns/cream-paper.png')",
+            'noise': "url('https://www.transparenttextures.com/patterns/stardust.png')",
+          },
+          boxShadow: {
+            'gothic': '0 10px 30px -5px rgba(26, 26, 26, 0.5)',
+            'inner-paper': 'inset 0 0 40px rgba(191, 166, 122, 0.3)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #1a1a1a;
+      color: #1a1a1a;
+    }
+
+    /* Custom scrollbar for that vintage feel */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f0e6d2;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #bfa67a;
+      border: 1px solid #1a1a1a;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #8b0000;
+    }
+
+    .typewriter {
+      overflow: hidden;
+      white-space: pre-wrap;
+    }
+  </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "@google/genai": "https://esm.sh/@google/genai@^1.34.0"
+  }
+}
+</script>
+  <link rel="stylesheet" href="/index.css">
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+
+</html>
