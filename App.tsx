@@ -292,6 +292,11 @@ const App: React.FC = () => {
       >
         {gameState.activeModal === 'status' && (
           <div className="w-full space-y-8 animate-in slide-in-from-bottom-4 duration-500">
+            {/* 移动端档案显示 (仅在移动端显示) */}
+            <div className="lg:hidden w-full h-[600px] border-b-4 border-double border-ink pb-6 mb-6">
+              <Sidebar profile={gameState.profile} />
+            </div>
+
             {/* Stats Section */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <ModalStatusMeter
