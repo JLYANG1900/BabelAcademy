@@ -258,7 +258,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="h-screen w-screen flex flex-row bg-ink overflow-hidden font-sans">
+    <div className="fixed inset-0 flex flex-row bg-ink overflow-hidden font-sans">
 
       {/* 1. Sidebar - Left Column (Full Height) */}
       <div className="hidden lg:block h-full z-30 shrink-0">
