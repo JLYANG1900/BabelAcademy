@@ -1,0 +1,1732 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>巴别塔档案 | Babel Archive</title>
+
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Merriweather', serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Cinzel', serif;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Custom Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        /* Form Element Styles */
+        .babel-input {
+            background-color: transparent;
+            border-bottom: 2px solid #cbd5e1;
+            padding: 0.25rem 0;
+            outline: none;
+            transition: border-color 0.3s;
+            font-family: 'Merriweather', serif;
+            color: #0f172a;
+            width: 100%;
+        }
+
+        .babel-input:focus {
+            border-bottom-color: #bfa67a;
+        }
+
+        .babel-input::placeholder {
+            color: #94a3b8;
+            font-style: italic;
+            font-size: 0.8em;
+        }
+
+        /* Radio Button Customization */
+        .radio-label {
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+            margin-right: 1rem;
+            font-size: 0.9em;
+        }
+
+        .radio-input {
+            appearance: none;
+            width: 1em;
+            height: 1em;
+            border: 1px solid #64748b;
+            border-radius: 50%;
+            margin-right: 0.5em;
+            position: relative;
+            display: grid;
+            place-content: center;
+        }
+
+        .radio-input::before {
+            content: "";
+            width: 0.5em;
+            height: 0.5em;
+            border-radius: 50%;
+            transform: scale(0);
+            transition: 120ms transform ease-in-out;
+            background-color: #bfa67a;
+        }
+
+        .radio-input:checked::before {
+            transform: scale(1);
+        }
+
+        .radio-input:checked {
+            border-color: #bfa67a;
+        }
+    </style>
+
+    <!-- Tailwind Config for Colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        babel: {
+                            gold: '#bfa67a',
+                            dark: '#1a1a1a',
+                            paper: '#e6ded1',
+                            paperDark: '#dcd0bc'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-[#e6ded1] text-slate-900 selection:bg-[#bfa67a] selection:text-white">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- Icons Component System ---
+        const Icon = ({ name, className = "w-6 h-6", ...props }) => {
+            const icons = {
+                Book: (
+                    <React.Fragment>
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                    </React.Fragment>
+                ),
+                Compass: (
+                    <React.Fragment>
+                        <circle cx="12" cy="12" r="10" />
+                        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+                    </React.Fragment>
+                ),
+                Shield: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />,
+                Feather: (
+                    <React.Fragment>
+                        <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z" />
+                        <line x1="16" y1="8" x2="2" y2="22" />
+                        <line x1="17.5" y1="15" x2="9" y2="15" />
+                    </React.Fragment>
+                ),
+                Users: (
+                    <React.Fragment>
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </React.Fragment>
+                ),
+                MapPin: (
+                    <React.Fragment>
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                        <circle cx="12" cy="10" r="3" />
+                    </React.Fragment>
+                ),
+                Key: (
+                    <React.Fragment>
+                        <circle cx="7.5" cy="15.5" r="5.5" />
+                        <path d="m21 2-9.6 9.6" />
+                        <path d="m15.5 7.5 3 3L22 7l-3-3" />
+                    </React.Fragment>
+                ),
+                Star: <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />,
+                Scroll: (
+                    <React.Fragment>
+                        <path d="M8 2h8a4 4 0 0 1 4 4v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a4 4 0 0 1 4-4Z" />
+                        <path d="M10 2v4h6" />
+                    </React.Fragment>
+                ),
+                GraduationCap: (
+                    <React.Fragment>
+                        <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                        <path d="M6 12v5c3 3 9 3 12 0v-5" />
+                    </React.Fragment>
+                ),
+                Sword: (
+                    <React.Fragment>
+                        <polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5" />
+                        <line x1="13" y1="19" x2="19" y2="13" />
+                        <line x1="16" y1="16" x2="20" y2="20" />
+                        <line x1="19" y1="21" x2="21" y2="19" />
+                    </React.Fragment>
+                ),
+                Eye: (
+                    <React.Fragment>
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                        <circle cx="12" cy="12" r="3" />
+                    </React.Fragment>
+                ),
+                Heart: <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />,
+                Zap: <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />,
+                Anchor: (
+                    <React.Fragment>
+                        <circle cx="12" cy="5" r="3" />
+                        <line x1="12" y1="22" x2="12" y2="8" />
+                        <path d="M5 12H2a10 10 0 0 0 20 0h-3" />
+                    </React.Fragment>
+                ),
+                Music: (
+                    <React.Fragment>
+                        <path d="M9 18V5l12-2v13" />
+                        <circle cx="6" cy="18" r="3" />
+                        <circle cx="18" cy="16" r="3" />
+                    </React.Fragment>
+                ),
+                MessageSquare: <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />,
+                Hammer: (
+                    <React.Fragment>
+                        <path d="m15 12-8.5 8.5c-.83.83-2.17.83-3 0 0 0 0 0 0 0a2.12 2.12 0 0 1 0-3L12 9" />
+                        <path d="M17.64 15 22 10.64" />
+                        <path d="m20.91 11.7-1.25-1.25c-.6-.6-.93-1.4-.93-2.25V7.86c0-.55.45-1 1-1h.14c.55 0 1 .45 1 1v.36c0 .85.33 1.65.93 2.25l1.25 1.25a.82.82 0 0 1 0 1.16l-.88.88a.82.82 0 0 1-1.16 0Z" />
+                        <path d="m15 12 1.15-4.25c.15-.58.73-1 1.33-1h1.79c.93 0 1.57-.96 1.05-1.76l-1.39-2.15a1.86 1.86 0 0 0-3.12 0l-1.4 2.15a1.83 1.83 0 0 0 .16 2.23L15 12Z" />
+                    </React.Fragment>
+                ),
+                Gavel: (
+                    <React.Fragment>
+                        <path d="m14 13-7.5 7.5c-.83.83-2.17.83-3 0 0 0 0 0 0 0a2.12 2.12 0 0 1 0-3L11 10" />
+                        <path d="m16 16 6-6" />
+                        <path d="m8 8 6-6" />
+                        <path d="m9 7 8 8" />
+                        <path d="m21 11-8-8" />
+                    </React.Fragment>
+                ),
+                Coffee: (
+                    <React.Fragment>
+                        <path d="M17 8h1a4 4 0 1 1 0 8h-1" />
+                        <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z" />
+                        <line x1="6" y1="1" x2="6" y2="4" />
+                        <line x1="10" y1="1" x2="10" y2="4" />
+                        <line x1="14" y1="1" x2="14" y2="4" />
+                    </React.Fragment>
+                ),
+                Landmark: (
+                    <React.Fragment>
+                        <line x1="3" y1="22" x2="21" y2="22" />
+                        <line x1="6" y1="18" x2="6" y2="11" />
+                        <line x1="10" y1="18" x2="10" y2="11" />
+                        <line x1="14" y1="18" x2="14" y2="11" />
+                        <line x1="18" y1="18" x2="18" y2="11" />
+                        <polygon points="12 2 20 7 4 7" />
+                    </React.Fragment>
+                ),
+                Library: (
+                    <React.Fragment>
+                        <path d="m16 6 4 14" />
+                        <path d="M12 6v14" />
+                        <path d="M8 8v12" />
+                        <path d="M4 4v16" />
+                    </React.Fragment>
+                ),
+                AlertTriangle: (
+                    <React.Fragment>
+                        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+                        <line x1="12" y1="9" x2="12" y2="13" />
+                        <line x1="12" y1="17" x2="12.01" y2="17" />
+                    </React.Fragment>
+                ),
+                Lock: (
+                    <React.Fragment>
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </React.Fragment>
+                ),
+                Scale: (
+                    <React.Fragment>
+                        <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
+                        <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
+                        <path d="M7 21h10" />
+                        <path d="M12 3v18" />
+                        <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2" />
+                    </React.Fragment>
+                ),
+                Globe: (
+                    <React.Fragment>
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="2" y1="12" x2="22" y2="12" />
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                    </React.Fragment>
+                ),
+                Crown: <path d="m2 4 3 12h14l3-12-6 7-4-9-4 9-6-7z" />,
+                Flame: <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.1.2-2.2.5-3 .5.3 1 .8 1.5 1.5z" />,
+                Briefcase: (
+                    <React.Fragment>
+                        <rect width="20" height="14" x="2" y="7" rx="2" ry="2" />
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                    </React.Fragment>
+                ),
+                Play: <polygon points="5 3 19 12 5 21 5 3" />
+            };
+
+            const paths = icons[name] || null;
+
+            return (
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className={className}
+                    {...props}
+                >
+                    {paths}
+                </svg>
+            );
+        };
+
+
+        // --- Audio Player Component (Extracted to persist state) ---
+        const AudioPlayer = () => {
+            const [isPlaying, setIsPlaying] = useState(false);
+            const audioRef = React.useRef(null);
+
+            useEffect(() => {
+                // --- NUCLEAR CLEANUP ---
+                // Find all existing audio elements in the DOM
+                const otherAudios = document.querySelectorAll('audio');
+                otherAudios.forEach(audio => {
+                    // If it's not THIS component's audio ref, kill it
+                    if (audio !== audioRef.current) {
+                        console.log("Found ghost audio, removing:", audio);
+                        audio.pause();
+                        audio.remove();
+                    }
+                });
+
+                // Singleton Global Check
+                if (window.currentBabelAudio && window.currentBabelAudio !== audioRef.current) {
+                    try {
+                        window.currentBabelAudio.pause();
+                    } catch (e) { }
+                }
+
+                // Initialize Current
+                if (audioRef.current) {
+                    window.currentBabelAudio = audioRef.current;
+                    audioRef.current.volume = 0.5;
+
+                    // Attempt Autoplay
+                    const playPromise = audioRef.current.play();
+                    if (playPromise !== undefined) {
+                        playPromise
+                            .then(() => setIsPlaying(true))
+                            .catch(error => {
+                                console.log("Autoplay prevented:", error);
+                                setIsPlaying(false);
+                            });
+                    }
+                }
+
+                // Cleanup on unmount
+                return () => {
+                    if (audioRef.current) {
+                        audioRef.current.pause();
+                    }
+                    if (window.currentBabelAudio === audioRef.current) {
+                        window.currentBabelAudio = null;
+                    }
+                };
+            }, []);
+
+            const togglePlay = () => {
+                if (audioRef.current) {
+                    if (audioRef.current.paused) {
+                        audioRef.current.play()
+                            .then(() => setIsPlaying(true))
+                            .catch(e => console.error("Play failed", e));
+                    } else {
+                        audioRef.current.pause();
+                        setIsPlaying(false);
+                    }
+                }
+            };
+
+            return (
+                <div className="flex items-center gap-4 bg-[#1a1a1a] border border-[#bfa67a] px-4 py-2 rounded-full shadow-[0_0_15px_rgba(191,166,122,0.2)] group hover:bg-[#2a2a2a] transition-colors relative overflow-hidden inline-flex">
+                    {/* Unique ID for debugging */}
+                    <audio
+                        id="babel-main-audio"
+                        ref={audioRef}
+                        src="https://files.catbox.moe/z5yg2z.mp3"
+                        loop
+                    />
+
+                    {/* Spinning Record Icon */}
+                    <div className={`relative w-8 h-8 rounded-full border-2 border-[#5c4d32] bg-black flex items-center justify-center ${isPlaying ? 'animate-[spin_3s_linear_infinite]' : ''}`}>
+                        <div className="w-2 h-2 rounded-full bg-[#bfa67a]"></div>
+                        <div className="absolute inset-0 rounded-full border border-slate-700 opacity-50"></div>
+                    </div>
+
+                    {/* Controls & Label */}
+                    <button
+                        onClick={togglePlay}
+                        className="flex items-center gap-2 group-hover:text-[#e6ded1] transition-colors"
+                    >
+                        <Icon
+                            name={isPlaying ? "Music" : "Play"}
+                            className={`w-4 h-4 ${isPlaying ? 'text-[#bfa67a]' : 'text-slate-400'}`}
+                        />
+                        <span className={`text-xs font-serif tracking-widest uppercase ${isPlaying ? 'text-[#bfa67a]' : 'text-slate-500'}`}>
+                            {isPlaying ? "Now Playing" : "Play Music"}
+                        </span>
+                    </button>
+
+                    {/* Decorative Corner flourish */}
+                    <div className="absolute -top-2 -right-2 w-4 h-4 border-l border-b border-[#bfa67a] opacity-30 rotate-45"></div>
+                </div>
+            );
+        };
+
+        const BabelArchive = () => {
+            const [activeSection, setActiveSection] = useState('apply');
+            const [isScrolled, setIsScrolled] = useState(false);
+            const [showLockedModal, setShowLockedModal] = useState(false);
+
+            // --- Player Character State ---
+            const [charName, setCharName] = useState('');
+            const [age, setAge] = useState('');
+            const [gender, setGender] = useState('female'); // default
+            const [customGender, setCustomGender] = useState('');
+            const [personality, setPersonality] = useState('');
+            const [appearance, setAppearance] = useState('');
+
+            // --- Scroll Logic ---
+            useEffect(() => {
+                window.scrollTo(0, 0);
+            }, [activeSection]);
+
+            useEffect(() => {
+                const handleScroll = () => {
+                    setIsScrolled(window.scrollY > 50);
+                };
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            // --- CORE FUNCTION: Send Story to SillyTavern ---
+            const sendStory = (message) => {
+                console.log("Attempting to send:", message);
+                setTimeout(() => {
+                    try {
+                        if (typeof parent !== 'undefined' && parent.document) {
+                            const sendButton = parent.document.querySelector('#send_but');
+                            const textInput = parent.document.querySelector('#send_textarea');
+                            if (sendButton && textInput) {
+                                textInput.value = message;
+                                textInput.dispatchEvent(new Event('input', { bubbles: true }));
+                                sendButton.click();
+                            } else {
+                                console.warn("SillyTavern input elements not found.");
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Send failed:', error);
+                        alert("连接酒馆失败，请手动复制指令: " + message);
+                    }
+                }, 100);
+            };
+
+            // --- Handle Register Logic ---
+            const handleRegisterClick = () => {
+                const finalGender = gender === 'other' ? (customGender || '其他') : (gender === 'female' ? '女' : '男');
+
+                const registrationData = {
+                    name: charName || 'User',
+                    gender: finalGender,
+                    age: age || '18',
+                    Origin: "China",
+                    Nationality: "不列颠尼亚帝国",
+                    Ethnicity: "中英混血",
+                    Personality: personality || '未知',
+                    Appearance: appearance || '未知'
+                };
+
+                // Command to update the lorebook
+                // Note: file name matches "巴别塔", uid matches 9
+                // Also adding an echo to confirm registration to the user in the chat
+                const command = `/setentryfield file=巴别塔 uid=9 field=content ${JSON.stringify(registrationData)} | /echo [系统] 档案已成功登记至世界书`;
+
+                sendStory(command);
+            };
+
+            // --- Handle Apply Logic ---
+            const handleApplyClick = () => {
+                // 仅发送开场指令，确保功能单一
+                sendStory('/sendas name={{char}} 【诺曼庄园の开场】');
+            };
+
+            const SectionTitle = ({ children, icon }) => (
+                <div className="flex items-center gap-3 mb-10 border-b-2 border-slate-400/30 pb-4">
+                    <div className="p-3 bg-slate-800 rounded-full border border-slate-600 shadow-inner">
+                        <Icon name={icon} className="w-6 h-6 text-slate-200" />
+                    </div>
+                    <h2 className="text-3xl font-bold text-slate-800 tracking-wide">{children}</h2>
+                </div>
+            );
+
+            const Card = ({ title, subtitle, children, className = "" }) => (
+                <div className={`bg-[#f0eadd] border border-[#d4c5a9] rounded-sm p-6 shadow-md hover:shadow-lg transition-all duration-300 relative overflow-hidden group ${className}`}>
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-slate-800 to-transparent opacity-20"></div>
+                    {title && <h3 className="text-xl font-bold text-slate-900 mb-1 relative z-10">{title}</h3>}
+                    {subtitle && <p className="text-sm text-slate-600 italic mb-4 relative z-10 border-b border-slate-300 pb-2 inline-block">{subtitle}</p>}
+                    <div className="relative z-10 text-slate-800 leading-relaxed">
+                        {children}
+                    </div>
+                    <div className="absolute -bottom-4 -right-4 w-12 h-12 border-4 border-slate-200/50 rounded-full group-hover:border-slate-400/50 transition-colors"></div>
+                </div>
+            );
+
+            const SilverBar = ({ label, description }) => (
+                <div className="bg-gradient-to-br from-gray-200 via-gray-100 to-gray-300 border border-gray-400 rounded p-4 shadow-lg transform hover:-translate-y-1 transition-transform duration-300 w-full">
+                    <div className="flex justify-between items-center mb-2 border-b border-gray-300 pb-2">
+                        <span className="font-bold text-slate-800 tracking-widest uppercase text-sm">{label}</span>
+                        <Icon name="Key" className="w-4 h-4 text-slate-500" />
+                    </div>
+                    <p className="text-xs text-slate-700 italic text-center px-2">{description}</p>
+                </div>
+            );
+
+            // Data Objects
+            const magicData = [
+                {
+                    id: 'utility',
+                    title: '实用类 (Utility)',
+                    icon: 'Anchor',
+                    isForbidden: false,
+                    description: '日常生活辅助、工业应用与物理性质改变。',
+                    pairs: [
+                        { lang: '中英', words: '“稳” (Wěn) / “Stable”', diff: '“稳”含禾与急，引申为沉着、靠得住。', effect: '重心锚定：交通工具如被钉在地面般平稳，无视风浪颠簸。' },
+                        { lang: '日英', words: '“道” (Dō) / “Way”', diff: '“道”包含技艺修行的精神境界。', effect: '自动导航：心中想着目的地，双脚或车轮自动选择正确路径。' },
+                        { lang: '法英', words: '“Clef” / “Key”', diff: '“Clef”亦指乐谱中的谱号。', effect: '声波开锁：哼出特定音调（共振频率）即可开锁。' },
+                        { lang: '德英', words: '“Schloss” / “Lock”', diff: '“Schloss”亦指城堡/宫殿。', effect: '堡垒化防御：普通门锁获得城墙般坚不可摧的物理强度。' },
+                        { lang: '俄英', words: '“Sputnik” / “Satellite”', diff: '原意为“旅伴、同行者”。', effect: '自动跟随行李：箱子悬浮并紧随主人脚步。' },
+                        { lang: '葡英', words: '“Jeito” / “Knack”', diff: '“Jeito”指巴西式的变通、即兴解决难题的特质。', effect: '万能润滑：强行让尺寸不合或生锈的零件凑合运作。' },
+                    ]
+                },
+                {
+                    id: 'entertainment',
+                    title: '娱乐类 (Entertainment)',
+                    icon: 'Music',
+                    isForbidden: false,
+                    description: '用于社交、表演与感官愉悦的戏法。',
+                    pairs: [
+                        { lang: '中英', words: '“韵” (Yùn) / “Rhyme”', diff: '“韵”指余韵、风度、悠长回味。', effect: '余音绕梁：旋律在听众脑海中清晰回荡数日。' },
+                        { lang: '日英', words: '“花火” (Hanabi) / “Fireworks”', diff: '字面意为“火之花”，赋予植物般生命力。', effect: '火树银花：烟花如真花般在空中盛开、悬浮并散发香气。' },
+                        { lang: '法英', words: '“Encore” / “Again”', diff: '“Encore”指还、仍然、更多（加演）。', effect: '体能透支：只要有掌声，表演者就能不知疲倦地继续。' },
+                        { lang: '德英', words: '“Ohrwurm” / “Catchy tune”', diff: '字面意为“耳虫”，钻进耳朵不出来。', effect: '听觉植入：将旋律强行植入潜意识，让人不由自主哼唱。' },
+                        { lang: '俄英', words: '“Balagur” / “Joker”', diff: '指善于活跃气氛、滔滔不绝的民间幽默大师。', effect: '欢笑力场：开口即让周围人发笑并放松警惕。' },
+                        { lang: '葡英', words: '“Festa” / “Party”', diff: '对应宗教节日，含神圣的集体庆祝感。', effect: '狂欢光环：消除隔阂，讓人陷入不知疲倦的集体狂喜。' },
+                    ]
+                },
+                {
+                    id: 'medical',
+                    title: '治疗与心理类 (Medical & Mental)',
+                    icon: 'Heart',
+                    isForbidden: false,
+                    description: '针对肉体创伤与精神状态的干涉与治愈。',
+                    pairs: [
+                        { lang: '中英', words: '“安” (Ān) / “Peace”', diff: '“安”字形含屋顶与女，意指家宅稳固、安全感。', effect: '精神镇静剂：创造如同处于堡垒或母亲怀抱般的极致安全感。' },
+                        { lang: '日英', words: '“癒し” (Iyashi) / “Healing”', diff: '“Iyashi”侧重心理慰藉与精神疲劳消除。', effect: '疲劳洗涤：瞬间驱散精神重压，恢复神清气爽。' },
+                        { lang: '法英', words: '“Panacée” / “Panacea”', diff: '法文保留了古典药学的神圣感，不同于英文的贬义。', effect: '广谱解毒：中和绝大多数未知毒素的通用血清。' },
+                        { lang: '德英', words: '“Gestalt” / “Shape”', diff: '“Gestalt”指完形，整体大于部分之和。', effect: '肢体重塑：引导碎骨按原本完美的整体结构自动归位。' },
+                        { lang: '俄英', words: '“Zhivoy” / “Alive”', diff: '“Zhivoy”指生机勃勃、鲜活的生命力。', effect: '生命力灌注：强行透支潜能，让垂死之人回光返照。' },
+                        { lang: '葡英', words: '“Curar” / “Cure”', diff: '“Curar”亦指腌制、防腐。', effect: '防腐静滞：将伤势“腌制/锁定”，防止恶化，争取时间。' },
+                    ]
+                },
+                {
+                    id: 'combat',
+                    title: '战斗类 (Combat)',
+                    icon: 'Sword',
+                    isForbidden: true,
+                    description: '具有直接破坏力或战术优势的攻击性刻银术。',
+                    pairs: [
+                        { lang: '中英', words: '“煞” (Shà) / “Fiend”', diff: '“Fiend”指恶魔；“煞”指凶恶终结的气数或凶神。', effect: '生机断绝：伤口周围细胞活性坏死（坏疽），极难愈合。' },
+                        { lang: '日英', words: '“斬る” (Kiru) / “Cut”', diff: '“Cut”是切；“斬る”带有武士道的决绝杀意。', effect: '锋利度增幅：将“杀意”转化为物理锋利度，切开坚硬物体。' },
+                        { lang: '法英', words: '“Sabotage” / “Damage”', diff: '“Damage”是损害；“Sabotage”特指内部破坏阻碍运作（扔木鞋进机器）。', effect: '机械故障诅咒：引发枪械、车辆的连环机械故障与卡死。' },
+                        { lang: '德英', words: '“Blitz” / “Lightning”', diff: '“Blitz”带有“闪电战”的军事突袭含义。', effect: '极速突袭：赋予超常反应速度与爆发力，视觉进入慢动作。' },
+                        { lang: '俄英', words: '“Pogrom” / “Riot”', diff: '“Riot”是骚乱；“Pogrom”指针对特定群体的毁灭性浩劫。', effect: '群体恐惧与混乱：引发雷鸣般的精神震慑，诱发敌军恐慌自相残杀。' },
+                        { lang: '葡英', words: '“Luta” / “Fight”', diff: '“Luta”包含生活中的挣扎与劣势中的韧性。', effect: '绝境反击：受伤越重，力量与敏捷度反而越强。' },
+                    ]
+                },
+                {
+                    id: 'stealth',
+                    title: '潜行类 (Stealth)',
+                    icon: 'Eye',
+                    isForbidden: true,
+                    description: '用于隐蔽行动、藏匿与消除踪迹的刻银术。',
+                    pairs: [
+                        { lang: '中英', words: '“潜” (Qián) / “Submerge”', diff: '英文“Submerge”主要指物理上进入水下；中文的“潜”含“潜伏、隐蔽、深藏不露”之意。', effect: '介质同化：像融入水中一样融入环境，移动时消除摩擦声与阻力。' },
+                        { lang: '日英', words: '“気配” (Kehai) / “Sign”', diff: '“Sign”指具体迹象；“気配”指第六感般的“气息”或氛围。', effect: '气息遮断：抹除存在感与生物电信号，让人下意识忽略使用者。' },
+                        { lang: '法英', words: '“Oubliette” / “Dungeon”', diff: '“Dungeon”指地牢；“Oubliette”源于“忘记”，指让人被彻底遗忘的密牢。', effect: '认知遗忘场：外界不仅找不到你，甚至会暂时“忘记”要去寻找你。' },
+                        { lang: '德英', words: '“Tarnkappe” / “Camouflage”', diff: '“Camouflage”指伪装；“Tarnkappe”源于神话隐身斗篷。', effect: '神话级隐形：折射光线并扭曲空间，避开视觉与红外探测。' },
+                        { lang: '俄英', words: '“Tishina” / “Silence”', diff: '“Silence”指无声；“Tishina”包含自然界的宁静厚重感。', effect: '绝对静默领域：创造厚重力场，瞬间吸收所有声波振动。' },
+                        { lang: '葡英', words: '“Sumir” / “Vanish”', diff: '“Vanish”指突然消失；“Sumir”指迷失、渐渐隐没。', effect: '存在感稀释：变得极度不引人注目，像丢失的物品一样被视而不见。' },
+                    ]
+                },
+            ];
+
+            const floors = [
+                {
+                    level: 1,
+                    name: "大堂 (The Lobby)",
+                    icon: "Users",
+                    image: "https://i.ibb.co/v4XfX0Dx/1.png",
+                    desc: "巴别塔与世俗世界交汇的边界，充满了商业与行政的喧嚣。",
+                    details: [
+                        { label: "公共接待区", text: "整座塔楼唯一对公众开放的区域。设有繁忙的收银窗口，市民和商人在此排队申请银条或公共工程维护。" },
+                    ]
+                },
+                {
+                    level: 2,
+                    name: "法务部 (Legal Department)",
+                    icon: "Gavel",
+                    image: "https://i.ibb.co/kgwd2z83/2.png",
+                    desc: "被称为“帝国的齿轮”，是巴别塔创收最多的部门。",
+                    details: [
+                        { label: "职能", text: "处理国际条约、海外贸易协定及帝国运作的法律文件。学者们埋首于将《拿破仑法典》等文本翻译成各种语言，桌上堆满厚重的合同。" },
+                    ]
+                },
+                {
+                    level: 3,
+                    name: "口译部 (Interpretation)",
+                    icon: "Coffee",
+                    image: "https://i.ibb.co/Rp2w9r71/3.png",
+                    desc: "属于冒险家的流动空间，被派往世界各地的译员们短暂的休憩之所。",
+                    details: [
+                        { label: "中转基地", text: "通常空荡荡的，只有歪歪扭扭的桌子，几个还没收走的茶杯，因为大部分学者都在海外执行任务。" },
+                    ]
+                },
+                {
+                    level: 4,
+                    name: "文学系 (Literature)",
+                    icon: "Feather",
+                    image: "https://i.ibb.co/XkLdhB0J/4.png",
+                    desc: "保存着语言最纯粹、最鲜活的生命力，受上流社会青睐。",
+                    details: [
+                        { label: "学术氛围", text: "被视为“放纵”之地。研究非英语的小说、诗歌和美学，探索语言的浪漫修辞。到处是来自国外的珍贵小说和诗集，旨在捕捉语言的灵魂与艺术。" },
+                    ]
+                },
+                {
+                    level: 5,
+                    name: "参考资料室 (Reference Materials)",
+                    icon: "Library",
+                    image: "https://i.ibb.co/wNhBKtWn/5.png",
+                    desc: "安静的学术宝库，书架之间弥漫着知识的厚重感。",
+                    details: [
+                        { label: "藏书区", text: "海量的初级读本、语法书、文选。拥有世界上每一种语言的词典，且至少有四个不同版本。这里是学者进行语言研究的核心场所。" },
+                    ]
+                },
+                {
+                    level: 6,
+                    name: "教室 (Instruction Rooms)",
+                    icon: "GraduationCap",
+                    image: "https://i.ibb.co/Rk92J1p4/6.png",
+                    desc: "充满了学习的紧张感和求知的渴望，年轻的学生们在此接受训练。",
+                    details: [
+                        { label: "教学空间", text: "从基础拉丁语变格到复杂翻译理论和魔法实践的传授之地。这里是塔楼知识的结晶。" },
+                    ]
+                },
+                {
+                    level: 7,
+                    name: "办公室 (Faculty Offices)",
+                    icon: "Landmark",
+                    image: "https://i.ibb.co/k2TSXX0k/7.png",
+                    desc: "掌握塔楼权力的核心人物（教授与高级研究员）的私人领地。",
+                    details: [
+                        { label: "教员空间", text: "相比下层的开放，这里更加私密和安静。房间里堆满了书籍、私人信件和未完成的手稿。这里是决策中心，也是导师与学生进行一对一指导或训诫的场所。" },
+                    ]
+                },
+                {
+                    level: 8,
+                    name: "刻银部 (Silver-working)",
+                    icon: "Hammer",
+                    desc: "唯一的禁地，隐藏在重门和墙壁之后的工业车间。",
+                    details: [
+                        { label: "环境", text: "这里像是工厂，空气中充满了嗡嗡声、钻孔声和金属鸣响。学者们像机械师一样工作，地板和长袍上常沾染着闪亮的银粉。因实验具有爆炸危险，特设于顶层以保护下层书籍。设有厚重的防火门。" },
+                    ]
+                }
+            ];
+
+            const internshipData = [
+                {
+                    id: 'legal',
+                    title: '法务部 (Legal Department)',
+                    scenarioName: '法务部实习', // For the command
+                    subtitle: '帝国的掠夺之手 (The Hand of Plunder)',
+                    icon: 'Scale',
+                    tags: ['现实主义商战', '律政惊悚', '资源管理'],
+                    core: {
+                        desc: '起草贸易条约，解决跨国纠纷。',
+                        tasks: '起草对外贸易条款；通过翻译为帝国赢得银矿开采权；处理殖民地港口纠纷。',
+                        rewards: '金钱与佣金（购买奢侈品或资助革命的主要来源）。'
+                    },
+                    paths: {
+                        imperialist: {
+                            title: '帝国精英路线',
+                            desc: '你用法律构建和平框架，通过条约避免直接战争。利用语言的模糊性为帝国争取最大利益，获得权贵赏识。'
+                        },
+                        resistance: {
+                            title: '反抗潜伏路线',
+                            desc: '在条约中寻找漏洞，试图让弱国在霸权下保留主权。利用职务之便获知帝国目标，传递情报给赫耳墨斯社。'
+                        }
+                    }
+                },
+                {
+                    id: 'literature',
+                    title: '文学部 (Literature)',
+                    scenarioName: '文学部实习',
+                    subtitle: '白银时代的社交场 (The Socialite)',
+                    icon: 'Feather',
+                    tags: ['恋爱模拟', '宫廷权谋', '上流社会'],
+                    core: {
+                        desc: '享乐主义的温床。战场是舞厅和沙龙，武器是魅力、诗歌和八卦。',
+                        tasks: '参加精英沙龙；追求或被追求；通过艺术品味获得进入核心圈子的入场券。',
+                        rewards: '情报与人脉（偷情丑闻、破产内幕、黑市银条线索）。'
+                    },
+                    paths: {
+                        imperialist: {
+                            title: '帝国精英路线',
+                            desc: '社交界的宠儿。享受奢靡生活，与权贵往来，巩固阶级地位，用社交走向帝国的权力核心。'
+                        },
+                        resistance: {
+                            title: '反抗潜伏路线',
+                            desc: '戴着面具的间谍。利用外貌和才华接近权力核心，在枕边细语中套取机密，在诗歌探讨中传播革命火种。'
+                        }
+                    }
+                },
+                {
+                    id: 'interpretation',
+                    title: '口译部 (Interpretation)',
+                    scenarioName: '口译部实习',
+                    subtitle: '悬崖上的冒险家 (The Adventurer)',
+                    icon: 'Globe',
+                    tags: ['全球探险', '危机生存', '公路电影'],
+                    core: {
+                        desc: '随皇家海军和商船出海，作为不同文明沟通的桥梁。',
+                        tasks: '随军/商出海；在持枪对峙的谈判桌上进行同声传译；在充满敌意的异国城市中充当向导。',
+                        rewards: '风险：极高。但能亲历世界的广阔与残酷。'
+                    },
+                    paths: {
+                        imperialist: {
+                            title: '帝国精英路线',
+                            desc: '你是象征帝国的理性声音。通过语言化解危机，保护军队安全，向世界传播帝国的先进理念。'
+                        },
+                        resistance: {
+                            title: '反抗潜伏路线',
+                            desc: '赫耳墨斯社的地下联络人。在翻译中夹带私货警告当地人，利用方言暗中与当地反抗组织建立联系网络。'
+                        }
+                    }
+                }
+            ];
+
+            return (
+                <div className="w-full bg-[#e6ded1] text-slate-900 selection:bg-slate-300 font-serif pb-12">
+                    {/* Texture Overlay */}
+                    <div className="fixed inset-0 pointer-events-none opacity-5 mix-blend-multiply" style={{ backgroundImage: 'url("https://www.transparenttextures.com/patterns/aged-paper.png")' }}></div>
+
+                    {/* Hero Section */}
+                    {/* Hero Section - Changed h-80 to min-h-80/auto for flexible height */}
+                    <header className="relative min-h-[20rem] py-12 flex items-center justify-center bg-slate-900 overflow-hidden border-b-8 border-double border-[#bfa67a]">
+                        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at center, #fff 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
+                        <div className="relative z-10 text-center px-4 mt-8">
+                            {/* Music Player */}
+                            {/* Custom Vintage Music Player */}
+                            <div className="mb-6 flex justify-center">
+                                <AudioPlayer />
+                            </div>
+                            <div className="w-20 h-20 mx-auto mb-4 border-2 border-[#bfa67a] rounded-full flex items-center justify-center bg-slate-800 shadow-[0_0_15px_rgba(191,166,122,0.3)]">
+                                <Icon name="Compass" className="w-10 h-10 text-[#bfa67a]" />
+                            </div>
+                            <h1 className="text-4xl md:text-5xl font-bold text-[#e6ded1] mb-2 tracking-wider" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
+                                ROYAL INSTITUTE OF TRANSLATION
+                            </h1>
+                            <p className="text-lg text-[#bfa67a] tracking-[0.2em] uppercase">Babel · Oxford · Britannia</p>
+                        </div>
+                    </header>
+
+                    {/* Navigation */}
+                    <nav className={`sticky top-0 z-50 transition-all duration-300 border-b border-[#bfa67a] ${isScrolled ? 'bg-slate-900 shadow-xl py-2' : 'bg-slate-800 py-4'}`}>
+                        <div className="max-w-7xl mx-auto px-4 flex flex-wrap justify-center gap-4 md:gap-10 text-[#e6ded1] text-xs md:text-base font-medium tracking-wide">
+                            {['apply', 'world', 'campus', 'internship', 'magic', 'internal', 'people', 'letter'].map((section) => (
+                                <button
+                                    key={section}
+                                    onClick={() => setActiveSection(section)}
+                                    className={`hover:text-[#bfa67a] transition-colors uppercase relative group ${activeSection === section ? 'text-[#bfa67a]' : ''}`}
+                                >
+                                    {section === 'apply' && '入学申请'}
+                                    {section === 'world' && '世界观'}
+                                    {section === 'campus' && '校园生活'}
+                                    {section === 'internship' && '实习制度'}
+                                    {section === 'magic' && '语言魔法'}
+                                    {section === 'internal' && '巴别塔'}
+                                    {section === 'people' && '人物档案'}
+                                    {section === 'letter' && '创作者的信'}
+                                    <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-[#bfa67a] transition-all duration-300 group-hover:w-full ${activeSection === section ? 'w-full' : ''}`}></span>
+                                </button>
+                            ))}
+                        </div>
+                    </nav>
+
+                    {/* Main Content */}
+                    <main className="max-w-6xl mx-auto px-4 md:px-8 py-12 relative z-10">
+
+                        {/* 0. 申请入学 (Modified: Removed Portrait, Added Age) */}
+                        {activeSection === 'apply' && (
+                            <div className="animate-fade-in space-y-12">
+                                <SectionTitle icon="Feather">入学申请 (Admission)</SectionTitle>
+
+                                <div className="max-w-3xl mx-auto bg-[#f4f1ea] border-2 border-[#bfa67a] p-8 md:p-12 shadow-2xl relative rounded-sm">
+                                    <div className="absolute top-4 right-4 w-24 h-24 border-4 border-red-900/30 rounded-full flex items-center justify-center -rotate-12 opacity-50">
+                                        <span className="text-red-900/50 font-bold text-xs uppercase tracking-widest border-t border-b border-red-900/30 py-1">Pending</span>
+                                    </div>
+
+                                    <div className="text-center mb-8 border-b-2 border-[#bfa67a]/30 pb-6">
+                                        <Icon name="Crown" className="w-12 h-12 text-[#bfa67a] mx-auto mb-4" />
+                                        <h3 className="text-2xl font-bold text-slate-900 font-serif tracking-widest uppercase">Candidate Profile</h3>
+                                        <p className="text-sm text-slate-500 italic mt-1">Royal Institute of Translation · Oxford</p>
+                                    </div>
+
+                                    {/* --- CUSTOMIZABLE FORM --- */}
+                                    <div className="space-y-6 text-sm">
+                                        {/* Name & Age Row */}
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div>
+                                                <span className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Name</span>
+                                                <input
+                                                    type="text"
+                                                    value={charName}
+                                                    onChange={(e) => setCharName(e.target.value)}
+                                                    placeholder="Enter your name..."
+                                                    className="babel-input text-lg font-bold"
+                                                />
+                                            </div>
+                                            <div>
+                                                <span className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Age</span>
+                                                <input
+                                                    type="text"
+                                                    value={age}
+                                                    onChange={(e) => setAge(e.target.value)}
+                                                    placeholder="e.g. 18岁"
+                                                    className="babel-input text-lg font-bold"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {/* Gender Row */}
+                                        <div>
+                                            <span className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Gender</span>
+                                            <div className="flex flex-wrap items-center gap-4">
+                                                <label className="radio-label">
+                                                    <input type="radio" name="gender" value="female" checked={gender === 'female'} onChange={() => setGender('female')} className="radio-input" />
+                                                    <span>女 (Female)</span>
+                                                </label>
+                                                <label className="radio-label">
+                                                    <input type="radio" name="gender" value="male" checked={gender === 'male'} onChange={() => setGender('male')} className="radio-input" />
+                                                    <span>男 (Male)</span>
+                                                </label>
+                                                <label className="radio-label">
+                                                    <input type="radio" name="gender" value="other" checked={gender === 'other'} onChange={() => setGender('other')} className="radio-input" />
+                                                    <span>其他 (Other)</span>
+                                                </label>
+                                            </div>
+                                            {gender === 'other' && (
+                                                <input
+                                                    type="text"
+                                                    value={customGender}
+                                                    onChange={(e) => setCustomGender(e.target.value)}
+                                                    placeholder="Please specify..."
+                                                    className="babel-input mt-2 text-sm"
+                                                />
+                                            )}
+                                        </div>
+
+                                        {/* Static Info Row */}
+                                        <div className="grid grid-cols-2 gap-4 bg-slate-100 p-3 rounded border border-slate-200">
+                                            <div>
+                                                <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Origin</span>
+                                                <span className="block font-bold text-slate-700">China</span>
+                                            </div>
+                                            <div>
+                                                <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Nationality</span>
+                                                <span className="block font-bold text-slate-700">不列颠尼亚帝国</span>
+                                            </div>
+                                            <div className="col-span-2">
+                                                <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Ethnicity</span>
+                                                <span className="block font-bold text-slate-700">中英混血 (Sino-British Mixed)</span>
+                                            </div>
+                                        </div>
+
+                                        {/* Personality & Appearance */}
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <span className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Personality</span>
+                                                <input
+                                                    type="text"
+                                                    value={personality}
+                                                    onChange={(e) => setPersonality(e.target.value)}
+                                                    placeholder="e.g. 坚韧, 敏感..."
+                                                    className="babel-input"
+                                                />
+                                            </div>
+                                            <div>
+                                                <span className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Appearance</span>
+                                                <input
+                                                    type="text"
+                                                    value={appearance}
+                                                    onChange={(e) => setAppearance(e.target.value)}
+                                                    placeholder="e.g. 身高183cm，黑发, 灰瞳..."
+                                                    className="babel-input"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {/* Guardian */}
+                                        <div>
+                                            <span className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Guardian</span>
+                                            <span className="block text-lg font-bold text-slate-900 border-b border-slate-300 pb-1 bg-slate-50/50 cursor-not-allowed">Professor 威廉·诺曼</span>
+                                        </div>
+
+                                        {/* Background Note */}
+                                        <div className="pt-2">
+                                            <span className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Background Note</span>
+                                            <p className="leading-relaxed text-slate-700 italic border-l-2 border-[#bfa67a] pl-3 text-xs md:text-sm">
+                                                曾任不列颠尼亚帝国驻清外交官的母亲去世后，你被亲戚威廉教授收养。你的母语是你最大的武器，也是你最大的原罪。在诺曼庄园的铁栅栏后，你学习拉丁语、英语和你快要遗忘的母语，只为了通过那扇通往巴别塔的大门。这是一个关于语言、抗争或荣耀的故事。
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    {/* Register Button Section */}
+                                    <div className="flex flex-col items-center justify-center mt-12 mb-4">
+                                        <p className="text-xs text-slate-500 italic mb-2 tracking-wide">将你的信息登记至世界书 (Register to World Book)</p>
+                                        <button
+                                            onClick={handleRegisterClick}
+                                            className="group relative inline-flex items-center justify-center px-6 py-2 font-serif font-bold text-slate-800 transition-all duration-200 bg-[#bfa67a] hover:bg-[#a68e65] hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#bfa67a] cursor-pointer rounded-sm border border-slate-400"
+                                        >
+                                            <Icon name="Book" className="w-4 h-4 mr-2" /> 提交申请 (Submit Application)
+                                        </button>
+                                    </div>
+
+                                    {/* Submit Button */}
+                                    <div className="flex justify-center mt-6">
+                                        <button
+                                            onClick={handleApplyClick}
+                                            className="group relative inline-flex items-center justify-center px-8 py-3 font-serif font-bold text-white transition-all duration-200 bg-red-900 font-lg hover:bg-red-800 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-900 cursor-pointer"
+                                        >
+                                            <span className="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
+                                            <span className="relative flex items-center gap-2 tracking-widest uppercase">
+                                                <Icon name="Feather" className="w-5 h-5" /> 进入诺曼庄园
+                                            </span>
+                                        </button>
+                                    </div>
+
+                                    <div className="mt-6 text-center">
+                                        <p className="text-[10px] text-slate-400 uppercase tracking-[0.2em]">By clicking above, you pledge your tongue to the Empire.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 1. 世界观 */}
+                        {activeSection === 'world' && (
+                            <div className="animate-fade-in space-y-12">
+                                <SectionTitle icon="Compass">世界观设定 (World Setting)</SectionTitle>
+                                <div className="grid md:grid-cols-2 gap-8">
+                                    <Card title="帝国背景与魔法源泉" subtitle="Imperial Background">
+                                        <div className="space-y-4 text-slate-800 text-lg">
+                                            <p>架空世界的19世纪初，不列颠尼亚帝国率先发动了工业革命，一跃成为世界霸主，并向全世界发起殖民。</p>
+                                            <p>在这个世界观中，工业的力量源泉是白银、语言和魔法。刻有两种语言的银条能产生魔法、驱动工业，让不列颠尼亚帝国的军队所向披靡，进一步将全世界的白银和人才卷入囊中。</p>
+                                            <p>而牛津的巴别塔（又称“皇家翻译学院”）则是帝国笼络及培养全世界多语言人才，将他们打造为帝国武器的根据地。</p>
+                                            <p>但这些掌握魔法、身为外族的人才们是否愿意为他人做嫁衣？一个隐秘的反抗组织，赫尔墨斯社，同样以巴别塔为中心诞生了。</p>
+                                        </div>
+                                    </Card>
+
+                                    <Card title="刻银术 (Silver-work)" subtitle="Core Magic System">
+                                        <div className="space-y-4">
+                                            <p><strong>核心媒介：</strong>银条 (Silver Bar)</p>
+                                            <p><strong>运作原理：</strong>配对 (Match-pair) 与 蚀刻 (Etch)。通过在银条上刻写词汇，利用语言间的“意义缺失” (Meaning Gap) 产生魔法效应。</p>
+                                            <p><strong>关键概念：</strong></p>
+                                            <div className="grid grid-cols-2 gap-3 mt-2">
+                                                <SilverBar label="TRANSLATION" description="翻译即背叛" />
+                                                <SilverBar label="ETYMOLOGY" description="词源溯源" />
+                                            </div>
+                                        </div>
+                                    </Card>
+
+                                    <Card title="势力阵营 (Factions)" subtitle="The Conflict">
+                                        <ul className="space-y-4 list-disc pl-5">
+                                            <li className="pl-2">
+                                                <span className="font-bold text-slate-800">不列颠尼亚帝国 (Britania Empire)</span>
+                                                <p className="text-sm text-slate-600 mt-1">利用翻译学院扩张殖民霸权。核心场景为牛津(Oxford)与皇家翻译学院(Royal Institute of Translation)。</p>
+                                            </li>
+                                            <li className="pl-2">
+                                                <span className="font-bold text-slate-800">赫耳墨斯社 (Hermes Society)</span>
+                                                <p className="text-sm text-slate-600 mt-1">地下抵抗组织 (Resistance)。从事破坏活动 (Sabotage)。</p>
+                                            </li>
+                                            <li className="pl-2">
+                                                <span className="font-bold text-slate-800">忠诚的破坏者 (Loyal Saboteur)</span>
+                                                <p className="text-sm text-slate-600 mt-1">处于夹缝中的身份，不仅是学者，更是潜伏者。</p>
+                                            </li>
+                                        </ul>
+                                    </Card>
+                                </div>
+
+                                <div className="bg-slate-800 text-[#e6ded1] p-8 rounded-sm shadow-xl border border-[#bfa67a]">
+                                    <h3 className="text-xl font-bold mb-4 flex items-center gap-2"><Icon name="Eye" className="w-5 h-5" /> 表象与真相 (Facade vs. Truth)</h3>
+                                    <p className="leading-relaxed italic opacity-90">
+                                        “巴别塔不仅是一座塔，它是帝国的心脏，也是谎言的堡垒。在这里，不可见之物 (Formless/Invisible) 往往比可见之物更加致命。”
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 2. 校园生活 */}
+                        {activeSection === 'campus' && (
+                            <div className="animate-fade-in space-y-8">
+                                <SectionTitle icon="GraduationCap">校园生活 (Campus Life)</SectionTitle>
+
+                                <div className="w-full max-w-md mx-auto mb-8 aspect-square rounded-sm overflow-hidden border-2 border-[#bfa67a] shadow-lg relative group">
+                                    <img
+                                        src="https://i.ibb.co/HD1RKHwV/image.jpg"
+                                        alt="Campus Life"
+                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                    />
+                                    <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.3)] pointer-events-none"></div>
+                                </div>
+
+                                <div className="grid md:grid-cols-3 gap-6">
+                                    <Card className="md:col-span-2" title="学术氛围" subtitle="Ivory Tower & Privilege">
+                                        <p className="mb-4">学院被描述为“象牙塔”(Ivory Tower)，充满了特权(Privilege)与隔绝感。学生们的生活穿梭于学术研究与Buttery（学院小卖部/餐吧）的闲谈之间。</p>
+                                        <div className="bg-[#e0d6c5] p-4 rounded border border-[#c9bb9e]">
+                                            <h4 className="font-bold text-slate-800 mb-2">Town and Gown</h4>
+                                            <p className="text-sm text-slate-700">“市井与长袍”的对立。学院不僅是学术场所，更是与外界市民阶层隔离的堡垒。</p>
+                                        </div>
+                                    </Card>
+
+                                    <Card title="核心课程" subtitle="Curriculum">
+                                        <ul className="space-y-3 text-sm">
+                                            <li className="flex items-center gap-2"><Icon name="Book" className="w-4 h-4" /> 语言研究 (Language Studies)</li>
+                                            <li className="flex items-center gap-2"><Icon name="Book" className="w-4 h-4" /> 语音学 (Phonetics)</li>
+                                            <li className="flex items-center gap-2"><Icon name="Book" className="w-4 h-4" /> 翻译工坊 (Translation Workshops)</li>
+                                            <li className="flex items-center gap-2"><Icon name="Book" className="w-4 h-4" /> 解谜 (Puzzle) - 寻找词义的缝隙</li>
+                                        </ul>
+                                    </Card>
+                                </div>
+
+                                <Card title="管制与安全" subtitle="Control & Safety">
+                                    <div className="flex flex-col md:flex-row gap-6">
+                                        <div className="flex-1">
+                                            <h4 className="font-bold text-red-800 mb-2 flex items-center gap-2"><Icon name="Shield" className="w-4 h-4" /> 银条管制 (Silver Bar Control)</h4>
+                                            <p className="text-sm text-slate-700 leading-relaxed">
+                                                所有刻银术的使用都受到严格监控。必须遵守《学术规则》(Academic Rules)与《安全协议》(Safety Protocol)。
+                                            </p>
+                                        </div>
+                                        <div className="flex-1 border-l border-slate-300 pl-0 md:pl-6">
+                                            <h4 className="font-bold text-red-800 mb-2">触发机制</h4>
+                                            <p className="text-sm text-slate-700">
+                                                若在课堂外非法施法，将触发 <strong>[Suspicion/Confiscation]</strong> (怀疑/没收) 事件。任何关于“危险/煽动性思想”的知识都只能在课程之外习得。
+                                            </p>
+                                        </div>
+                                    </div>
+                                </Card>
+                            </div>
+                        )}
+
+                        {/* 3. 实习制度 (Modified with start buttons) */}
+                        {activeSection === 'internship' && (
+                            <div className="animate-fade-in space-y-12">
+                                <SectionTitle icon="Briefcase">实习与抉择 (Internship & Factions)</SectionTitle>
+
+                                <div className="mb-8 p-4 bg-slate-800 text-[#bfa67a] rounded text-center font-serif italic border border-[#bfa67a]/30">
+                                    "实习不仅是工作，更是关于掠夺 (Plunder) 与权力的选择。你将成为谁？"
+                                </div>
+
+                                <div className="space-y-12">
+                                    <div className="grid grid-cols-1 gap-10">
+                                        {internshipData.map((dept) => (
+                                            <div key={dept.id} className="bg-[#f0eadd] border border-[#d4c5a9] rounded shadow-lg overflow-hidden flex flex-col md:flex-row">
+                                                <div className="bg-[#e6ded1] p-6 md:w-1/3 border-b md:border-b-0 md:border-r border-[#d4c5a9] flex flex-col">
+                                                    <div className="flex items-center gap-3 mb-4">
+                                                        <div className="p-3 bg-slate-800 rounded-full text-[#bfa67a]">
+                                                            <Icon name={dept.icon} className="w-6 h-6" />
+                                                        </div>
+                                                        <div>
+                                                            <h3 className="text-xl font-bold text-slate-900">{dept.title}</h3>
+                                                            <p className="text-xs text-slate-600 italic">{dept.subtitle}</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="flex flex-wrap gap-2 mb-6">
+                                                        {dept.tags.map(tag => (
+                                                            <span key={tag} className="text-[10px] uppercase font-bold px-2 py-1 bg-slate-200 text-slate-700 rounded border border-slate-300">
+                                                                {tag}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+
+                                                    <div className="space-y-4 text-sm text-slate-700 mb-6">
+                                                        <div>
+                                                            <strong className="block text-slate-900 mb-1 flex items-center gap-1"><Icon name="Star" className="w-3 h-3" /> 核心体验</strong>
+                                                            {dept.core.desc}
+                                                        </div>
+                                                        <div>
+                                                            <strong className="block text-slate-900 mb-1 flex items-center gap-1"><Icon name="Book" className="w-3 h-3" /> 任务类型</strong>
+                                                            {dept.core.tasks}
+                                                        </div>
+                                                        <div>
+                                                            <strong className="block text-slate-900 mb-1 flex items-center gap-1"><Icon name="Crown" className="w-3 h-3" /> 奖励/风险</strong>
+                                                            {dept.core.rewards}
+                                                        </div>
+                                                    </div>
+
+                                                    {/* NEW: Start Scenario Button */}
+                                                    <div className="mt-auto">
+                                                        <button
+                                                            onClick={() => {
+                                                                // --- 修改重点：判断逻辑 ---
+                                                                if (dept.id === 'interpretation') {
+                                                                    // 如果是口译部，显示弹窗
+                                                                    setShowLockedModal(true);
+                                                                } else {
+                                                                    // 其他部门（法务、文学），正常发送指令
+                                                                    sendStory(`/sendas name={{char}} 【${dept.scenarioName}の开场】`);
+                                                                }
+                                                            }}
+                                                            className="w-full bg-slate-800 hover:bg-[#bfa67a] text-white hover:text-slate-900 font-serif py-2 px-4 rounded transition-colors duration-300 flex items-center justify-center gap-2 group uppercase text-xs tracking-widest font-bold shadow-lg"
+                                                        >
+                                                            {/* 按钮内部的文字和图标显示逻辑（保持你上一轮的修改） */}
+                                                            {dept.id === 'interpretation' ? (
+                                                                <>
+                                                                    <Icon name="Hammer" className="w-3 h-3" /> 进入部门 (Enter Department)
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <Icon name="Play" className="w-3 h-3" /> 入职报到 (Start Scenario)
+                                                                </>
+                                                            )}
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex-1 p-6 bg-slate-50/50">
+                                                    <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4 text-center">Dual Perspectives · 双重立场</h4>
+                                                    <div className="grid md:grid-cols-2 gap-4 h-full">
+                                                        <div className="bg-white border-t-4 border-blue-900 p-4 shadow-sm hover:shadow-md transition-shadow">
+                                                            <h5 className="font-bold text-blue-900 mb-2 flex items-center gap-2">
+                                                                <Icon name="Crown" className="w-4 h-4" /> {dept.paths.imperialist.title}
+                                                            </h5>
+                                                            <p className="text-sm text-slate-600 leading-relaxed">
+                                                                {dept.paths.imperialist.desc}
+                                                            </p>
+                                                        </div>
+                                                        <div className="bg-white border-t-4 border-red-800 p-4 shadow-sm hover:shadow-md transition-shadow">
+                                                            <h5 className="font-bold text-red-800 mb-2 flex items-center gap-2">
+                                                                <Icon name="Flame" className="w-4 h-4" /> {dept.paths.resistance.title}
+                                                            </h5>
+                                                            <p className="text-sm text-slate-600 leading-relaxed">
+                                                                {dept.paths.resistance.desc}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div className="relative mt-16 p-1 bg-gradient-to-r from-[#bfa67a] via-slate-400 to-[#bfa67a] rounded shadow-2xl">
+                                        <div className="bg-slate-900 text-[#e6ded1] p-8 rounded relative overflow-hidden">
+                                            <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+
+                                            <div className="relative z-10 text-center mb-8">
+                                                <div className="inline-flex items-center gap-2 bg-red-900/80 text-red-200 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-4 border border-red-500/50 animate-pulse">
+                                                    <Icon name="Lock" className="w-3 h-3" /> Locked until Final Year
+                                                </div>
+                                                <h3 className="text-3xl font-bold text-[#bfa67a] font-serif mb-2">刻银部 (Silver-working)</h3>
+                                                <p className="text-slate-400 italic">命运的终极分歧点 (The Endgame)</p>
+                                            </div>
+
+                                            <div className="grid md:grid-cols-3 gap-8 relative z-10">
+                                                <div className="space-y-4 md:col-span-1 text-sm text-slate-300 border-r border-slate-700 pr-0 md:pr-6">
+                                                    <p><strong className="text-white">核心体验：</strong>接触最高机密——“自己制作银条”。</p>
+                                                    <p><strong className="text-white">场景：</strong>封闭的实验室，嗡嗡作响的银条，只有你和价值连城的全新银条。</p>
+                                                    <p><strong className="text-white">机制：</strong>你需要决定将什么词刻上去，以及——为了谁而刻。</p>
+
+                                                    {/* NEW: Start Silver-working Button */}
+                                                    <button
+                                                        onClick={() => setShowLockedModal(true)}
+                                                        className="w-full mt-4 bg-[#bfa67a] hover:bg-[#d4c5a9] text-slate-900 font-serif py-2 px-4 rounded transition-colors duration-300 flex items-center justify-center gap-2 uppercase text-xs tracking-widest font-bold shadow-lg"
+                                                    >
+                                                        <Icon name="Hammer" className="w-3 h-3" /> 进入部门 (Enter Department)
+                                                    </button>
+                                                </div>
+
+                                                <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                    <div className="bg-slate-800 border border-blue-900/50 p-5 rounded hover:bg-slate-800/80 transition-colors group cursor-pointer">
+                                                        <h4 className="text-blue-400 font-bold mb-2 group-hover:text-blue-300 transition-colors">路线 A：帝国的栋梁</h4>
+                                                        <p className="text-xs text-slate-400 mb-3">Pillar of the Empire</p>
+                                                        <p className="text-sm text-slate-300 leading-relaxed">
+                                                            你选择了繁荣、秩序和财富。你相信只有强大的帝国才能带领世界走出愚昧，并成为了新任巴别塔荣誉教授，化身帝国的守护者。
+                                                        </p>
+                                                    </div>
+                                                    <div className="bg-slate-800 border border-red-900/50 p-5 rounded hover:bg-slate-800/80 transition-colors group cursor-pointer">
+                                                        <h4 className="text-red-400 font-bold mb-2 group-hover:text-red-300 transition-colors">路线 B：赫耳墨斯的信徒</h4>
+                                                        <p className="text-xs text-slate-400 mb-3">Disciple of Hermes</p>
+                                                        <p className="text-sm text-slate-300 leading-relaxed">
+                                                            你选择了自由、尊严和激烈的革命。你相信不破不立。你将具有杀伤力的战斗类银条偷运出路线，交给赫耳墨斯社，点燃革命火炬。
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 4. 语言魔法 */}
+                        {activeSection === 'magic' && (
+                            <div className="animate-fade-in space-y-12">
+                                <SectionTitle icon="Star">语言魔法 (Language Magic)</SectionTitle>
+
+                                <div className="mb-8 p-6 bg-slate-800 text-[#e6ded1] rounded-lg shadow-xl border-l-4 border-[#bfa67a]">
+                                    <p className="italic font-serif leading-relaxed">
+                                        “翻译即背叛。正是这种背叛——这种词义在跨越语言边界时不可避免的流失与扭曲——创造了刻银术的力量。”
+                                    </p>
+                                </div>
+
+                                <div className="space-y-16">
+                                    {magicData.map((category) => (
+                                        <div
+                                            key={category.id}
+                                            className={`scroll-mt-24 rounded-lg p-6 md:-mx-6 transition-all duration-500
+                                                ${category.isForbidden
+                                                    ? 'bg-slate-900 border border-red-900/50 shadow-[inset_0_0_40px_rgba(0,0,0,0.5)]'
+                                                    : ''}
+                                            `}
+                                            id={category.id}
+                                        >
+                                            <div className="flex items-center gap-3 mb-6 relative">
+                                                <div className={`p-2 rounded-full ${category.isForbidden ? 'bg-red-950 text-red-500 border border-red-800' : ''}`}>
+                                                    <Icon name={category.icon} className={`w-8 h-8 ${category.isForbidden ? 'text-red-500' : 'text-slate-700'}`} />
+                                                </div>
+                                                <div>
+                                                    <h3 className={`text-2xl font-bold font-serif flex items-center gap-3 ${category.isForbidden ? 'text-red-100' : 'text-slate-800'}`}>
+                                                        {category.title}
+                                                        {category.isForbidden && (
+                                                            <span className="px-3 py-1 bg-red-900/80 text-white text-xs font-bold uppercase tracking-widest border border-red-500 flex items-center gap-2 animate-pulse">
+                                                                <Icon name="Lock" className="w-3 h-3" />
+                                                                Restricted / 禁术
+                                                            </span>
+                                                        )}
+                                                    </h3>
+                                                    <p className={`text-sm italic ${category.isForbidden ? 'text-red-300/70' : 'text-slate-600'}`}>{category.description}</p>
+                                                </div>
+                                            </div>
+
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                {category.pairs.map((pair, idx) => (
+                                                    <div
+                                                        key={idx}
+                                                        className={`
+                                                            p-5 rounded shadow-sm hover:shadow-md transition-all group relative overflow-hidden border
+                                                            ${category.isForbidden
+                                                                ? 'bg-[#1a1a1a] border-red-900/30 hover:border-red-600/50'
+                                                                : 'bg-gradient-to-br from-slate-100 to-[#e8e4dc] border-slate-300'}
+                                                        `}
+                                                    >
+                                                        {category.isForbidden && (
+                                                            <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+                                                                <Icon name="AlertTriangle" className="w-16 h-16 text-red-600" />
+                                                            </div>
+                                                        )}
+
+                                                        <div className={`flex justify-between items-start mb-3 pb-2 border-b ${category.isForbidden ? 'border-red-900/30' : 'border-slate-300'}`}>
+                                                            <span className={`font-bold text-lg font-serif ${category.isForbidden ? 'text-red-50' : 'text-slate-900'}`}>{pair.words}</span>
+                                                            <span className={`text-xs font-bold px-2 py-1 rounded tracking-wider ${category.isForbidden ? 'text-red-100 bg-red-900' : 'text-white bg-slate-700'}`}>{pair.lang}</span>
+                                                        </div>
+
+                                                        <div className="space-y-3 relative z-10">
+                                                            <div>
+                                                                <h4 className={`text-xs font-bold uppercase tracking-widest mb-1 flex items-center gap-1 ${category.isForbidden ? 'text-red-400' : 'text-slate-500'}`}>
+                                                                    <Icon name="Scroll" className="w-3 h-3" /> 语义差异 (Gap)
+                                                                </h4>
+                                                                <p className={`text-sm leading-snug pl-2 border-l-2 ${category.isForbidden ? 'text-gray-400 border-red-800' : 'text-slate-700 border-slate-300'}`}>{pair.diff}</p>
+                                                            </div>
+
+                                                            <div className={`p-3 rounded ${category.isForbidden ? 'bg-red-950/20' : 'bg-slate-800/5'}`}>
+                                                                <h4 className={`text-xs font-bold px-2 py-0.5 rounded inline-block mb-1 shadow-sm ${category.isForbidden ? 'text-red-200 bg-red-900' : 'text-[#bfa67a] bg-slate-800'}`}>
+                                                                    <Icon name="Zap" className="w-3 h-3 inline mr-1" /> 魔法效果 (Effect)
+                                                                </h4>
+                                                                <p className={`text-sm font-medium ${category.isForbidden ? 'text-red-100' : 'text-slate-800'}`}>{pair.effect}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 5. 巴别塔内部 */}
+                        {activeSection === 'internal' && (
+                            <div className="animate-fade-in space-y-12">
+                                <SectionTitle icon="MapPin">巴别塔内部布局 (Inside Babel)</SectionTitle>
+
+                                <div className="max-w-4xl mx-auto">
+                                    <div className="bg-slate-800 text-[#e6ded1] p-6 mb-12 rounded border-t-4 border-[#bfa67a] shadow-xl">
+                                        <p className="italic text-lg text-center font-serif opacity-90">
+                                            "巴别塔不仅是一座学术殿堂，更是一台巨大的帝国机器。从熙攘的大堂到危险的刻银部，每一层都精密运转。"
+                                        </p>
+                                    </div>
+
+                                    <div className="space-y-6 relative ml-4 md:ml-0">
+                                        <div className="absolute left-6 md:left-1/2 top-4 bottom-4 w-1 bg-[#bfa67a]/30 -translate-x-1/2 hidden md:block"></div>
+                                        <div className="absolute left-0 top-4 bottom-4 w-1 bg-[#bfa67a]/30 md:hidden"></div>
+
+                                        {floors.map((floor, index) => (
+                                            <div key={index} className={`relative flex flex-col md:flex-row items-center gap-8 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
+                                                <div className="absolute left-0 md:left-1/2 w-8 h-8 md:-translate-x-1/2 -translate-x-1/2 bg-slate-900 border-2 border-[#bfa67a] rounded-full flex items-center justify-center z-10 shadow-lg">
+                                                    <span className="text-[#bfa67a] text-xs font-bold">{floor.level}F</span>
+                                                </div>
+
+                                                <div className="w-full md:w-[calc(50%-2rem)] pl-8 md:pl-0">
+                                                    <div className="bg-[#f4f1ea] p-6 rounded border border-[#dcd0bc] shadow-md hover:shadow-xl transition-all relative group">
+                                                        <div className={`absolute top-0 w-2 h-full bg-slate-800/5 ${index % 2 === 0 ? 'right-0' : 'left-0 hidden md:block'}`}></div>
+
+                                                        <div className="flex items-center gap-3 mb-3 border-b border-[#bfa67a]/40 pb-2">
+                                                            <div className="p-2 bg-slate-200 rounded-full">
+                                                                <Icon name={floor.icon} className="w-5 h-5 text-slate-800" />
+                                                            </div>
+                                                            <h3 className="text-xl font-bold text-slate-900">{floor.name}</h3>
+                                                        </div>
+
+                                                        <p className="text-sm text-slate-600 mb-4 italic leading-relaxed">{floor.desc}</p>
+
+                                                        <div className="space-y-3">
+                                                            {floor.details.map((detail, idx) => (
+                                                                <div key={idx} className="text-sm">
+                                                                    <span className="font-bold text-slate-800 mr-2">[{detail.label}]</span>
+                                                                    <span className="text-slate-700">{detail.text}</span>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="w-full md:w-[calc(50%-2rem)] pl-8 md:pl-0 flex justify-center mt-4 md:mt-0">
+                                                    {floor.image ? (
+                                                        <div className="w-full relative aspect-video md:aspect-auto md:h-64 rounded-sm border-2 border-[#bfa67a] shadow-lg overflow-hidden group bg-slate-900">
+                                                            <img
+                                                                src={floor.image}
+                                                                alt={floor.name}
+                                                                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100"
+                                                            />
+                                                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none"></div>
+                                                            <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(191,166,122,0.3)] pointer-events-none"></div>
+                                                        </div>
+                                                    ) : floor.level === 8 && (
+                                                        <div className="w-full relative aspect-video md:aspect-auto md:h-64 rounded-sm border-2 border-red-900/40 shadow-xl overflow-hidden group bg-[#1a0f0f] flex items-center justify-center">
+                                                            <div className="absolute inset-0 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(69,10,10,0.1)_10px,rgba(69,10,10,0.1)_20px)] pointer-events-none"></div>
+                                                            <div className="relative z-10 p-4 border border-red-900/30 bg-black/60 backdrop-blur-sm text-center transform transition-transform duration-500 group-hover:scale-105">
+                                                                <Icon name="Lock" className="w-6 h-6 text-red-500 mx-auto mb-2 opacity-80" />
+                                                                <span className="text-red-500/80 font-serif tracking-widest italic text-sm">这里是禁区……</span>
+                                                            </div>
+                                                            <div className="absolute inset-0 shadow-[inset_0_0_50px_rgba(0,0,0,0.8)] pointer-events-none"></div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 6. 人物与NPC */}
+                        {activeSection === 'people' && (
+                            <div className="animate-fade-in space-y-16">
+                                <SectionTitle icon="Users">人物档案 (Personnel)</SectionTitle>
+
+                                {/* 学院与学生 */}
+                                <div className="space-y-8">
+                                    <div className="flex items-center justify-between border-b-2 border-slate-300 pb-2 mb-6">
+                                        <h3 className="text-2xl font-bold text-slate-800 font-serif">学院成员 (Academy Members)</h3>
+                                        <span className="text-xs font-bold bg-[#bfa67a] text-white px-3 py-1 rounded-full uppercase tracking-wider">Class of 1830</span>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                        {[
+                                            {
+                                                name: 'William Norman',
+                                                cnName: '威廉·诺曼',
+                                                role: '36岁 / 教授 / 家族族长',
+                                                origin: 'Britannia Empire',
+                                                image: 'https://i.ibb.co/zWbhSsyn/image.png',
+                                                desc: '温文尔雅的巴别塔教授，诺曼家族家主，你的养父。擅长人情世故与外交辞令的他，好像有着不为人知的另一面……',
+                                                quote: '语言是武器，是阶梯，是帝国能够统治这个世界的根基。'
+                                            },
+                                            {
+                                                name: 'Eleanor Norman',
+                                                cnName: '埃莉诺·诺曼',
+                                                role: '18岁 / 学生 / 社交名媛',
+                                                origin: 'Britannia (Mixed)',
+                                                image: 'https://i.ibb.co/nMhHSnHV/image.png',
+                                                desc: '威廉18年前在大清生下的私生女，中英混血，八面玲珑的社交名媛。才华横溢的她是巴别塔中最闪耀的新星。柔弱和美貌的表象之下，好像也有着另一面……',
+                                                quote: '在巴别塔，察言观色比任何魔法都管用。'
+                                            },
+                                            {
+                                                name: 'Heinrich von Kleist',
+                                                cnName: '海因里希·冯·克莱斯特',
+                                                role: '26岁 / 学生 / 容克贵族',
+                                                origin: 'Kingdom of Prussia',
+                                                image: 'https://i.ibb.co/TDb8P8Hx/image.png',
+                                                desc: '普鲁士容克贵族，退役军官。严谨的社会达尔文主义者，推崇秩序与力量。他视不列颠尼亚为普鲁士工业化的榜样。',
+                                                quote: '如果不列颠尼亚如此轻易就能被你撼动……那它就不配存在。'
+                                            },
+                                            {
+                                                name: 'Guan Qi',
+                                                cnName: '关祁',
+                                                role: '23岁 / 学生 / 八旗子弟',
+                                                origin: 'Great Qing (Manchu)',
+                                                image: 'https://i.ibb.co/gML1H8JS/image.png',
+                                                desc: '大清两广总督之子。优雅的犬儒主义者和毒舌家。他好像对东西方的体制都感到失望，只想在混乱的世界做一个体面的闲人。',
+                                                quote: '看着蠢货在我面前死掉会影响我的心情。'
+                                            },
+                                            {
+                                                name: 'Minamoto Yuetsuki',
+                                                cnName: '源结月',
+                                                role: '19岁 / 学生 / 源氏贵族',
+                                                origin: 'Japan',
+                                                image: 'https://i.ibb.co/1tQW31L3/image.png',
+                                                desc: '源氏贵族后裔。优雅神秘的东洋女人，总是在追求极致的美感、力量与控制权。',
+                                                quote: '这间房的布置还差些意思...我必须成为最耀眼的那一个。'
+                                            },
+                                            {
+                                                name: 'Sophia Obolensky',
+                                                cnName: '索菲亚·奥博连斯基',
+                                                role: '21岁 / 学生 / 流亡贵族',
+                                                origin: 'Russian Empire',
+                                                image: 'https://i.ibb.co/hRpDTP4k/image.png',
+                                                desc: '沙俄流亡贵族。热情直率的激进革命者，总是挑战权威，痛恨一切压迫体制。好像与赫耳墨斯社有着千丝万缕的联系。',
+                                                quote: '这该死的世界谁都可以死，唯独你不行！'
+                                            },
+                                            {
+                                                name: 'Pedro de Sousa',
+                                                cnName: '佩德罗·德·索萨',
+                                                role: '19岁 / 学生 / 庄园主之子',
+                                                origin: 'Empire of Brazil',
+                                                image: 'https://i.ibb.co/cK27c402/image.png',
+                                                desc: '巴西糖业大亨之子。享乐主义的乐天派，用酒精和派对逃避家族罪恶的迷茫特权者。巴别塔最受欢迎的派对组织者。',
+                                                quote: '走吧！我们去喝酒！今天我教你跳桑巴？'
+                                            },
+                                            {
+                                                name: 'Colette Valois',
+                                                cnName: '科莱特·瓦卢瓦',
+                                                role: '27岁 / 教授 / 文学系主任',
+                                                origin: 'France / Tunisia',
+                                                image: 'https://i.ibb.co/0yr0sjS4/image.png',
+                                                desc: '法兰西贵族，文学教授。极擅长感官魔法。她的办公室与私人沙龙是全牛津最华丽的地方。她的面容明显是两种族裔的混血。你能找到她的真实身份吗？',
+                                                quote: '昨晚的月色太美了……所以我迟到了。'
+                                            }
+                                        ].map((char, i) => (
+                                            <div key={i} className="bg-[#f2efe9] border border-[#d4c5a9] rounded-sm shadow-md hover:shadow-xl transition-all duration-300 group flex flex-col sm:flex-row overflow-hidden relative">
+                                                {/* 图片区域 - 保持2:3比例 */}
+                                                <div className="w-full sm:w-40 md:w-48 shrink-0 relative bg-slate-200">
+                                                    <div className="aspect-[2/3] w-full h-full relative">
+                                                        <img
+                                                            src={char.image}
+                                                            alt={char.cnName}
+                                                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                                            loading="lazy"
+                                                        />
+                                                        {/* 图片内边框阴影，增加质感 */}
+                                                        <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.1)] pointer-events-none"></div>
+                                                    </div>
+                                                </div>
+
+                                                {/* 内容区域 */}
+                                                <div className="p-5 flex flex-col flex-1 relative">
+                                                    {/* 顶部水印图标 */}
+                                                    <div className="absolute top-2 right-2 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
+                                                        <Icon name="Feather" className="w-16 h-16 text-slate-800" />
+                                                    </div>
+
+                                                    <div className="mb-3 relative z-10">
+                                                        <div className="flex flex-col mb-2">
+                                                            <h4 className="text-xl font-bold text-slate-900 font-serif leading-none mb-1 group-hover:text-[#bfa67a] transition-colors">{char.cnName}</h4>
+                                                            <p className="text-xs text-slate-500 uppercase tracking-wide font-medium">{char.name}</p>
+                                                        </div>
+                                                        <div className="flex flex-wrap gap-2">
+                                                            <span className="text-[10px] font-bold bg-slate-200 text-slate-700 px-2 py-0.5 rounded border border-slate-300">{char.origin}</span>
+                                                            <span className="text-[10px] font-bold bg-[#bfa67a]/10 text-[#8c734b] px-2 py-0.5 rounded border border-[#bfa67a]/30">{char.role}</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <p className="text-sm text-slate-700 mb-4 leading-relaxed flex-grow">
+                                                        {char.desc}
+                                                    </p>
+
+                                                    <div className="mt-auto pt-3 border-t border-[#d4c5a9]/30">
+                                                        <p className="text-xs text-slate-600 italic font-serif relative pl-3">
+                                                            <span className="absolute left-0 top-0 text-[#bfa67a] font-bold text-lg leading-none">"</span>
+                                                            {char.quote}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* 重要 NPC */}
+                                <div className="space-y-8">
+                                    <div className="flex items-center justify-between border-b-2 border-red-900/30 pb-2 mb-6">
+                                        <h3 className="text-2xl font-bold text-red-950 font-serif">关键人物 (Key Figures)</h3>
+                                        <span className="text-xs font-bold bg-red-900 text-white px-3 py-1 rounded-full uppercase tracking-wider animate-pulse">Classified</span>
+                                    </div>
+
+                                    <div className="grid md:grid-cols-3 gap-6">
+                                        <div className="bg-slate-800 text-[#e6ded1] p-6 rounded-sm shadow-xl border border-[#bfa67a] relative overflow-hidden group md:col-span-3 lg:col-span-1">
+                                            <div className="absolute top-0 right-0 w-20 h-20 bg-[#bfa67a] rounded-bl-full opacity-20 group-hover:scale-110 transition-transform"></div>
+                                            <div className="relative z-10">
+                                                <div className="flex items-center gap-3 mb-4">
+                                                    <div className="p-2 bg-[#bfa67a] rounded-full text-slate-900">
+                                                        <Icon name="Crown" className="w-6 h-6" />
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="text-xl font-bold text-[#bfa67a]">维多利亚女王</h4>
+                                                        <p className="text-xs text-slate-400 uppercase tracking-widest">银之暴君 (The Silver Tyrant)</p>
+                                                    </div>
+                                                </div>
+                                                <p className="text-sm text-slate-300 leading-relaxed mb-4">
+                                                    帝国的绝对核心，仅20岁的年轻女王。她不仅是统治者，更是被巴别塔最高级刻银术滋养的“银色共生体”。在她眼中，世界是一座巨大的银矿，而她是唯一有资格开采它的人。
+                                                </p>
+                                                <div className="text-xs font-bold text-red-400 border-t border-slate-600 pt-2 mt-2">
+                                                    ABILITY: 君权神授 (The Sovereign's Word)
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="bg-[#e8e8e8] p-6 rounded-sm shadow-md border-l-4 border-slate-600 relative overflow-hidden group md:col-span-3 lg:col-span-1">
+                                            <div className="relative z-10">
+                                                <div className="flex items-center gap-3 mb-4">
+                                                    <div className="p-2 bg-slate-700 rounded-full text-white">
+                                                        <Icon name="Anchor" className="w-6 h-6" />
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="text-xl font-bold text-slate-900">邓肯·柯克伦</h4>
+                                                        <p className="text-xs text-slate-500 uppercase tracking-widest">海狼 (The Sea Wolf)</p>
+                                                    </div>
+                                                </div>
+                                                <p className="text-sm text-slate-700 leading-relaxed mb-4">
+                                                    前皇家海军少将，现赫耳墨斯社军事指挥官。驾驶着魔法潜艇“复仇女神号”潜伏在泰晤士河底。他相信真正的正义必须用鲜血书写，是帝国海军的噩梦。
+                                                </p>
+                                                <div className="text-xs font-bold text-slate-600 border-t border-slate-300 pt-2 mt-2">
+                                                    STATUS: 巴别塔头号通缉犯
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="bg-[#fcfbf9] p-6 rounded-sm shadow-md border-l-4 border-[#bfa67a] relative overflow-hidden group md:col-span-3 lg:col-span-1">
+                                            <div className="relative z-10">
+                                                <div className="flex items-center gap-3 mb-4">
+                                                    <div className="p-2 bg-slate-200 rounded-full text-slate-500">
+                                                        <Icon name="Heart" className="w-6 h-6" />
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="text-xl font-bold text-slate-600">玛蒂尔达·诺曼</h4>
+                                                        <p className="text-xs text-slate-400 uppercase tracking-widest">已故 (Deceased)</p>
+                                                    </div>
+                                                </div>
+                                                <p className="text-sm text-slate-600 leading-relaxed mb-4">
+                                                    主角的生母，威廉的堂姐。曾经的帝国天才外交官，为了爱跨越国界与种族，最终被家族除名。她是主角心中永远的明灯，也是主角身世之谜的关键。
+                                                </p>
+                                                <div className="text-xs font-bold text-[#bfa67a] border-t border-slate-200 pt-2 mt-2">
+                                                    LEGACY: 跨越种族的爱与语言天赋
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 7. 创作者的信 */}
+                        {activeSection === 'letter' && (
+                            <div className="animate-fade-in space-y-8 max-w-3xl mx-auto">
+                                <SectionTitle icon="MessageSquare">创作者的信 (Creator's Letter)</SectionTitle>
+
+                                <div className="relative bg-[#f4f1ea] p-8 md:p-12 shadow-2xl border-2 border-[#d4c5a9] rotate-1 transform transition-transform hover:rotate-0 duration-500 rounded-sm">
+                                    {/* Stamp Decoration */}
+                                    <div className="absolute top-6 right-8 w-24 h-24 border-4 border-red-900/30 rounded-full flex items-center justify-center -rotate-12 opacity-60 pointer-events-none select-none">
+                                        <span className="text-red-900/50 font-serif font-bold text-center leading-tight text-xs uppercase tracking-widest">
+                                            Postage<br />Paid<br />Oxford
+                                        </span>
+                                    </div>
+
+                                    {/* Content */}
+                                    <div className="font-serif text-slate-800 space-y-6 leading-relaxed text-lg">
+                                        <p className="font-bold text-xl mb-6">致读者 (Dear Reader),</p>
+
+                                        <p>感谢您打开这张角色卡！</p>
+                                        <p>我是作者 <strong>JLYANG1900</strong>（Discord ID：Arnold1900）。</p>
+                                        <p>这个作品是我的第一张角色卡，使用了我游玩酒馆几个月以来跟着社区大佬们的教程学到的各种技术。在此之前，我创作过一些其他作品，例如互动地图插件、CTE电竞战队模拟经营插件和二改卡等，都发布在旅程社区内。</p>
+
+                                        <div className="border-t-2 border-b-2 border-[#bfa67a] py-4 my-6 bg-[#bfa67a]/10 px-6 italic text-base rounded-sm">
+                                            <p className="font-bold mb-2 flex items-center gap-2 text-red-900 decoration-wavy">
+                                                <Icon name="Gavel" className="w-4 h-4" /> 注意 (NOTICE):
+                                            </p>
+                                            <p className="text-slate-900 font-bold">本角色卡完全免费，禁止任何商业盈利用途，禁止二传；请尊重社区氛围与创作热情。</p>
+                                        </div>
+
+                                        <p>
+                                            如果您喜欢，欢迎在社区留言，或关注我的小红书（MOD反情报部门），或是去我的 github 为我的任意作品点星星。这对我忽悠不列颠尼亚帝国的教授会有很大帮助，谢谢！<br />
+                                            <a href="https://github.com/JLYANG1900" target="_blank" rel="noreferrer" className="inline-block mt-2 text-[#bfa67a] font-bold border-b-2 border-[#bfa67a] hover:text-slate-900 transition-colors">
+                                                🔗 https://github.com/JLYANG1900
+                                            </a>
+                                        </p>
+
+                                        <hr className="border-slate-300 my-8 w-1/2 mx-auto" />
+
+                                        <p className="font-bold">说回“巴别塔”。</p>
+                                        <p>
+                                            这个故事的灵感来源于美籍华裔作家匡灵秀创作的科幻小说《巴别塔学院》。这本书荣获2022年星云奖最佳长篇小说奖，被人们誉为“当代哈利波特”。
+                                            但也有一种说法认为，作家创作了一个精彩的故事设定（帝国主义、殖民主义、语言魔法），却没有在剧情中描绘出真正精彩的情节。
+                                        </p>
+
+                                        <p className="font-bold text-xl text-[#bfa67a] border-l-4 border-[#bfa67a] pl-4 italic">
+                                            那么，就让我们发挥AI、大语言模型和酒馆的力量，看看我们能亲自玩出什么样的精彩故事吧！
+                                        </p>
+
+                                        <div className="text-center mt-12 mb-4">
+                                            <p className="font-bold text-2xl tracking-wider uppercase font-serif text-slate-800">
+                                                欢迎来到巴别塔！
+                                            </p>
+                                        </div>
+
+                                        <div className="text-right mt-8 font-bold italic text-slate-600">
+                                            <p className="font-serif text-lg text-slate-500">— Arnold1900</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                    </main>
+
+                    {/* Footer */}
+                    <footer className="bg-slate-900 text-slate-400 py-12 text-center border-t border-[#bfa67a] mt-12">
+                        <p className="font-serif italic mb-2">"Language is the key to the world."</p>
+                        <p className="text-xs uppercase tracking-widest opacity-50">© 1830 Royal Institute of Translation. All Rights Reserved.</p>
+                    </footer>
+                    {/* --- 新增代码：自定义弹窗 --- */}
+                    {showLockedModal && (
+                        <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
+                            {/* 黑色半透明背景遮罩 */}
+                            <div
+                                className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+                                onClick={() => setShowLockedModal(false)}
+                            ></div>
+
+                            {/* 弹窗主体 */}
+                            <div className="relative bg-[#f0eadd] border-2 border-[#bfa67a] p-8 max-w-md w-full rounded shadow-[0_0_50px_rgba(0,0,0,0.5)] animate-fade-in text-center">
+                                <div className="mb-4 flex justify-center">
+                                    <div className="p-3 bg-slate-800 rounded-full border border-[#bfa67a]">
+                                        <Icon name="Lock" className="w-8 h-8 text-[#bfa67a]" />
+                                    </div>
+                                </div>
+                                <h3 className="text-2xl font-bold text-slate-900 font-serif mb-2">权限受限 (Access Denied)</h3>
+                                <p className="text-slate-700 italic mb-6 leading-relaxed border-t border-b border-[#bfa67a]/30 py-4 my-4">
+                                    “仅限临近高年级学生进入。<br />请先从开局玩起吧！”
+                                </p>
+                                <button
+                                    onClick={() => setShowLockedModal(false)}
+                                    className="bg-slate-800 text-[#bfa67a] hover:bg-[#bfa67a] hover:text-slate-900 px-8 py-2 rounded transition-colors duration-200 font-bold uppercase tracking-widest text-xs"
+                                >
+                                    返回 (Return)
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                    {/* --- 新增结束 --- */}
+
+                </div> // 这里的 /div 对应最外层的 className="min-h-screen..."
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<BabelArchive />);
+    </script>
+</body>
+
+</html>
