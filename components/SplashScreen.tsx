@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
     Compass, Play, Pause, Volume2, VolumeX, Crown, Feather, Users,
     Globe, Scale, GraduationCap, Book, Shield, Flame, MapPin, Library,
-    Landmark, Hammer, Star, Eye
+    Landmark, Hammer, Star, Eye, Lock, AlertTriangle, Anchor, Music, Zap, Heart, Coffee, Briefcase
 } from 'lucide-react';
 
 // ===== TYPES =====
@@ -75,13 +75,110 @@ const CHARACTERS = [
 
 // Navigation sections (with apply at the rightmost)
 const NAV_SECTIONS = [
-    { id: 'world', label: '世界观', icon: Compass },
-    { id: 'campus', label: '校园生活', icon: GraduationCap },
-    { id: 'internship', label: '实习制度', icon: Globe },
-    { id: 'magic', label: '语言魔法', icon: Star },
-    { id: 'internal', label: '巴别塔', icon: Landmark },
-    { id: 'people', label: '人物档案', icon: Users },
-    { id: 'apply', label: '入学申请', icon: Feather },
+    { id: 'world', label: '世界观 World', icon: Compass },
+    { id: 'campus', label: '校园生活 Campus', icon: GraduationCap },
+    { id: 'internship', label: '实习制度 Internship', icon: Globe },
+    { id: 'magic', label: '语言魔法 Magic', icon: Star },
+    { id: 'internal', label: '巴别塔 Tower', icon: Landmark },
+    { id: 'people', label: '人物档案 People', icon: Users },
+    { id: 'apply', label: '入学申请 Apply', icon: Feather },
+];
+
+// Magic Data
+const MAGIC_DATA = [
+    {
+        id: 'utility', title: '实用类 (Utility)', icon: Anchor, isForbidden: false,
+        description: '日常生活辅助、工业应用与物理性质改变。',
+        descEn: 'Daily life assistance, industrial applications and physical property changes.',
+        pairs: [
+            { lang: '中英', words: '"稳" (Wěn) / "Stable"', diff: '"稳"含禾与急，引申为沉着、靠得住。', effect: '重心锚定：交通工具如被钉在地面般平稳。' },
+            { lang: '日英', words: '"道" (Dō) / "Way"', diff: '"道"包含技艺修行的精神境界。', effect: '自动导航：心中想着目的地，双脚自动选择正确路径。' },
+            { lang: '法英', words: '"Clef" / "Key"', diff: '"Clef"亦指乐谱中的谱号。', effect: '声波开锁：哼出特定音调即可开锁。' },
+        ]
+    },
+    {
+        id: 'entertainment', title: '娱乐类 (Entertainment)', icon: Music, isForbidden: false,
+        description: '用于社交、表演与感官愉悦的戏法。',
+        descEn: 'Tricks for social events, performances and sensory pleasure.',
+        pairs: [
+            { lang: '中英', words: '"韵" (Yùn) / "Rhyme"', diff: '"韵"指余韵、风度、悠长回味。', effect: '余音绕梁：旋律在听众脑海中清晰回荡数日。' },
+            { lang: '日英', words: '"花火" (Hanabi) / "Fireworks"', diff: '字面意为"火之花"，赋予植物般生命力。', effect: '火树银花：烟花如真花般在空中盛开。' },
+        ]
+    },
+    {
+        id: 'medical', title: '治疗与心理类 (Medical & Mental)', icon: Heart, isForbidden: false,
+        description: '针对肉体创伤与精神状态的干涉与治愈。',
+        descEn: 'Intervention and healing for physical trauma and mental states.',
+        pairs: [
+            { lang: '中英', words: '"安" (Ān) / "Peace"', diff: '"安"字形含屋顶与女，意指家宅稳固。', effect: '精神镇静剂：创造极致安全感。' },
+            { lang: '德英', words: '"Gestalt" / "Shape"', diff: '"Gestalt"指完形，整体大于部分之和。', effect: '肢体重塑：引导碎骨按原本结构自动归位。' },
+        ]
+    },
+    {
+        id: 'combat', title: '战斗类 (Combat)', icon: Zap, isForbidden: true,
+        description: '具有直接破坏力或战术优势的攻击性刻银术。',
+        descEn: 'Offensive silver-work with direct destructive power.',
+        pairs: [
+            { lang: '中英', words: '"煞" (Shà) / "Fiend"', diff: '"煞"指凶恶终结的气数或凶神。', effect: '生机断绝：伤口周围细胞坏死，极难愈合。' },
+            { lang: '日英', words: '"斬る" (Kiru) / "Cut"', diff: '"斬る"带有武士道的决绝杀意。', effect: '锋利度增幅：将"杀意"转化为物理锋利度。' },
+            { lang: '德英', words: '"Blitz" / "Lightning"', diff: '"Blitz"带有"闪电战"的军事突袭含义。', effect: '极速突袭：赋予超常反应速度与爆发力。' },
+        ]
+    },
+    {
+        id: 'stealth', title: '潜行类 (Stealth)', icon: Eye, isForbidden: true,
+        description: '用于隐蔽行动、藏匿与消除踪迹的刻银术。',
+        descEn: 'Silver-work for covert operations and concealment.',
+        pairs: [
+            { lang: '中英', words: '"潜" (Qián) / "Submerge"', diff: '"潜"含"潜伏、隐蔽、深藏不露"之意。', effect: '介质同化：融入环境，消除摩擦声与阻力。' },
+            { lang: '日英', words: '"気配" (Kehai) / "Sign"', diff: '"気配"指第六感般的"气息"或氛围。', effect: '气息遮断：抹除存在感，让人下意识忽略。' },
+        ]
+    },
+];
+
+// Internship Data
+const INTERNSHIP_DATA = [
+    {
+        id: 'legal', title: '法务部 (Legal Department)', scenarioName: '法务部实习',
+        subtitle: '帝国的掠夺之手 The Hand of Plunder', icon: Scale,
+        tags: ['现实主义商战', '律政惊悚', '资源管理'],
+        core: { desc: '起草贸易条约，解决跨国纠纷。', tasks: '起草对外贸易条款；通过翻译为帝国赢得银矿开采权。', rewards: '金钱与佣金。' },
+        paths: {
+            imperialist: { title: '帝国精英路线 Imperial Elite', desc: '用法律构建和平框架，获得权贵赏识。' },
+            resistance: { title: '反抗潜伏路线 Resistance Spy', desc: '在条约中寻找漏洞，传递情报给赫耳墨斯社。' }
+        }
+    },
+    {
+        id: 'literature', title: '文学部 (Literature)', scenarioName: '文学部实习',
+        subtitle: '白银时代的社交场 The Socialite', icon: Feather,
+        tags: ['恋爱模拟', '宫廷权谋', '上流社会'],
+        core: { desc: '享乐主义的温床。武器是魅力、诗歌和八卦。', tasks: '参加精英沙龙；追求或被追求。', rewards: '情报与人脉。' },
+        paths: {
+            imperialist: { title: '帝国精英路线 Imperial Elite', desc: '社交界的宠儿，巩固阶级地位。' },
+            resistance: { title: '反抗潜伏路线 Resistance Spy', desc: '戴着面具的间谍，套取机密。' }
+        }
+    },
+    {
+        id: 'interpretation', title: '口译部 (Interpretation)', scenarioName: '口译部实习',
+        subtitle: '悬崖上的冒险家 The Adventurer', icon: Globe,
+        tags: ['全球探险', '危机生存', '公路电影'],
+        core: { desc: '随皇家海军和商船出海，作为沟通的桥梁。', tasks: '在持枪对峙的谈判桌上进行同声传译。', rewards: '风险极高，但能亲历世界。' },
+        paths: {
+            imperialist: { title: '帝国精英路线 Imperial Elite', desc: '象征帝国的理性声音，保护军队安全。' },
+            resistance: { title: '反抗潜伏路线 Resistance Spy', desc: '赫耳墨斯社的地下联络人。' }
+        }
+    }
+];
+
+// Floors Data
+const FLOORS_DATA = [
+    { level: 1, name: '大堂 The Lobby', icon: Users, image: 'https://i.ibb.co/v4XfX0Dx/1.png', desc: '巴别塔与世俗世界交汇的边界。', descEn: 'The boundary where Babel meets the secular world.' },
+    { level: 2, name: '法务部 Legal Dept', icon: Scale, image: 'https://i.ibb.co/kgwd2z83/2.png', desc: '被称为"帝国的齿轮"，创收最多的部门。', descEn: 'Called "the Gears of Empire", the highest revenue department.' },
+    { level: 3, name: '口译部 Interpretation', icon: Coffee, image: 'https://i.ibb.co/Rp2w9r71/3.png', desc: '属于冒险家的流动空间。', descEn: 'A fluid space for adventurers.' },
+    { level: 4, name: '文学系 Literature', icon: Feather, image: 'https://i.ibb.co/XkLdhB0J/4.png', desc: '保存着语言最纯粹的生命力。', descEn: 'Preserves the purest vitality of language.' },
+    { level: 5, name: '参考资料室 Reference', icon: Library, image: 'https://i.ibb.co/wNhBKtWn/5.png', desc: '安静的学术宝库。', descEn: 'A quiet academic treasure trove.' },
+    { level: 6, name: '教室 Instruction', icon: GraduationCap, image: 'https://i.ibb.co/Rk92J1p4/6.png', desc: '学习的紧张感和求知的渴望。', descEn: 'Tension of learning and thirst for knowledge.' },
+    { level: 7, name: '办公室 Faculty', icon: Landmark, image: 'https://i.ibb.co/k2TSXX0k/7.png', desc: '教授与高级研究员的私人领地。', descEn: 'Private domain of professors and senior scholars.' },
+    { level: 8, name: '刻银部 Silver-working', icon: Hammer, image: '', desc: '唯一的禁地，隐藏在重门之后。', descEn: 'The only forbidden zone, hidden behind heavy doors.' },
 ];
 
 // ===== COMPONENTS =====
@@ -153,6 +250,16 @@ const Card: React.FC<{ title?: string; subtitle?: string; children: React.ReactN
     </div>
 );
 
+/** Silver Bar Component for magic system */
+const SilverBar: React.FC<{ label: string; description: string }> = ({ label, description }) => (
+    <div className="bg-gradient-to-br from-gray-200 via-gray-100 to-gray-300 border border-gray-400 rounded p-4 shadow-lg transform hover:-translate-y-1 transition-transform duration-300 w-full">
+        <div className="flex justify-between items-center mb-2 border-b border-gray-300 pb-2">
+            <span className="font-bold text-slate-800 tracking-widest uppercase text-sm">{label}</span>
+        </div>
+        <p className="text-xs text-slate-700 italic text-center px-2">{description}</p>
+    </div>
+);
+
 /** Character Card */
 const CharacterCard: React.FC<{ character: typeof CHARACTERS[0] }> = ({ character }) => (
     <div className="bg-[#f4f1ea] border border-[#d4c5a9] rounded-sm overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
@@ -187,6 +294,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onStartGame }) => {
     const [gender, setGender] = useState<'female' | 'male' | 'other'>('female');
     const [personality, setPersonality] = useState('');
     const [appearance, setAppearance] = useState('');
+    const [showLockedModal, setShowLockedModal] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -241,43 +349,59 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onStartGame }) => {
                         <SectionTitle icon={<Compass className="w-6 h-6" />}>世界观设定 (World Setting)</SectionTitle>
                         <div className="grid md:grid-cols-2 gap-8">
                             <Card title="帝国背景与魔法源泉" subtitle="Imperial Background">
-                                <div className="space-y-4">
-                                    <p>架空世界的19世纪初，不列颠尼亚帝国率先发动了工业革命，一跃成为世界霸主。</p>
+                                <div className="space-y-4 text-slate-800">
+                                    <p>架空世界的19世纪初，不列颠尼亚帝国率先发动了工业革命，一跃成为世界霸主，并向全世界发起殖民。</p>
+                                    <p className="text-sm text-slate-600 italic">In the early 19th century of an alternate world, the Britannia Empire led the Industrial Revolution, becoming the world's hegemon.</p>
                                     <p>工业的力量源泉是白银、语言和魔法。刻有两种语言的银条能产生魔法、驱动工业。</p>
+                                    <p className="text-sm text-slate-600 italic">The source of industrial power is silver, language, and magic. Silver bars inscribed with two languages can produce magic.</p>
                                     <p>牛津的巴别塔是帝国培养全世界多语言人才的根据地。</p>
                                 </div>
                             </Card>
                             <Card title="刻银术 (Silver-work)" subtitle="Core Magic System">
-                                <div className="space-y-3">
-                                    <p><strong>核心媒介：</strong>银条 (Silver Bar)</p>
-                                    <p><strong>运作原理：</strong>配对 (Match-pair) 与蚀刻 (Etch)。利用语言间的"意义缺失"产生魔法。</p>
+                                <div className="space-y-4">
+                                    <p><strong>核心媒介 Core Medium：</strong>银条 (Silver Bar)</p>
+                                    <p><strong>运作原理 Mechanism：</strong>配对 (Match-pair) 与蚀刻 (Etch)。利用语言间的"意义缺失" (Meaning Gap) 产生魔法。</p>
+                                    <div className="grid grid-cols-2 gap-3 mt-4">
+                                        <SilverBar label="TRANSLATION" description="翻译即背叛 Traduire c'est trahir" />
+                                        <SilverBar label="ETYMOLOGY" description="词源溯源 Root of Words" />
+                                    </div>
                                 </div>
                             </Card>
-                            <Card title="势力阵营" subtitle="The Conflict" className="md:col-span-2">
+                            <Card title="势力阵营 (Factions)" subtitle="The Conflict" className="md:col-span-2">
                                 <div className="grid md:grid-cols-3 gap-4">
                                     <div className="flex items-start gap-2">
                                         <Crown className="w-5 h-5 text-blue-700 mt-1 flex-shrink-0" />
                                         <div>
-                                            <strong className="text-slate-800">不列颠尼亚帝国</strong>
-                                            <p className="text-sm text-slate-600">利用翻译学院扩张殖民霸权</p>
+                                            <strong className="text-slate-800">不列颠尼亚帝国 Britannia Empire</strong>
+                                            <p className="text-sm text-slate-600">利用翻译学院扩张殖民霸权。Uses the translation academy to expand colonial hegemony.</p>
                                         </div>
                                     </div>
                                     <div className="flex items-start gap-2">
                                         <Flame className="w-5 h-5 text-red-700 mt-1 flex-shrink-0" />
                                         <div>
-                                            <strong className="text-slate-800">赫耳墨斯社</strong>
-                                            <p className="text-sm text-slate-600">地下抵抗组织，从事破坏活动</p>
+                                            <strong className="text-slate-800">赫耳墨斯社 Hermes Society</strong>
+                                            <p className="text-sm text-slate-600">地下抵抗组织，从事破坏活动。Underground resistance, engaging in sabotage.</p>
                                         </div>
                                     </div>
                                     <div className="flex items-start gap-2">
                                         <Scale className="w-5 h-5 text-slate-600 mt-1 flex-shrink-0" />
                                         <div>
-                                            <strong className="text-slate-800">忠诚的破坏者</strong>
-                                            <p className="text-sm text-slate-600">处于夹缝中的潜伏者身份</p>
+                                            <strong className="text-slate-800">忠诚的破坏者 Loyal Saboteur</strong>
+                                            <p className="text-sm text-slate-600">处于夹缝中的潜伏者身份。A double agent caught between worlds.</p>
                                         </div>
                                     </div>
                                 </div>
                             </Card>
+                        </div>
+                        {/* Quote Block */}
+                        <div className="bg-slate-800 text-[#e6ded1] p-8 rounded-sm shadow-xl border border-[#bfa67a]">
+                            <h3 className="text-xl font-bold mb-4 flex items-center gap-2"><Eye className="w-5 h-5" /> 表象与真相 (Facade vs. Truth)</h3>
+                            <p className="leading-relaxed italic opacity-90">
+                                "巴别塔不仅是一座塔，它是帝国的心脏，也是谎言的堡垒。在这里，不可见之物往往比可见之物更加致命。"
+                            </p>
+                            <p className="leading-relaxed italic opacity-70 text-sm mt-2">
+                                "Babel is not just a tower—it is the heart of the Empire, and a fortress of lies. Here, the invisible is often more deadly than the visible."
+                            </p>
                         </div>
                     </div>
                 )}
@@ -323,16 +447,67 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onStartGame }) => {
 
                 {/* People Section */}
                 {activeSection === 'people' && (
-                    <div className="animate-fade-in space-y-8">
+                    <div className="animate-fade-in space-y-16">
                         <SectionTitle icon={<Users className="w-6 h-6" />}>人物档案 (Personnel)</SectionTitle>
-                        <div className="flex items-center justify-between border-b-2 border-slate-300 pb-2 mb-6">
-                            <h3 className="text-2xl font-bold text-slate-800 font-serif">学院成员 (Academy Members)</h3>
-                            <span className="text-xs font-bold bg-[#bfa67a] text-white px-3 py-1 rounded-full uppercase tracking-wider">Class of 1830</span>
+
+                        {/* Academy Members */}
+                        <div className="space-y-8">
+                            <div className="flex items-center justify-between border-b-2 border-slate-300 pb-2 mb-6">
+                                <h3 className="text-2xl font-bold text-slate-800 font-serif">学院成员 (Academy Members)</h3>
+                                <span className="text-xs font-bold bg-[#bfa67a] text-white px-3 py-1 rounded-full uppercase tracking-wider">Class of 1830</span>
+                            </div>
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                {CHARACTERS.map((char, idx) => (
+                                    <CharacterCard key={idx} character={char} />
+                                ))}
+                            </div>
                         </div>
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            {CHARACTERS.map((char, idx) => (
-                                <CharacterCard key={idx} character={char} />
-                            ))}
+
+                        {/* Key Figures */}
+                        <div className="space-y-8">
+                            <div className="flex items-center justify-between border-b-2 border-red-900/30 pb-2 mb-6">
+                                <h3 className="text-2xl font-bold text-red-950 font-serif">关键人物 (Key Figures)</h3>
+                                <span className="text-xs font-bold bg-red-900 text-white px-3 py-1 rounded-full uppercase tracking-wider animate-pulse">Classified</span>
+                            </div>
+                            <div className="grid md:grid-cols-3 gap-6">
+                                {/* Queen Victoria */}
+                                <div className="bg-slate-800 text-[#e6ded1] p-6 rounded-sm shadow-xl border border-[#bfa67a] relative overflow-hidden">
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <div className="p-2 bg-[#bfa67a] rounded-full text-slate-900"><Crown className="w-6 h-6" /></div>
+                                        <div>
+                                            <h4 className="text-xl font-bold text-[#bfa67a]">维多利亚女王</h4>
+                                            <p className="text-xs text-slate-400 uppercase tracking-widest">银之暴君 The Silver Tyrant</p>
+                                        </div>
+                                    </div>
+                                    <p className="text-sm text-slate-300 leading-relaxed mb-4">帝国的绝对核心，仅20岁的年轻女王。被巴别塔最高级刻银术滋养的"银色共生体"。</p>
+                                    <p className="text-xs text-slate-400 italic">The absolute core of the Empire, a young queen of only 20 years.</p>
+                                    <div className="text-xs font-bold text-red-400 border-t border-slate-600 pt-2 mt-2">ABILITY: 君权神授 The Sovereign's Word</div>
+                                </div>
+                                {/* Duncan */}
+                                <div className="bg-[#e8e8e8] p-6 rounded-sm shadow-md border-l-4 border-slate-600">
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <div className="p-2 bg-slate-700 rounded-full text-white"><Anchor className="w-6 h-6" /></div>
+                                        <div>
+                                            <h4 className="text-xl font-bold text-slate-900">邓肯·柯克伦</h4>
+                                            <p className="text-xs text-slate-500 uppercase tracking-widest">海狼 The Sea Wolf</p>
+                                        </div>
+                                    </div>
+                                    <p className="text-sm text-slate-700 leading-relaxed mb-4">前皇家海军少将，现赫耳墨斯社军事指挥官。驾驶魔法潜艇"复仇女神号"潜伏在泰晤士河底。</p>
+                                    <div className="text-xs font-bold text-slate-600 border-t border-slate-300 pt-2 mt-2">STATUS: 巴别塔头号通缉犯 Most Wanted</div>
+                                </div>
+                                {/* Matilda */}
+                                <div className="bg-[#fcfbf9] p-6 rounded-sm shadow-md border-l-4 border-[#bfa67a]">
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <div className="p-2 bg-slate-200 rounded-full text-slate-500"><Heart className="w-6 h-6" /></div>
+                                        <div>
+                                            <h4 className="text-xl font-bold text-slate-600">玛蒂尔达·诺曼</h4>
+                                            <p className="text-xs text-slate-400 uppercase tracking-widest">已故 Deceased</p>
+                                        </div>
+                                    </div>
+                                    <p className="text-sm text-slate-600 leading-relaxed mb-4">主角的生母，威廉的堂姐。曾经的帝国天才外交官，为了爱跨越国界与种族。</p>
+                                    <div className="text-xs font-bold text-[#bfa67a] border-t border-slate-200 pt-2 mt-2">LEGACY: 跨越种族的爱与语言天赋</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 )}
@@ -340,41 +515,78 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onStartGame }) => {
                 {/* Internship Section */}
                 {activeSection === 'internship' && (
                     <div className="animate-fade-in space-y-8">
-                        <SectionTitle icon={<Globe className="w-6 h-6" />}>实习与抉择 (Internship & Factions)</SectionTitle>
+                        <SectionTitle icon={<Briefcase className="w-6 h-6" />}>实习与抉择 (Internship & Factions)</SectionTitle>
                         <div className="p-4 bg-slate-800 text-[#bfa67a] rounded text-center font-serif italic border border-[#bfa67a]/30">
-                            "实习不仅是工作，更是关于掠夺与权力的选择。你将成为谁？"
+                            "实习不仅是工作，更是关于掠夺与权力的选择。你将成为谁？"<br />
+                            <span className="text-sm opacity-70">"Internship is not just work—it's a choice about plunder and power. Who will you become?"</span>
                         </div>
-                        <div className="grid md:grid-cols-2 gap-6">
-                            <Card title="法务部" subtitle="Legal Department">
-                                <div className="space-y-3">
-                                    <p className="text-sm">起草贸易条约，解决跨国纠纷。金钱与佣金是主要回报。</p>
-                                    <div className="grid grid-cols-2 gap-3 mt-4">
-                                        <div className="p-3 bg-blue-50 border-t-2 border-blue-800">
-                                            <h4 className="font-bold text-blue-800 text-sm flex items-center gap-1"><Crown className="w-3 h-3" /> 帝国精英路线</h4>
-                                            <p className="text-xs text-slate-600 mt-1">用法律构建和平框架，获得权贵赏识</p>
+                        <div className="space-y-8">
+                            {INTERNSHIP_DATA.map((dept) => (
+                                <div key={dept.id} className="bg-[#f0eadd] border border-[#d4c5a9] rounded shadow-lg overflow-hidden flex flex-col md:flex-row">
+                                    <div className="bg-[#e6ded1] p-6 md:w-1/3 border-b md:border-b-0 md:border-r border-[#d4c5a9] flex flex-col">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="p-3 bg-slate-800 rounded-full text-[#bfa67a]">
+                                                <dept.icon className="w-6 h-6" />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-xl font-bold text-slate-900">{dept.title}</h3>
+                                                <p className="text-xs text-slate-600 italic">{dept.subtitle}</p>
+                                            </div>
                                         </div>
-                                        <div className="p-3 bg-red-50 border-t-2 border-red-800">
-                                            <h4 className="font-bold text-red-800 text-sm flex items-center gap-1"><Flame className="w-3 h-3" /> 反抗潜伏路线</h4>
-                                            <p className="text-xs text-slate-600 mt-1">在条约中寻找漏洞，传递情报</p>
+                                        <div className="flex flex-wrap gap-2 mb-4">
+                                            {dept.tags.map(tag => (
+                                                <span key={tag} className="text-[10px] uppercase font-bold px-2 py-1 bg-slate-200 text-slate-700 rounded border border-slate-300">{tag}</span>
+                                            ))}
+                                        </div>
+                                        <div className="space-y-3 text-sm text-slate-700 mb-4">
+                                            <div><strong className="text-slate-900">核心体验 Core:</strong> {dept.core.desc}</div>
+                                            <div><strong className="text-slate-900">任务 Tasks:</strong> {dept.core.tasks}</div>
+                                            <div><strong className="text-slate-900">奖励 Rewards:</strong> {dept.core.rewards}</div>
+                                        </div>
+                                        <button
+                                            onClick={() => dept.id === 'interpretation' ? setShowLockedModal(true) : null}
+                                            className="mt-auto w-full bg-slate-800 hover:bg-[#bfa67a] text-white hover:text-slate-900 font-serif py-2 px-4 rounded transition-colors duration-300 flex items-center justify-center gap-2 uppercase text-xs tracking-widest font-bold shadow-lg"
+                                        >
+                                            {dept.id === 'interpretation' ? <><Lock className="w-3 h-3" /> 进入部门 Enter Dept</> : <><Play className="w-3 h-3" /> 入职报到 Start</>}
+                                        </button>
+                                    </div>
+                                    <div className="flex-1 p-6 bg-slate-50/50">
+                                        <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4 text-center">Dual Perspectives · 双重立场</h4>
+                                        <div className="grid md:grid-cols-2 gap-4">
+                                            <div className="bg-white border-t-4 border-blue-900 p-4 shadow-sm">
+                                                <h5 className="font-bold text-blue-900 mb-2 flex items-center gap-2"><Crown className="w-4 h-4" /> {dept.paths.imperialist.title}</h5>
+                                                <p className="text-sm text-slate-600">{dept.paths.imperialist.desc}</p>
+                                            </div>
+                                            <div className="bg-white border-t-4 border-red-800 p-4 shadow-sm">
+                                                <h5 className="font-bold text-red-800 mb-2 flex items-center gap-2"><Flame className="w-4 h-4" /> {dept.paths.resistance.title}</h5>
+                                                <p className="text-sm text-slate-600">{dept.paths.resistance.desc}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </Card>
-                            <Card title="文学部" subtitle="Literature">
-                                <div className="space-y-3">
-                                    <p className="text-sm">战场是舞厅和沙龙，武器是魅力、诗歌和八卦。情报与人脉为主要回报。</p>
-                                    <div className="grid grid-cols-2 gap-3 mt-4">
-                                        <div className="p-3 bg-blue-50 border-t-2 border-blue-800">
-                                            <h4 className="font-bold text-blue-800 text-sm flex items-center gap-1"><Crown className="w-3 h-3" /> 帝国精英路线</h4>
-                                            <p className="text-xs text-slate-600 mt-1">社交界的宠儿，享受奢靡生活</p>
+                            ))}
+                            {/* Locked Silver-working Section */}
+                            <div className="relative p-1 bg-gradient-to-r from-[#bfa67a] via-slate-400 to-[#bfa67a] rounded shadow-2xl">
+                                <div className="bg-slate-900 text-[#e6ded1] p-8 rounded relative overflow-hidden">
+                                    <div className="text-center mb-6">
+                                        <div className="inline-flex items-center gap-2 bg-red-900/80 text-red-200 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-4 border border-red-500/50 animate-pulse">
+                                            <Lock className="w-3 h-3" /> Locked until Final Year · 仅限高年级
                                         </div>
-                                        <div className="p-3 bg-red-50 border-t-2 border-red-800">
-                                            <h4 className="font-bold text-red-800 text-sm flex items-center gap-1"><Flame className="w-3 h-3" /> 反抗潜伏路线</h4>
-                                            <p className="text-xs text-slate-600 mt-1">戴着面具的间谍，套取机密</p>
+                                        <h3 className="text-3xl font-bold text-[#bfa67a] font-serif mb-2">刻银部 (Silver-working)</h3>
+                                        <p className="text-slate-400 italic">命运的终极分歧点 The Endgame</p>
+                                    </div>
+                                    <div className="grid md:grid-cols-2 gap-4">
+                                        <div className="bg-slate-800 border border-blue-900/50 p-5 rounded">
+                                            <h4 className="text-blue-400 font-bold mb-2">路线 A：帝国的栋梁 Pillar of Empire</h4>
+                                            <p className="text-sm text-slate-300">你选择了繁荣、秩序和财富。你成为了帝国的守护者。</p>
+                                        </div>
+                                        <div className="bg-slate-800 border border-red-900/50 p-5 rounded">
+                                            <h4 className="text-red-400 font-bold mb-2">路线 B：赫耳墨斯的信徒 Disciple of Hermes</h4>
+                                            <p className="text-sm text-slate-300">你选择了自由、尊严和革命。你点燃了革命火炬。</p>
                                         </div>
                                     </div>
                                 </div>
-                            </Card>
+                            </div>
                         </div>
                     </div>
                 )}
@@ -383,54 +595,100 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onStartGame }) => {
                 {activeSection === 'magic' && (
                     <div className="animate-fade-in space-y-8">
                         <SectionTitle icon={<Star className="w-6 h-6" />}>语言魔法 (Language Magic)</SectionTitle>
-                        <Card title="魔法分类" subtitle="Magic Categories">
-                            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                {[
-                                    { name: '实用类 (Utility)', desc: '日常生活辅助与物理性质改变', example: '"稳" (Wěn) / "Stable" → 重心锚定' },
-                                    { name: '娱乐类 (Entertainment)', desc: '社交、表演与感官愉悦', example: '"韵" (Yùn) / "Rhyme" → 余音绕梁' },
-                                    { name: '治疗类 (Medical)', desc: '肉体创伤与精神状态干涉', example: '"安" (Ān) / "Peace" → 精神镇静' },
-                                    { name: '战斗类 (Combat)', desc: '具有直接破坏力的攻击性魔法', forbidden: true, example: '"煞" (Shà) / "Fiend" → 生机断绝' },
-                                    { name: '潜行类 (Stealth)', desc: '隐蔽行动与消除踪迹', forbidden: true, example: '"潜" (Qián) / "Submerge" → 介质同化' },
-                                ].map((cat, idx) => (
-                                    <div key={idx} className={`p-4 border rounded ${cat.forbidden ? 'border-red-300 bg-red-50' : 'border-slate-200 bg-slate-50'}`}>
-                                        <h4 className={`font-bold mb-2 ${cat.forbidden ? 'text-red-800' : 'text-slate-800'}`}>
-                                            {cat.name}
-                                            {cat.forbidden && <span className="ml-2 text-xs bg-red-800 text-white px-1 rounded">禁术</span>}
-                                        </h4>
-                                        <p className="text-xs text-slate-600 mb-2">{cat.desc}</p>
-                                        <p className="text-xs italic text-[#bfa67a]">{cat.example}</p>
+                        {/* Quote */}
+                        <div className="mb-8 p-6 bg-slate-800 text-[#e6ded1] rounded-lg shadow-xl border-l-4 border-[#bfa67a]">
+                            <p className="italic font-serif leading-relaxed">
+                                "翻译即背叛。正是这种背叛——词义在跨越语言边界时的流失与扭曲——创造了刻银术的力量。"
+                            </p>
+                            <p className="italic font-serif leading-relaxed text-sm opacity-70 mt-2">
+                                "Translation is betrayal. It's this betrayal—the loss and distortion of meaning across linguistic boundaries—that creates the power of silver-work."
+                            </p>
+                        </div>
+                        {/* Magic Categories */}
+                        <div className="space-y-12">
+                            {MAGIC_DATA.map((category) => (
+                                <div key={category.id} className={`rounded-lg p-6 ${category.isForbidden ? 'bg-slate-900 border border-red-900/50' : 'bg-[#f4f1ea] border border-[#d4c5a9]'}`}>
+                                    <div className="flex items-center gap-3 mb-6">
+                                        <div className={`p-2 rounded-full ${category.isForbidden ? 'bg-red-950 text-red-500' : 'bg-slate-200 text-slate-700'}`}>
+                                            <category.icon className="w-6 h-6" />
+                                        </div>
+                                        <div>
+                                            <h3 className={`text-2xl font-bold font-serif flex items-center gap-3 ${category.isForbidden ? 'text-red-100' : 'text-slate-800'}`}>
+                                                {category.title}
+                                                {category.isForbidden && <span className="px-2 py-1 bg-red-900 text-white text-xs font-bold uppercase tracking-widest border border-red-500 flex items-center gap-1"><Lock className="w-3 h-3" /> 禁术 Forbidden</span>}
+                                            </h3>
+                                            <p className={`text-sm italic ${category.isForbidden ? 'text-red-300/70' : 'text-slate-600'}`}>{category.description}</p>
+                                        </div>
                                     </div>
-                                ))}
-                            </div>
-                        </Card>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                        {category.pairs.map((pair, idx) => (
+                                            <div key={idx} className={`p-4 rounded shadow-sm border ${category.isForbidden ? 'bg-[#1a1a1a] border-red-900/30' : 'bg-white border-slate-200'}`}>
+                                                <div className={`flex justify-between items-start mb-2 pb-2 border-b ${category.isForbidden ? 'border-red-900/30' : 'border-slate-200'}`}>
+                                                    <span className={`font-bold font-serif ${category.isForbidden ? 'text-red-50' : 'text-slate-900'}`}>{pair.words}</span>
+                                                    <span className={`text-xs font-bold px-2 py-1 rounded ${category.isForbidden ? 'bg-red-900 text-red-100' : 'bg-slate-700 text-white'}`}>{pair.lang}</span>
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <div>
+                                                        <h4 className={`text-xs font-bold uppercase tracking-widest mb-1 ${category.isForbidden ? 'text-red-400' : 'text-slate-500'}`}>语义差异 Gap</h4>
+                                                        <p className={`text-xs ${category.isForbidden ? 'text-gray-400' : 'text-slate-700'}`}>{pair.diff}</p>
+                                                    </div>
+                                                    <div className={`p-2 rounded ${category.isForbidden ? 'bg-red-950/20' : 'bg-slate-50'}`}>
+                                                        <h4 className={`text-xs font-bold mb-1 ${category.isForbidden ? 'text-red-200' : 'text-[#bfa67a]'}`}><Zap className="w-3 h-3 inline mr-1" />效果 Effect</h4>
+                                                        <p className={`text-xs font-medium ${category.isForbidden ? 'text-red-100' : 'text-slate-800'}`}>{pair.effect}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 )}
 
                 {/* Internal Tower Section */}
                 {activeSection === 'internal' && (
                     <div className="animate-fade-in space-y-8">
-                        <SectionTitle icon={<Landmark className="w-6 h-6" />}>巴别塔 (Internal)</SectionTitle>
-                        <div className="space-y-4">
-                            {[8, 7, 6, 5, 4, 3, 2, 1].map(level => {
-                                const floors: Record<number, { name: string; eng: string; desc: string }> = {
-                                    8: { name: '刻银部', eng: 'Silver-working', desc: '禁地，银条制造车间' },
-                                    7: { name: '教授办公室', eng: 'Faculty Offices', desc: '教授与高级研究员的私人领地' },
-                                    6: { name: '教室', eng: 'Instruction Rooms', desc: '从基础拉丁语到翻译理论' },
-                                    5: { name: '参考资料室', eng: 'Reference Materials', desc: '学术宝库，世界语言词典' },
-                                    4: { name: '文学系', eng: 'Literature', desc: '翻译与比较文学' },
-                                    3: { name: '口译部', eng: 'Interpretation', desc: '外交口译培训' },
-                                    2: { name: '法务部', eng: 'Legal Department', desc: '条约与法律翻译' },
-                                    1: { name: '大堂', eng: 'The Lobby', desc: '唯一对公众开放的区域' },
-                                };
-                                const floor = floors[level];
+                        <SectionTitle icon={<MapPin className="w-6 h-6" />}>巴别塔内部布局 (Inside Babel)</SectionTitle>
+                        {/* Quote Header */}
+                        <div className="bg-slate-800 text-[#e6ded1] p-6 rounded border-t-4 border-[#bfa67a] shadow-xl">
+                            <p className="italic text-lg text-center font-serif opacity-90">
+                                "巴别塔不仅是一座学术殿堂，更是一台巨大的帝国机器。从熙攘的大堂到危险的刻银部，每一层都精密运转。"
+                            </p>
+                            <p className="italic text-sm text-center font-serif opacity-70 mt-2">
+                                "Babel is not just an academic hall—it's a massive imperial machine. From the bustling lobby to the dangerous silver-working floor, every level operates with precision."
+                            </p>
+                        </div>
+                        {/* Floor List */}
+                        <div className="space-y-6">
+                            {[...FLOORS_DATA].reverse().map((floor, index) => {
+                                const FloorIcon = floor.icon;
                                 return (
-                                    <div key={level} className="flex items-center gap-4 p-4 bg-[#f4f1ea] border border-[#d4c5a9] rounded">
-                                        <div className="w-12 h-12 bg-slate-800 text-[#bfa67a] font-bold text-lg flex items-center justify-center rounded-full">
-                                            {level}F
+                                    <div key={floor.level} className={`flex flex-col md:flex-row items-center gap-6 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
+                                        {/* Floor Card */}
+                                        <div className="w-full md:w-1/2 bg-[#f4f1ea] p-6 rounded border border-[#dcd0bc] shadow-md">
+                                            <div className="flex items-center gap-3 mb-3 border-b border-[#bfa67a]/40 pb-2">
+                                                <div className="w-10 h-10 bg-slate-800 text-[#bfa67a] font-bold flex items-center justify-center rounded-full text-sm">{floor.level}F</div>
+                                                <div className="p-2 bg-slate-200 rounded-full"><FloorIcon className="w-5 h-5 text-slate-800" /></div>
+                                                <h3 className="text-xl font-bold text-slate-900">{floor.name}</h3>
+                                            </div>
+                                            <p className="text-sm text-slate-600 italic">{floor.desc}</p>
+                                            <p className="text-xs text-slate-500 mt-1">{floor.descEn}</p>
                                         </div>
-                                        <div>
-                                            <h4 className="font-bold text-slate-900">{floor.name} <span className="text-xs text-slate-500">({floor.eng})</span></h4>
-                                            <p className="text-sm text-slate-600">{floor.desc}</p>
+                                        {/* Floor Image */}
+                                        <div className="w-full md:w-1/2">
+                                            {floor.image ? (
+                                                <div className="aspect-video rounded-sm border-2 border-[#bfa67a] shadow-lg overflow-hidden">
+                                                    <img src={floor.image} alt={floor.name} className="w-full h-full object-cover" />
+                                                </div>
+                                            ) : floor.level === 8 && (
+                                                <div className="aspect-video rounded-sm border-2 border-red-900/40 shadow-xl overflow-hidden bg-[#1a0f0f] flex items-center justify-center">
+                                                    <div className="p-4 border border-red-900/30 bg-black/60 text-center">
+                                                        <Lock className="w-6 h-6 text-red-500 mx-auto mb-2" />
+                                                        <span className="text-red-500/80 font-serif tracking-widest italic text-sm">这里是禁区… Restricted Area</span>
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 );
@@ -570,9 +828,35 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onStartGame }) => {
             </main>
 
             {/* Footer */}
-            <footer className="border-t border-[#bfa67a]/30 py-6 text-center text-xs text-slate-500">
-                <p>巴别塔档案馆 | The Babel Archive · Oxford · MDCCCXXX</p>
+            <footer className="bg-slate-900 text-slate-400 py-12 text-center border-t border-[#bfa67a] mt-12">
+                <p className="font-serif italic mb-2">"Language is the key to the world."</p>
+                <p className="text-xs uppercase tracking-widest opacity-50">© 1830 Royal Institute of Translation. All Rights Reserved.</p>
             </footer>
+
+            {/* Locked Modal */}
+            {showLockedModal && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowLockedModal(false)} />
+                    <div className="relative bg-[#f0eadd] border-2 border-[#bfa67a] p-8 max-w-md w-full rounded shadow-[0_0_50px_rgba(0,0,0,0.5)] animate-fade-in text-center">
+                        <div className="mb-4 flex justify-center">
+                            <div className="p-3 bg-slate-800 rounded-full border border-[#bfa67a]">
+                                <Lock className="w-8 h-8 text-[#bfa67a]" />
+                            </div>
+                        </div>
+                        <h3 className="text-2xl font-bold text-slate-900 font-serif mb-2">权限受限 (Access Denied)</h3>
+                        <p className="text-slate-700 italic mb-6 leading-relaxed border-t border-b border-[#bfa67a]/30 py-4 my-4">
+                            "仅限临近高年级学生进入。请先从开局玩起吧！"<br />
+                            <span className="text-sm opacity-70">"Only final year students may enter. Please start from the beginning!"</span>
+                        </p>
+                        <button
+                            onClick={() => setShowLockedModal(false)}
+                            className="bg-slate-800 text-[#bfa67a] hover:bg-[#bfa67a] hover:text-slate-900 px-8 py-2 rounded transition-colors duration-200 font-bold uppercase tracking-widest text-xs"
+                        >
+                            返回 (Return)
+                        </button>
+                    </div>
+                </div>
+            )}
 
             <style>{`
         @keyframes fade-in {
