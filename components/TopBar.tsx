@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Save, FolderOpen } from 'lucide-react';
+import { Save, FolderOpen, Home } from 'lucide-react';
 import { ModalType } from '../types';
 import { NAV_ITEMS } from '../constants';
 
@@ -7,9 +7,10 @@ interface TopBarProps {
   onNavClick: (id: ModalType) => void;
   onSave?: () => void;
   onLoad?: (file: File) => void;
+  onReturnToSplash?: () => void;
 }
 
-export const TopBar: React.FC<TopBarProps> = ({ onNavClick, onSave, onLoad }) => {
+export const TopBar: React.FC<TopBarProps> = ({ onNavClick, onSave, onLoad, onReturnToSplash }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleLoadClick = () => {
@@ -28,6 +29,20 @@ export const TopBar: React.FC<TopBarProps> = ({ onNavClick, onSave, onLoad }) =>
   return (
     <div className="bg-academy text-parchment border-b-4 border-gold shadow-md relative z-20">
       <div className="flex justify-between w-full overflow-x-auto pb-1 px-2 pt-2 scrollbar-hide">
+        {/* 返回档案馆按钮 */}
+        {onReturnToSplash && (
+          <button
+            onClick={onReturnToSplash}
+            className="flex flex-col items-center justify-center p-3 min-w-[80px] text-gold hover:text-gold hover:bg-gold/20 transition-all duration-200 border-r border-gold/30 group"
+            title="返回巴别塔档案馆"
+          >
+            <div className="mb-1 transform transition-transform group-hover:scale-110 group-active:scale-95">
+              <Home className="w-5 h-5" />
+            </div>
+            <span className="text-[10px] font-display tracking-widest uppercase">档案馆</span>
+          </button>
+        )}
+
         {/* 导航按钮 */}
         <div className="flex">
           {NAV_ITEMS.map((item) => (

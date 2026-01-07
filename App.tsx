@@ -295,7 +295,7 @@ const App: React.FC = () => {
       <div className="flex-1 flex flex-col min-w-0 relative h-full">
 
         {/* Top Navigation */}
-        <TopBar onNavClick={handleNavClick} onSave={handleSaveGame} onLoad={handleLoadGame} />
+        <TopBar onNavClick={handleNavClick} onSave={handleSaveGame} onLoad={handleLoadGame} onReturnToSplash={() => setShowSplash(true)} />
 
         {/* Content Wrapper */}
         <div className="flex-1 flex flex-col overflow-hidden relative">
