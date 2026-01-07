@@ -67,8 +67,24 @@ const App: React.FC = () => {
   });
 
   // 处理开始游戏
-  const handleStartGame = () => {
+  const handleStartGame = (profileData?: { name: string; age: string; gender: 'female' | 'male' | 'other'; personality: string; appearance: string }) => {
     localStorage.setItem('babelAcademy_hasVisited', 'true');
+
+    // Update profile with form data if provided
+    if (profileData) {
+      setGameState(prev => ({
+        ...prev,
+        profile: {
+          ...prev.profile,
+          name: profileData.name || prev.profile.name,
+          age: profileData.age || prev.profile.age,
+          gender: profileData.gender || prev.profile.gender,
+          personality: profileData.personality || prev.profile.personality,
+          appearance: profileData.appearance || prev.profile.appearance,
+        }
+      }));
+    }
+
     setShowSplash(false);
   };
 
@@ -278,6 +294,18 @@ const App: React.FC = () => {
     reader.readAsText(file);
   };
 
+  // Handle avatar change
+  const handleAvatarChange = (newAvatar: string) => {
+    setGameState(prev => ({
+      ...prev,
+      profile: {
+        ...prev.profile,
+        avatar: newAvatar
+      }
+    }));
+    // Persist to local storage is handled by Sidebar for now, but good to have in state
+  };
+
   // 如果显示开场页面，渲染SplashScreen
   if (showSplash) {
     return <SplashScreen onStartGame={handleStartGame} />;
@@ -288,7 +316,7 @@ const App: React.FC = () => {
 
       {/* 1. Sidebar - Left Column (Full Height) */}
       <div className="hidden lg:block h-full z-30 shrink-0">
-        <Sidebar profile={gameState.profile} />
+        <Sidebar profile={gameState.profile} onAvatarChange={handleAvatarChange} />
       </div>
 
       {/* 2. Main Area - Right Column */}
@@ -320,7 +348,7 @@ const App: React.FC = () => {
           <div className="w-full space-y-8 animate-in slide-in-from-bottom-4 duration-500">
             {/* 移动端档案显示 (仅在移动端显示) */}
             <div className="lg:hidden w-full border-b-4 border-double border-ink pb-6 mb-6">
-              <Sidebar profile={gameState.profile} isMobileEmbedded={true} />
+              <Sidebar profile={gameState.profile} isMobileEmbedded={true} onAvatarChange={handleAvatarChange} />
             </div>
 
             {/* Stats Section */}

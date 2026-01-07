@@ -12,6 +12,11 @@ export interface PlayerStats {
 
 export interface PlayerProfile {
   name: string;
+  age: string;
+  gender: 'female' | 'male' | 'other';
+  personality: string;
+  appearance: string;
+  avatar: string;  // Base64 or URL of user's avatar image
   grade: string;
   coins: number;
   clothing: string;
