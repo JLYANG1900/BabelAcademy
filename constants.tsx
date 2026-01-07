@@ -14,6 +14,11 @@ export const INITIAL_STATS: PlayerStats = {
 
 export const INITIAL_PROFILE: PlayerProfile = {
   name: "{{user}}",
+  age: "18",
+  gender: "female",
+  personality: "",
+  appearance: "",
+  avatar: "",
   grade: "一年级 · 翻译学部",
   coins: 50,
   clothing: "学院制服长袍",
