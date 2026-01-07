@@ -1,13 +1,30 @@
-import React from 'react';
-import { Clock, MapPin, CloudFog, User, Shirt, Coins } from 'lucide-react';
+import React, { useRef } from 'react';
+import { Clock, MapPin, CloudFog, User, Shirt, Coins, Upload } from 'lucide-react';
 import { PlayerProfile } from '../types';
 
 interface SidebarProps {
     profile: PlayerProfile;
     isMobileEmbedded?: boolean;
+    onAvatarChange?: (avatar: string) => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ profile, isMobileEmbedded = false }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ profile, isMobileEmbedded = false, onAvatarChange }) => {
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file && onAvatarChange) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const base64 = event.target?.result as string;
+                onAvatarChange(base64);
+                // Also save to localStorage for persistence
+                localStorage.setItem('babelAcademy_avatar', base64);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     return (
         <aside className={`
             bg-[#e6dac0] border-ink flex flex-col z-10 font-serif relative overflow-hidden select-none
@@ -90,15 +107,39 @@ export const Sidebar: React.FC<SidebarProps> = ({ profile, isMobileEmbedded = fa
                         </h2>
                     </div>
 
-                    {/* Portrait with Caption */}
+                    {/* Portrait with Caption and Upload Button */}
                     <figure className="flex flex-col gap-2 p-2 border border-ink bg-white/40 shadow-[4px_4px_0_0_rgba(26,26,26,0.2)] rotate-[-1deg] transition-transform hover:rotate-0">
                         <div className="aspect-square bg-ink/10 flex items-center justify-center border border-ink/20 overflow-hidden relative grayscale">
                             <div className="absolute inset-0 bg-[radial-gradient(circle,transparent_50%,rgba(0,0,0,0.4)_100%)]"></div>
-                            <User className="w-24 h-24 text-ink/80 drop-shadow-lg" />
+                            {profile.avatar ? (
+                                <img src={profile.avatar} alt="Student Portrait" className="w-full h-full object-cover" />
+                            ) : (
+                                <User className="w-24 h-24 text-ink/80 drop-shadow-lg" />
+                            )}
                         </div>
-                        <figcaption className="text-center font-mono text-[10px] border-t border-ink/20 pt-1 text-ink/70">
-                            FIG A. 学员证件照 (未归档)
-                        </figcaption>
+                        <div className="flex items-center justify-between">
+                            <figcaption className="text-center font-mono text-[10px] border-t border-ink/20 pt-1 text-ink/70 flex-1">
+                                FIG A. 学员证件照 {profile.avatar ? '(已归档)' : '(未归档)'}
+                            </figcaption>
+                            {onAvatarChange && (
+                                <>
+                                    <input
+                                        type="file"
+                                        ref={fileInputRef}
+                                        onChange={handleImageUpload}
+                                        accept="image/*"
+                                        className="hidden"
+                                    />
+                                    <button
+                                        onClick={() => fileInputRef.current?.click()}
+                                        className="flex items-center gap-1 px-2 py-1 bg-ink text-[#e6dac0] text-[9px] font-bold uppercase tracking-wider hover:bg-ink/80 transition-colors rounded-sm"
+                                    >
+                                        <Upload className="w-3 h-3" />
+                                        上传
+                                    </button>
+                                </>
+                            )}
+                        </div>
                     </figure>
 
                     {/* Details Text styled as Article */}
