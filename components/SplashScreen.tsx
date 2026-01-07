@@ -6,8 +6,16 @@ import {
 } from 'lucide-react';
 
 // ===== TYPES =====
+export interface ProfileFormData {
+    name: string;
+    age: string;
+    gender: 'female' | 'male' | 'other';
+    personality: string;
+    appearance: string;
+}
+
 interface SplashScreenProps {
-    onStartGame: () => void;
+    onStartGame: (profileData: ProfileFormData) => void;
 }
 
 // ===== CONSTANTS =====
@@ -811,7 +819,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onStartGame }) => {
                             {/* Submit Button */}
                             <div className="flex flex-col items-center justify-center mt-12">
                                 <button
-                                    onClick={onStartGame}
+                                    onClick={() => onStartGame({ name: charName, age, gender, personality, appearance })}
                                     className="group relative inline-flex items-center justify-center px-8 py-3 font-serif font-bold text-white transition-all duration-200 bg-red-900 hover:bg-red-800 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-900 cursor-pointer"
                                 >
                                     <span className="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black" />
