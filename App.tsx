@@ -17,6 +17,7 @@ import { GameState, Message, ModalType } from './types';
 import { INITIAL_STATS, INITIAL_PROFILE, INITIAL_INVENTORY } from './constants';
 import { sendMessageToGemini } from './services/geminiService';
 import { parseStatusBlock, formatTimeDisplay, getDefaultCharacterDynamics } from './utils/statusParser';
+import { WorldInfoManager } from './utils/WorldInfoManager';
 import { Crown, Users, Eye } from 'lucide-react';
 
 // Helper component for the Status Modal
@@ -122,9 +123,14 @@ const App: React.FC = () => {
     }));
 
     try {
+      // Get dynamic context based on user input
+      const dynamicContext = WorldInfoManager.getCombinedContext(text);
+      console.log('Dynamic Context Length:', dynamicContext.length);
+
       const responseText = await sendMessageToGemini(
         gameState.messages.concat(userMessage).map(m => ({ role: m.role, content: m.content })),
-        text
+        text,
+        dynamicContext
       );
 
       // 解析状态数据块

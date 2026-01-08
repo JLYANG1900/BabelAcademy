@@ -212,14 +212,14 @@ export function getDefaultCharacterDynamics(): Record<string, CharacterDynamicDa
     };
 
     return {
-        '埃莉诺': { ...defaultData, location: '诺曼庄园', clothing: '深色天鹅绒晚礼服', activity: '与贵族交谈', thought: '这些伪善的笑容让我作呕', affection: 45 },
-        '关祁': { ...defaultData, location: '金狮茶室', clothing: '松垮的定制西装', activity: '品茶阅报', thought: '又是无聊的一天', affection: 60 },
-        '海因里希': { ...defaultData, location: '巴别塔-教室', clothing: '军官制服', activity: '独自训练', thought: '纪律至上', affection: 30 },
-        '索菲亚': { ...defaultData, location: '巴别塔-参考资料室', clothing: '朴素长裙', activity: '阅读革命文献', thought: '自由终将到来', affection: 55 },
-        '源结月': { ...defaultData, location: '植物园', clothing: '和服与西式外套', activity: '赏花沉思', thought: '完美必须追求', affection: 35 },
-        '佩德罗': { ...defaultData, location: '谢尔登大剧院', clothing: '鲜艳马甲', activity: '组织派对', thought: '人生就该快乐', affection: 70 },
-        '科莱特': { ...defaultData, location: '科莱特的私人沙龙', clothing: '法式晚礼服', activity: '抽烟阅读', thought: '这世界真乏味', affection: 40 },
-        '威廉': { ...defaultData, location: '巴别塔-教授办公室', clothing: '浅灰西装', activity: '批改文件', thought: '一切尽在掌控', affection: 50 }
+        '埃莉诺': { ...defaultData, location: '巴别塔-教室前排', clothing: '学院制服(优等生)', activity: '正在记笔记', thought: '必须表现得完美无缺', affection: 45 },
+        '关祁': { ...defaultData, location: '巴别塔-教室后排', clothing: '学院制服(内衬丝绸)', activity: '转笔神游', thought: '好困...昨晚不该熬夜', affection: 60 },
+        '海因里希': { ...defaultData, location: '巴别塔-教室角落', clothing: '学院制服(笔挺)', activity: '盯着黑板', thought: '这也太简单了', affection: 30 },
+        '索菲亚': { ...defaultData, location: '巴别塔-教室窗边', clothing: '学院制服(挽起袖口)', activity: '把玩银条', thought: '这就是帝国的洗脑教育', affection: 55 },
+        '源结月': { ...defaultData, location: '巴别塔-教室中排', clothing: '学院制服(系着香囊)', activity: '练习发音', thought: '再完美一点...', affection: 35 },
+        '佩德罗': { ...defaultData, location: '巴别塔-教室后排', clothing: '学院制服(歪领带)', activity: '传纸条', thought: '下课去哪喝酒？', affection: 70 },
+        '科莱特': { ...defaultData, location: '巴别塔-教室后门', clothing: '深紫助教袍', activity: '旁听观察', thought: '年轻的欲望真有趣', affection: 40 },
+        '威廉': { ...defaultData, location: '巴别塔-教室讲台', clothing: '深红教授袍', activity: '敲击讲台', thought: '这届新生有些意思', affection: 50 }
     };
 }
 

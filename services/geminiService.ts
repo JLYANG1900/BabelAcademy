@@ -10,7 +10,8 @@ const getApiConfig = () => {
 
 export const sendMessageToGemini = async (
   history: { role: string; content: string }[],
-  newMessage: string
+  newMessage: string,
+  dynamicContext?: string
 ): Promise<string> => {
   const { apiKey, model } = getApiConfig();
 
@@ -52,11 +53,16 @@ export const sendMessageToGemini = async (
       parts: [{ text: h.content }]
     }));
 
+    // Inject dynamic World Info if available
+    const finalSystemInstruction = dynamicContext
+      ? `${SYSTEM_INSTRUCTION}\n\n=== WORLD INFO / 世界书 ===\n${dynamicContext}`
+      : SYSTEM_INSTRUCTION;
+
     // 创建聊天会话
     const chatSession = ai.chats.create({
       model: model,
       config: {
-        systemInstruction: SYSTEM_INSTRUCTION,
+        systemInstruction: finalSystemInstruction,
         temperature: 0.8,
         topK: 40,
         maxOutputTokens: 8000,  // 增加到8000以支持1000-2000中文字（每字约2-3 tokens）

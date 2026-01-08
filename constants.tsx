@@ -23,7 +23,7 @@ export const INITIAL_PROFILE: PlayerProfile = {
   coins: 50,
   clothing: "学院制服长袍",
   location: "巴别塔 - 教室楼层",
-  time: "14:30",
+  time: "09:00",
   weather: "阴天 (伦敦雾)"
 };
 
