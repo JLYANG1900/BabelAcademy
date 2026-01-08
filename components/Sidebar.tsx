@@ -55,7 +55,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ profile, isMobileEmbedded = fa
                     <div className="w-full flex justify-between items-center border-t border-b-2 border-ink py-1 px-1 text-[10px] font-mono font-bold uppercase tracking-wider text-ink">
                         <span>Vol. XCII</span>
                         <span className="flex-1 text-center">· 牛津特刊 ·</span>
-                        <span>5 Coppers</span>
+                        <span>{profile.date}</span>
                     </div>
                 </header>
 

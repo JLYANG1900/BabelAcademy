@@ -23,6 +23,7 @@ export interface PlayerProfile {
   location: string;
   time: string;
   weather: string;
+  date: string;  // 日期 (年/月/日) e.g. "1830年9月2日"
 }
 
 export interface InventoryItem {
@@ -84,4 +85,24 @@ export interface GameState {
    * Dynamic data for 8 main characters - keyed by character ID, updated by LLM each turn
    */
   characterDynamics: Record<string, CharacterDynamicData>;
+
+  /**
+   * 游戏事件日志 - 由LLM每回合动态更新
+   * Game event log - Updated by LLM each turn
+   */
+  events: GameEvent[];
+}
+
+/**
+ * 游戏事件接口 - 用于EventLog组件
+ * Game Event Interface - For EventLog component
+ */
+export interface GameEvent {
+  id: string;
+  type: 'headline' | 'social' | 'secret' | 'system';
+  timestamp: string;
+  title: string;
+  content: string;
+  isNew?: boolean;
+  isLocked?: boolean;
 }

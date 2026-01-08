@@ -8,9 +8,10 @@ interface TopBarProps {
   onSave?: () => void;
   onLoad?: (file: File) => void;
   onReturnToSplash?: () => void;
+  hasUpdates?: { map?: boolean; logs?: boolean; social?: boolean };
 }
 
-export const TopBar: React.FC<TopBarProps> = ({ onNavClick, onSave, onLoad, onReturnToSplash }) => {
+export const TopBar: React.FC<TopBarProps> = ({ onNavClick, onSave, onLoad, onReturnToSplash, hasUpdates }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleLoadClick = () => {
@@ -51,7 +52,12 @@ export const TopBar: React.FC<TopBarProps> = ({ onNavClick, onSave, onLoad, onRe
               onClick={() => onNavClick(item.id as ModalType)}
               className="flex flex-col items-center justify-center p-3 min-w-[80px] text-parchment/70 hover:text-gold hover:bg-ink/40 transition-all duration-200 border-b-2 border-transparent hover:border-gold group"
             >
-              <div className="mb-1 transform transition-transform group-hover:scale-110 group-active:scale-95">{item.icon}</div>
+              <div className="mb-1 transform transition-transform group-hover:scale-110 group-active:scale-95 relative">
+                {item.icon}
+                {hasUpdates?.[item.id as keyof typeof hasUpdates] && (
+                  <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse border border-white" />
+                )}
+              </div>
               <span className="text-[10px] font-display tracking-widest uppercase">{item.label}</span>
             </button>
           ))}

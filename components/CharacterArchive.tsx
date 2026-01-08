@@ -178,7 +178,7 @@ const CharacterEntry: React.FC<CharacterEntryProps> = ({ config, dynamicData }) 
                         <span className="flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-ink/50 w-16 flex-shrink-0">
                             <Shirt className="w-3 h-3" /> Wearing
                         </span>
-                        <span className="text-ink/80 truncate">{clothing}</span>
+                        <span className="text-ink/80">{clothing}</span>
                     </div>
                     <div className="flex items-start gap-2">
                         <span className="flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-ink/50 w-16 flex-shrink-0">

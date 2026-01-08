@@ -176,7 +176,7 @@ const MapMarker: React.FC<{
                 </div>
                 {/* Tooltip */}
                 {showTooltip && label && (
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-ink text-paper text-xs px-2 py-1 rounded whitespace-nowrap z-50">
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-white text-ink text-xs px-2 py-1 rounded shadow-lg border border-ink/20 whitespace-nowrap z-50">
                         你：{label}
                     </div>
                 )}
@@ -193,11 +193,11 @@ const MapMarker: React.FC<{
                 onMouseEnter={() => setShowTooltip(true)}
                 onMouseLeave={() => setShowTooltip(false)}
             >
-                <div className="flex -space-x-2">
-                    {characters.slice(0, 3).map((char, idx) => (
+                <div className="flex flex-wrap justify-center gap-0.5" style={{ maxWidth: '56px' }}>
+                    {characters.slice(0, 8).map((char, idx) => (
                         <div
                             key={char.name}
-                            className="w-8 h-8 rounded-full border-2 border-gold bg-paper overflow-hidden shadow-md"
+                            className="w-5 h-5 rounded-full border border-gold bg-paper overflow-hidden shadow-md"
                             style={{ zIndex: characters.length - idx }}
                         >
                             <img
@@ -208,15 +208,15 @@ const MapMarker: React.FC<{
                             />
                         </div>
                     ))}
-                    {characters.length > 3 && (
-                        <div className="w-8 h-8 rounded-full border-2 border-gold bg-ink text-paper text-[10px] font-bold flex items-center justify-center">
-                            +{characters.length - 3}
+                    {characters.length > 8 && (
+                        <div className="w-5 h-5 rounded-full border border-gold bg-ink text-paper text-[8px] font-bold flex items-center justify-center">
+                            +{characters.length - 8}
                         </div>
                     )}
                 </div>
                 {/* Tooltip */}
                 {showTooltip && (
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-ink text-paper text-xs px-2 py-1 rounded whitespace-nowrap z-50 max-w-[200px]">
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-white text-ink text-xs px-2 py-1 rounded shadow-lg border border-ink/20 whitespace-nowrap z-50 max-w-[200px]">
                         {characters.map(c => c.name).join(', ')}
                     </div>
                 )}

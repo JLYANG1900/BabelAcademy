@@ -13,8 +13,8 @@ import { EventLog } from './components/EventLog';
 import { SuspicionWarning } from './components/SuspicionWarning';
 import { SettingsPanel } from './components/SettingsPanel';
 import { SplashScreen } from './components/SplashScreen';
-import { GameState, Message, ModalType } from './types';
-import { INITIAL_STATS, INITIAL_PROFILE, INITIAL_INVENTORY } from './constants';
+import { GameState, Message, ModalType, CharacterDynamicData } from './types';
+import { INITIAL_STATS, INITIAL_PROFILE, INITIAL_INVENTORY, INITIAL_EVENTS } from './constants';
 import { sendMessageToGemini } from './services/geminiService';
 import { parseStatusBlock, formatTimeDisplay, getDefaultCharacterDynamics } from './utils/statusParser';
 import { WorldInfoManager } from './utils/WorldInfoManager';
@@ -57,7 +57,8 @@ const App: React.FC = () => {
     isLoading: false,
     activeModal: null,
     suggestedActions: ["观察周围的环境", "检查背包里的物品", "询问关于禁书区的传闻"],
-    characterDynamics: getDefaultCharacterDynamics()
+    characterDynamics: getDefaultCharacterDynamics(),
+    events: INITIAL_EVENTS
   });
 
   // 开场页面状态
@@ -66,6 +67,9 @@ const App: React.FC = () => {
     const hasVisited = localStorage.getItem('babelAcademy_hasVisited');
     return !hasVisited;
   });
+
+  // 小红点提醒状态 - 初始化时显示红点
+  const [hasUpdates, setHasUpdates] = useState({ map: true, logs: true, social: true });
 
   // 处理开始游戏
   const handleStartGame = (profileData?: { name: string; age: string; gender: 'female' | 'male' | 'other'; personality: string; appearance: string }) => {
@@ -124,7 +128,28 @@ const App: React.FC = () => {
 
     try {
       // Get dynamic context based on user input
-      const dynamicContext = WorldInfoManager.getCombinedContext(text);
+      const worldInfoContext = WorldInfoManager.getCombinedContext(text);
+
+      // 序列化当前游戏状态，让LLM知道当前的好感度等数值
+      const currentStateContext = `
+=== 当前游戏状态 / CURRENT GAME STATE ===
+时间: ${gameState.profile.date} ${gameState.profile.time}
+地点: ${gameState.profile.location}
+天气: ${gameState.profile.weather}
+玩家银币: ${gameState.profile.coins}
+帝国贡献: ${gameState.stats.empireContribution}
+社团声望: ${gameState.stats.clubContribution}
+怀疑度: ${gameState.stats.suspicion}
+
+主要角色当前状态:
+${Object.entries(gameState.characterDynamics).map(([name, data]: [string, CharacterDynamicData]) =>
+        `- ${name}: 好感度=${data.affection}, 位置=${data.location}, 行动=${data.activity}`
+      ).join('\n')}
+
+【重要】LLM必须在上述数值基础上进行增减，好感度单次变化限制为±1！
+`;
+
+      const dynamicContext = worldInfoContext + '\n\n' + currentStateContext;
       console.log('Dynamic Context Length:', dynamicContext.length);
 
       const responseText = await sendMessageToGemini(
@@ -171,6 +196,14 @@ const App: React.FC = () => {
           ? { ...prev.characterDynamics, ...status.characterDynamics }
           : prev.characterDynamics;
 
+        // 如果有事件更新 - 追加到现有事件列表并将旧事件标记为已读
+        const updatedEvents = status?.eventUpdates && status.eventUpdates.length > 0
+          ? [
+            ...status.eventUpdates, // 新事件在前面
+            ...prev.events.map(e => ({ ...e, isNew: false })) // 旧事件标记为已读
+          ]
+          : prev.events;
+
         return {
           ...prev,
           messages: [...prev.messages, botMessage],
@@ -178,9 +211,13 @@ const App: React.FC = () => {
           stats: updatedStats,
           suggestedActions: updatedActions,
           characterDynamics: updatedCharacterDynamics,
+          events: updatedEvents,
           isLoading: false
         };
       });
+
+      // 每次LLM回复后，设置红点提醒（角色动态/事件/地图都会刷新）
+      setHasUpdates({ map: true, logs: true, social: true });
 
     } catch (error) {
       setGameState(prev => ({
@@ -196,6 +233,10 @@ const App: React.FC = () => {
   };
 
   const handleNavClick = (modalType: ModalType) => {
+    // 清除对应按钮的小红点
+    if (modalType === 'map' || modalType === 'logs' || modalType === 'social') {
+      setHasUpdates(prev => ({ ...prev, [modalType]: false }));
+    }
     setGameState(prev => ({ ...prev, activeModal: modalType }));
   };
 
@@ -329,7 +370,7 @@ const App: React.FC = () => {
       <div className="flex-1 flex flex-col min-w-0 relative h-full">
 
         {/* Top Navigation */}
-        <TopBar onNavClick={handleNavClick} onSave={handleSaveGame} onLoad={handleLoadGame} onReturnToSplash={() => setShowSplash(true)} />
+        <TopBar onNavClick={handleNavClick} onSave={handleSaveGame} onLoad={handleLoadGame} onReturnToSplash={() => setShowSplash(true)} hasUpdates={hasUpdates} />
 
         {/* Content Wrapper */}
         <div className="flex-1 flex flex-col overflow-hidden relative">
@@ -440,7 +481,7 @@ const App: React.FC = () => {
         )}
 
         {gameState.activeModal === 'logs' && (
-          <EventLog />
+          <EventLog events={gameState.events} />
         )}
 
         {gameState.activeModal === 'settings' && (

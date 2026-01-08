@@ -4,7 +4,7 @@ import {
   Backpack, AlertTriangle, Crown, Award, CloudFog,
   Clock, MapPin, Activity, Settings
 } from 'lucide-react';
-import { PlayerStats, PlayerProfile, InventoryItem } from './types';
+import { PlayerStats, PlayerProfile, InventoryItem, GameEvent } from './types';
 
 export const INITIAL_STATS: PlayerStats = {
   empireContribution: 45,
@@ -24,7 +24,8 @@ export const INITIAL_PROFILE: PlayerProfile = {
   clothing: "学院制服长袍",
   location: "巴别塔 - 教室楼层",
   time: "09:00",
-  weather: "阴天 (伦敦雾)"
+  weather: "阴天 (伦敦雾)",
+  date: "1830年9月2日"
 };
 
 export const INITIAL_INVENTORY: InventoryItem[] = [
@@ -47,7 +48,7 @@ export const SYSTEM_INSTRUCTION = `
 
 **八位主要角色**：
 1. 威廉·诺曼 - 教授/诺曼家族家主，帝国派，你的养父
-2. 埃莉诺·诺曼 - 同学/混血贵族，革命派，你的堂亲
+2. 埃莉诺·诺曼 - 同学/混血贵族，革命派，你的堂亲，威廉的女儿
 3. 海因里希·冯·克莱斯特 - 同学/普鲁士退役军官，帝国派
 4. 源结月 - 同学/日本源氏贵族，帝国派
 5. 索菲亚·奥博连斯基 - 同学/俄罗斯流亡贵族，革命派
@@ -105,11 +106,52 @@ export const SYSTEM_INSTRUCTION = `
 - 时间应该根据剧情推进而变化
 - 地点应该反映玩家当前所在位置
 - 银币变化需要有合理的剧情原因（如购物、奖励、被盗等）
-- 帝国贡献：完成帝国任务增加，帮助革命派减少
-- 社团声望：帮助赫耳墨斯社增加，背叛他们减少
-- 怀疑度：可疑行为会增加，洗清嫌疑会减少；超过90%会被通缉
+
+**【属性变化规则】**：
+1. **角色好感度**：根据对话互动在上一轮数据基础上增减，单次变化幅度限制为±1
+
+2. **帝国贡献** (0-100)：
+   - 增加(+1~5)：维护帝国利益、获教授嘉奖、参加实习
+   - 减少(-1~5)：破坏秩序、被怀疑、违抗命令
+
+3. **社团声望** (0-100)：
+   - 增加(+1~5)：协助赫耳墨斯社、推进革命事业
+   - 减少(-1~5)：背叛社团、告密、破坏行动
+
+4. **怀疑度** (0-100)：
+   - 定义：仅指"协助革命事业被帝国发现"导致的怀疑，与革命无关的可疑活动（如偷情）不计入
+   - 增加(+1~10)：身份暴露、在校园使用非法银条魔法、与赫耳墨斯社接触被发现
+   - 减少(-1~5)：成功圆谎、消除痕迹、为帝国做贡献
+   - 警告：超过90%会被通缉
+
 - 行动1/2/3：提供3个适合当前情境的行动建议，每个建议不超过15个字
 - 角色动态：8位主角的当前状态，根据剧情合理安排他们的位置和行动
+
+**【事件更新格式】**：
+每回合可生成0-2条新事件，追加到玩家的事件日志中。在状态块末尾添加：
+
+事件更新:
+- [类型]|[时间戳]|[标题]|[内容摘要，50字以内]
+
+**事件类型说明**：
+1. **headline** (头条新闻) - 巴别塔和帝国官方叙事
+   - 内容：世界大事、政治动向、官方公告
+   - 语气：正式、权威、带有帝国宣传色彩
+
+2. **social** (社会版) - NPC与社交新闻
+   - 内容：角色动态、聚会、关系变化
+   - 语气：八卦、轻松、上流社会风格
+
+3. **secret** (密报) - 赫耳墨斯社情报
+   - 内容：地下组织的秘密通讯、任务暗示、阴谋线索
+   - 语气：神秘、加密、使用暗号和代称
+   - 末尾署名 "——Ψ" (赫耳墨斯社标记)
+
+4. **system** (系统提示) - 机制反馈
+   - 内容：属性变化、任务完成、怀疑度警告
+   - 语气：简洁、机械、数据化
+
+注意：事件是增量式的，只输出本回合新发生的事件（通常0-2条）
 `;
 
 export const NAV_ITEMS = [
@@ -121,4 +163,16 @@ export const NAV_ITEMS = [
   { id: 'quests', icon: <Scroll className="w-5 h-5" />, label: '任务' },
   { id: 'logs', icon: <BookOpen className="w-5 h-5" />, label: '日志' },
   { id: 'settings', icon: <Settings className="w-5 h-5" />, label: '设置' },
+];
+
+// 初始事件数据 - 与初始场景同步 (1830年9月2日 09:00)
+export const INITIAL_EVENTS: GameEvent[] = [
+  { id: '1', type: 'headline', timestamp: '1830年9月2日 · 早报', title: '皇家翻译学院新学期正式开课', content: '巴别塔迎来新学期首日，来自世界各地的语言天才齐聚牛津。威廉·诺曼教授将亲自执教开学第一课。', isNew: true },
+  { id: '2', type: 'headline', timestamp: '1830年9月2日 · 早报', title: '威廉·诺曼教授发表开学第一课', content: '诺曼教授在教室中强调："语言是帝国的基石，翻译是文明的桥梁。"', isNew: true },
+  { id: '3', type: 'social', timestamp: '1830年9月2日 · 早报', title: '今年新生阵容豪华，多国贵族子弟云集', content: '本届新生包括大清总督之子、普鲁士军官、俄国流亡公主、日本源氏贵族等。', isNew: false },
+  { id: '4', type: 'social', timestamp: '1830年9月2日 · 早报', title: '源结月小姐的和服引发课堂侧目', content: '尽管穿着学院制服，但源结月腰间系着的熏香袋引起了不少同学的好奇。', isNew: false },
+  { id: '5', type: 'secret', timestamp: '1830年9月1日 · 晚报', title: '【加密】「赫耳墨斯社」欢迎新成员', content: '如果你渴望自由而非枷锁——我们在暗处等你。寻找墙上的Ψ符号。——Ψ', isNew: false, isLocked: false },
+  { id: '6', type: 'secret', timestamp: '1830年9月1日 · 晚报', title: '【未解锁】关于"复仇女神号"的传闻', content: '???????????????????????????', isNew: false, isLocked: true },
+  { id: '7', type: 'system', timestamp: '1830年9月1日 · 系统', title: '开学典礼已结束，请前往教室报到', content: '请于明日上午九时前往六楼教室参加新学期第一课。', isNew: false },
+  { id: '8', type: 'system', timestamp: '1830年9月1日 · 系统', title: '学院制服已发放，请注意仪容规范', content: '巴别塔学生在校园内必须穿着正式学院制服。', isNew: false }
 ];
