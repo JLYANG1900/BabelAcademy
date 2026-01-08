@@ -2,6 +2,10 @@
 
 ![Babel Banner](https://img.shields.io/badge/Status-Beta-gold) ![License](https://img.shields.io/badge/License-MIT-blue) ![Tech](https://img.shields.io/badge/Tech-React%20%7C%20Vite%20%7C%20Gemini%20API-crimson)
 
+[中文](#中文-chinese) | [English](#english)
+
+<a id="中文-chinese"></a>
+
 > "言语即力量。在工业革命的蒸汽与齿轮之间，翻译是唯一能驱动魔法的炼金术。"
 
 **Babel Academy** 是一个由 Google Gemini 大语言模型驱动的沉浸式文字冒险游戏（RPG）。游戏背景设定在一个架空的维多利亚时代，你将扮演一名皇家翻译学院的学生，在学习外语与刻银术魔法的同时，卷入帝国与革命派系的政治漩涡。
@@ -84,3 +88,95 @@
 ## 📜 开源协议
 
 MIT License. 欢迎 Fork 与贡献代码！
+
+<br>
+<br>
+
+---
+
+<a id="english"></a>
+
+# Babel Academy (The Royal Institute of Translation)
+
+> "Language is power. Amidst the steam and gears of the Industrial Revolution, translation is the only alchemy that drives magic."
+
+**Babel Academy** is an immersive text-based RPG powered by the **Google Gemini** Large Language Model. Set in an alternate Victorian era, you play as a student at the Royal Institute of Translation, caught in the political vortex between the Empire and revolutionary factions while mastering foreign languages and silver-working magic.
+
+🔗 **[Play Online (Github Pages)](https://JLYANG1900.github.io/BabelAcademy/)**
+
+---
+
+## 🔒 Privacy & Security Statement (Important)
+
+This project is a **purely frontend application (Client-side Only)**. We highly value your privacy and data security:
+
+1.  **API Key Security**:
+    *   Your Google Gemini API Key is **stored ONLY in your browser's `localStorage`**.
+    *   There is **NO** backend server collecting or relaying your Key.
+    *   All API requests are made directly from your browser to Google's servers.
+
+2.  **Save Data**:
+    *   Game progress (including chat history, attributes, inventory) is **stored locally on your device** as JSON files.
+    *   Through the "Save/Load" function, data flows only between your browser memory and local hard drive, never passing through any cloud database.
+
+3.  **Chat History**:
+    *   To prevent Token limits, the system automatically manages context length (retaining the last 20 messages), and these history records are used solely for maintaining context in the current session.
+
+---
+
+## ✨ Core Features
+
+### 1. LLM-Driven Dynamic Narrative
+*   **Infinite Freedom**: No more traditional branching options; you can input any action command, and the AI Game Master will generate real-time plot feedback.
+*   **Smart Action Suggestions**: If you are unsure what to do, the AI dynamically generates 3 recommended actions based on the current situation.
+*   **Deep Immersion**: The system prompts the AI to provide detailed descriptions of no less than 1000 words, delivering a Victorian Gothic reading experience.
+
+### 2. Real-Time Status System
+Sidebar data updates in real-time as the story progresses:
+*   **Environmental Awareness**: Time, location, weather, and attire change based on your actions.
+*   **Economic System**: Earn silver coins (¤) through internships to buy items or build connections.
+*   **Three-Dimensional Attributes**: Your choices affect **Imperial Contribution**, **Society Reputation**, and **Suspicion**.
+    *   ⚠️ **Warning**: When Suspicion exceeds 90%, you will be wanted by the Imperial Inquisition.
+
+### 3. Babel Campus Life
+*   **Department Internships**: Handle disputes in the Legal Department or gather intelligence in the Literature Department (some departments like Interpretation require higher grades to unlock).
+*   **NPC Interaction**: Access detailed NPC archives, each with unique portraits and backstories.
+*   **Event Log**: Newspaper-style event records tracking detailed occurrences.
+
+### 4. Save & Load
+*   Support for exporting current game progress as a JSON save file at any time.
+*   Support for importing saves across devices to continue your adventure.
+
+---
+
+## 🎮 Gameplay Guide
+
+1.  **Configuration**:
+    *   Click the **Settings** icon in the top right corner.
+    *   Enter your Google Gemini API Key (available for free).
+    *   Select a model (default is `gemini-2.5-flash`).
+    *   Click Save and test the connection.
+
+2.  **Start Adventure**:
+    *   Describe your action in the bottom input box, e.g., "Go to the library to find books on silver-working" or "Observe the professor's expression carefully."
+    *   Or simply click the action suggestion buttons above the input box.
+
+3.  **Rules of Survival**:
+    *   **Empire vs. Revolution**: Every decision you make influences the balance between these two powers through subtle perturbations.
+    *   **Manage Suspicion**: Avoid frequent radical activities to escape the school's attention.
+    *   **Gather Resources**: Use internship opportunities to accumulate silver coins, which can save your life in critical moments.
+
+---
+
+## 🛠️ Tech Stack
+
+*   **Frontend Framework**: React 18 + TypeScript + Vite
+*   **Styling**: Tailwind CSS (Custom Retro Parchment Style)
+*   **AI SDK**: Google Generative AI SDK
+*   **Icons**: Lucide React
+
+---
+
+## 📜 License
+
+MIT License. Forking and contributions are welcome!
