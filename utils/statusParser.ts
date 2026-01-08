@@ -26,11 +26,20 @@ export function parseStatusBlock(response: string): { content: string; status: P
     const statusRegex = /```status\s*\n([\s\S]*?)```/;
     const match = response.match(statusRegex);
 
+    // DEBUG: 打印原始响应和匹配结果
+    console.log('=== parseStatusBlock DEBUG ===');
+    console.log('Response length:', response.length);
+    console.log('Status block found:', !!match);
+    if (!match) {
+        console.log('No status block matched. Response preview:', response.slice(-500));
+    }
+
     if (!match) {
         return { content: response, status: null };
     }
 
     const statusContent = match[1];
+    console.log('Status content preview:', statusContent.slice(0, 300));
     const cleanContent = response.replace(statusRegex, '').trim();
 
     // 解析状态字段
@@ -128,11 +137,18 @@ export function parseCharacterDynamics(statusContent: string): Record<string, Ch
 
     // 查找"角色动态:"段落
     const dynamicsMatch = statusContent.match(/角色动态:\s*([\s\S]*?)(?=\n[^\-\s]|$)/);
+
+    // DEBUG: 打印角色动态匹配结果
+    console.log('=== parseCharacterDynamics DEBUG ===');
+    console.log('角色动态 section found:', !!dynamicsMatch);
+
     if (!dynamicsMatch) {
+        console.log('No 角色动态 matched. Content preview:', statusContent.slice(0, 200));
         return result;
     }
 
     const dynamicsContent = dynamicsMatch[1];
+    console.log('Dynamics content lines:', dynamicsContent.split('\n').length);
     const lines = dynamicsContent.split('\n').filter(line => line.trim().startsWith('-'));
 
     for (const line of lines) {
@@ -285,12 +301,18 @@ export function parseEventUpdates(statusContent: string): GameEvent[] {
 
     // 查找"事件更新:"段落
     const eventMatch = statusContent.match(/事件更新:\s*([\s\S]*?)(?=\n[^\-\s]|$)/);
+
+    // DEBUG: 打印事件更新匹配结果
+    console.log('=== parseEventUpdates DEBUG ===');
+    console.log('事件更新 section found:', !!eventMatch);
+
     if (!eventMatch) {
         return result;
     }
 
     const eventContent = eventMatch[1];
     const lines = eventContent.split('\n').filter(line => line.trim().startsWith('-'));
+    console.log('Event lines found:', lines.length);
 
     for (const line of lines) {
         try {

@@ -193,11 +193,11 @@ const MapMarker: React.FC<{
                 onMouseEnter={() => setShowTooltip(true)}
                 onMouseLeave={() => setShowTooltip(false)}
             >
-                <div className="flex flex-wrap justify-center gap-0.5" style={{ maxWidth: '56px' }}>
+                <div className="flex flex-wrap justify-center gap-1" style={{ maxWidth: '112px' }}>
                     {characters.slice(0, 8).map((char, idx) => (
                         <div
                             key={char.name}
-                            className="w-5 h-5 rounded-full border border-gold bg-paper overflow-hidden shadow-md"
+                            className="w-10 h-10 rounded-full border-2 border-gold bg-paper overflow-hidden shadow-md"
                             style={{ zIndex: characters.length - idx }}
                         >
                             <img
@@ -209,7 +209,7 @@ const MapMarker: React.FC<{
                         </div>
                     ))}
                     {characters.length > 8 && (
-                        <div className="w-5 h-5 rounded-full border border-gold bg-ink text-paper text-[8px] font-bold flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-full border-2 border-gold bg-ink text-paper text-sm font-bold flex items-center justify-center">
                             +{characters.length - 8}
                         </div>
                     )}
@@ -313,7 +313,7 @@ export const TowerMap: React.FC<TowerMapProps> = ({
     playerGrade = 1,
     characterDynamics = {}
 }) => {
-    const [activeTab, setActiveTab] = useState<ViewTab>('tower');
+    const [activeTab, setActiveTab] = useState<ViewTab>('world');
     const [expandedFloor, setExpandedFloor] = useState<number | null>(null);
 
     return (
@@ -321,18 +321,18 @@ export const TowerMap: React.FC<TowerMapProps> = ({
             {/* Tab Navigation */}
             <div className="flex border-b-2 border-ink/20 mb-4">
                 <button
-                    onClick={() => setActiveTab('tower')}
-                    className={`flex items-center gap-2 px-4 py-2 font-display font-bold text-sm transition-colors
-            ${activeTab === 'tower' ? 'border-b-2 border-gold text-gold -mb-0.5' : 'text-ink/60 hover:text-ink'}`}
-                >
-                    <Landmark className="w-4 h-4" /> 巴别塔 / Tower
-                </button>
-                <button
                     onClick={() => setActiveTab('world')}
                     className={`flex items-center gap-2 px-4 py-2 font-display font-bold text-sm transition-colors
             ${activeTab === 'world' ? 'border-b-2 border-gold text-gold -mb-0.5' : 'text-ink/60 hover:text-ink'}`}
                 >
                     <Map className="w-4 h-4" /> 牛津 / Oxford
+                </button>
+                <button
+                    onClick={() => setActiveTab('tower')}
+                    className={`flex items-center gap-2 px-4 py-2 font-display font-bold text-sm transition-colors
+            ${activeTab === 'tower' ? 'border-b-2 border-gold text-gold -mb-0.5' : 'text-ink/60 hover:text-ink'}`}
+                >
+                    <Landmark className="w-4 h-4" /> 巴别塔 / Tower
                 </button>
             </div>
 
