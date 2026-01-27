@@ -12,21 +12,26 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Courier+Prime&display=swap"
+    href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Oswald:wght@400;500;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Courier+Prime&display=swap"
     rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            parchment: '#f0e6d2',
-            ink: '#1a1a1a',
+            paper: '#F4F1EA',
+            'paper-contrast': '#E8E4DB',
+            parchment: '#F4F1EA',
+            'parchment-dark': '#E8E4DB',
+            ink: '#151515',
             gold: '#bfa67a',
             crimson: '#8b0000',
             academy: '#2c3e50',
-            'parchment-dark': '#e6dac0',
           },
           fontFamily: {
+            masthead: ['"UnifrakturMaguntia"', 'serif'],
+            headline: ['"Oswald"', 'sans-serif'],
+            serif: ['"Merriweather"', 'serif'],
             display: ['"Cinzel"', 'serif'],
             body: ['"Cormorant Garamond"', 'serif'],
             mono: ['"Courier Prime"', 'monospace'],
@@ -36,8 +41,12 @@
             'noise': "url('https://www.transparenttextures.com/patterns/stardust.png')",
           },
           boxShadow: {
-            'gothic': '0 10px 30px -5px rgba(26, 26, 26, 0.5)',
+            'gothic': '0 10px 30px -5px rgba(21, 21, 21, 0.5)',
             'inner-paper': 'inset 0 0 40px rgba(191, 166, 122, 0.3)',
+            'newspaper': '4px 4px 0 rgba(21, 21, 21, 0.15)',
+          },
+          borderWidth: {
+            '3': '3px',
           }
         }
       }
@@ -45,23 +54,23 @@
   </script>
   <style>
     body {
-      background-color: #1a1a1a;
-      color: #1a1a1a;
+      background-color: #151515;
+      color: #151515;
     }
 
-    /* Custom scrollbar for that vintage feel */
+    /* Custom scrollbar for vintage newspaper feel */
     ::-webkit-scrollbar {
       width: 8px;
       height: 8px;
     }
 
     ::-webkit-scrollbar-track {
-      background: #f0e6d2;
+      background: #F4F1EA;
     }
 
     ::-webkit-scrollbar-thumb {
       background: #bfa67a;
-      border: 1px solid #1a1a1a;
+      border: 1px solid #151515;
     }
 
     ::-webkit-scrollbar-thumb:hover {
@@ -71,6 +80,50 @@
     .typewriter {
       overflow: hidden;
       white-space: pre-wrap;
+    }
+
+    /* Vintage Newspaper Utilities */
+    .vintage-noise {
+      position: relative;
+    }
+
+    .vintage-noise::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .newspaper-columns {
+      column-count: 2;
+      column-gap: 2rem;
+      column-rule: 1px solid rgba(21, 21, 21, 0.2);
+    }
+
+    .text-justify {
+      text-align: justify;
+      hyphens: auto;
+    }
+
+    .newspaper-rule {
+      border: none;
+      border-top: 1px solid #151515;
+      margin: 1rem 0;
+    }
+
+    .newspaper-rule-thick {
+      border: none;
+      border-top: 3px solid #151515;
+      margin: 1rem 0;
+    }
+
+    .newspaper-rule-double {
+      border: none;
+      border-top: 3px double #151515;
+      margin: 1rem 0;
     }
   </style>
   <script type="importmap">

@@ -50,7 +50,7 @@ const App: React.FC = () => {
         content: "晨光透过巨大的哥特式窗户洒入教室，尘埃在光柱中翻滚起舞。你坐在巨大的木质课桌前，桌面上散落着几本厚重的语法词典和一条铅银合金银条。\n\n威廉·诺曼教授正在讲台上讲解刷银术的基本原理——如何在两种语言的语义差异中捕捉魔法的力量。\n\n\"当你用中文写下'安'，再用英文写下'Peace'，这两个词看似对等，但它们承载的文化意象却有微妙差异……\"教授的声音在教室中回荡。\n\n你接下来打算做什么？",
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }
-    ],
+    ], 
     stats: INITIAL_STATS,
     profile: INITIAL_PROFILE,
     inventory: INITIAL_INVENTORY,

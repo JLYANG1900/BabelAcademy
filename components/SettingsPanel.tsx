@@ -18,7 +18,6 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ onApiKeyChange }) 
     const [showKey, setShowKey] = useState(false);
     const [testStatus, setTestStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
 
-    // 从localStorage加载保存的设置
     useEffect(() => {
         const savedApiKey = localStorage.getItem('babel_api_key');
         const savedModel = localStorage.getItem('babel_llm_model');
@@ -36,8 +35,6 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ onApiKeyChange }) 
         localStorage.setItem('babel_llm_model', selectedModel);
         setIsSaved(true);
         onApiKeyChange?.(apiKey);
-
-        // 显示保存成功提示
         setTimeout(() => setIsSaved(false), 2000);
     };
 
@@ -50,9 +47,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ onApiKeyChange }) 
         setTestStatus('testing');
 
         try {
-            // 简单的API测试 - 尝试初始化并发送一个简单请求
             const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
-
             if (response.ok) {
                 setTestStatus('success');
             } else {
@@ -62,7 +57,6 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ onApiKeyChange }) 
             setTestStatus('error');
         }
 
-        // 3秒后重置状态
         setTimeout(() => setTestStatus('idle'), 3000);
     };
 
@@ -79,28 +73,33 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ onApiKeyChange }) 
     const maskedApiKey = apiKey ? `${apiKey.slice(0, 8)}${'*'.repeat(Math.max(0, apiKey.length - 12))}${apiKey.slice(-4)}` : '';
 
     return (
-        <div className="w-full space-y-6 animate-in slide-in-from-bottom-4 duration-500">
-            {/* 标题 */}
-            <div className="text-center border-b border-ink/20 pb-4">
-                <div className="inline-flex items-center gap-2">
-                    <Settings className="w-6 h-6 text-gold" />
-                    <h2 className="font-display text-2xl font-bold text-ink tracking-wider uppercase">
-                        设置
-                    </h2>
+        <div className="w-full space-y-6">
+            {/* Newspaper Masthead */}
+            <div className="text-center border-b-3 border-ink pb-4">
+                <div className="flex items-center gap-3 mb-3">
+                    <div className="flex-1 h-px bg-ink"></div>
+                    <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-ink/60">Administration</span>
+                    <div className="flex-1 h-px bg-ink"></div>
                 </div>
-                <p className="text-sm text-ink/60 font-serif italic mt-1">Settings & Configuration</p>
+                <div className="inline-flex items-center gap-3">
+                    <Settings className="w-6 h-6 text-ink" />
+                    <h1 className="font-headline text-3xl md:text-4xl font-bold text-ink uppercase tracking-wider">
+                        Editorial Office
+                    </h1>
+                </div>
+                <p className="text-sm font-serif italic text-ink/60 mt-2">系统设置</p>
             </div>
 
-            {/* API Key 配置 */}
-            <div className="bg-white/50 border-2 border-ink/20 p-6 space-y-4">
-                <div className="flex items-center gap-2 border-b border-ink/10 pb-3">
-                    <Key className="w-5 h-5 text-gold" />
-                    <h3 className="font-display font-bold text-ink">LLM 接口配置</h3>
+            {/* API Key Configuration */}
+            <div className="bg-paper border-3 border-ink p-6 space-y-4">
+                <div className="flex items-center gap-2 border-b-2 border-ink/20 pb-3">
+                    <Key className="w-5 h-5 text-ink" />
+                    <h3 className="font-headline font-bold uppercase tracking-wide">LLM Interface Configuration</h3>
                 </div>
 
-                {/* API Key 输入 */}
+                {/* API Key Input */}
                 <div className="space-y-2">
-                    <label className="block text-sm font-bold text-ink/70">
+                    <label className="block text-sm font-mono font-bold uppercase text-ink/70">
                         Google Gemini API Key
                     </label>
                     <div className="flex gap-2">
@@ -112,26 +111,26 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ onApiKeyChange }) 
                                     setApiKey(e.target.value);
                                     setIsSaved(false);
                                 }}
-                                placeholder="输入您的 API Key..."
-                                className="w-full px-4 py-2 border-2 border-ink/20 bg-parchment text-ink font-mono text-sm focus:border-gold focus:outline-none transition-colors"
+                                placeholder="Enter your API Key..."
+                                className="w-full px-4 py-3 border-2 border-ink/30 bg-paper text-ink font-mono text-sm focus:border-ink focus:outline-none transition-colors"
                             />
                             <button
                                 onClick={() => setShowKey(!showKey)}
-                                className="absolute right-2 top-1/2 -translate-y-1/2 text-ink/40 hover:text-ink text-xs font-mono"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-ink/40 hover:text-ink text-xs font-mono uppercase"
                             >
-                                {showKey ? '隐藏' : '显示'}
+                                {showKey ? 'Hide' : 'Show'}
                             </button>
                         </div>
                     </div>
-                    <p className="text-xs text-ink/50">
-                        您的 API Key 将安全存储在本地浏览器中，不会上传到任何服务器。
+                    <p className="text-xs text-ink/50 font-serif italic">
+                        Your API Key is stored securely in local browser storage. It is never uploaded to any server.
                     </p>
                 </div>
 
-                {/* 模型选择 */}
+                {/* Model Selection */}
                 <div className="space-y-2">
-                    <label className="block text-sm font-bold text-ink/70">
-                        选择模型
+                    <label className="block text-sm font-mono font-bold uppercase text-ink/70">
+                        Select Model
                     </label>
                     <select
                         value={selectedModel}
@@ -139,7 +138,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ onApiKeyChange }) 
                             setSelectedModel(e.target.value);
                             setIsSaved(false);
                         }}
-                        className="w-full px-4 py-2 border-2 border-ink/20 bg-parchment text-ink font-mono text-sm focus:border-gold focus:outline-none transition-colors cursor-pointer"
+                        className="w-full px-4 py-3 border-2 border-ink/30 bg-paper text-ink font-mono text-sm focus:border-ink focus:outline-none transition-colors cursor-pointer"
                     >
                         {LLM_MODELS.map(model => (
                             <option key={model.id} value={model.id}>
@@ -149,19 +148,16 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ onApiKeyChange }) 
                     </select>
                 </div>
 
-                {/* 操作按钮 */}
-                <div className="flex gap-3 pt-4 border-t border-ink/10">
+                {/* Action Buttons */}
+                <div className="flex gap-3 pt-4 border-t-2 border-ink/20">
                     <button
                         onClick={handleTestConnection}
                         disabled={!apiKey || testStatus === 'testing'}
-                        className={`flex items-center gap-2 px-4 py-2 border-2 font-display font-bold text-sm transition-all ${testStatus === 'testing'
-                            ? 'border-gold/50 text-gold/50 cursor-wait'
-                            : testStatus === 'success'
-                                ? 'border-green-500 text-green-600 bg-green-50'
-                                : testStatus === 'error'
-                                    ? 'border-crimson text-crimson bg-crimson/10'
-                                    : 'border-ink/30 text-ink hover:border-gold hover:text-gold'
-                            }`}
+                        className={`flex items-center gap-2 px-4 py-2 border-2 font-mono font-bold text-sm uppercase transition-all
+                            ${testStatus === 'testing' ? 'border-ink/30 text-ink/30 cursor-wait'
+                                : testStatus === 'success' ? 'border-ink bg-paper-contrast text-ink'
+                                    : testStatus === 'error' ? 'border-crimson text-crimson'
+                                        : 'border-ink/30 text-ink hover:border-ink'}`}
                     >
                         {testStatus === 'testing' ? (
                             <RefreshCw className="w-4 h-4 animate-spin" />
@@ -172,72 +168,69 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ onApiKeyChange }) 
                         ) : (
                             <Sparkles className="w-4 h-4" />
                         )}
-                        {testStatus === 'testing' ? '测试中...' :
-                            testStatus === 'success' ? '连接成功' :
-                                testStatus === 'error' ? '连接失败' : '测试连接'}
+                        {testStatus === 'testing' ? 'Testing...' :
+                            testStatus === 'success' ? 'Connected' :
+                                testStatus === 'error' ? 'Failed' : 'Test'}
                     </button>
 
                     <button
                         onClick={handleSave}
                         disabled={!apiKey}
-                        className={`flex items-center gap-2 px-6 py-2 font-display font-bold text-sm transition-all ${isSaved
-                            ? 'bg-green-600 text-white'
-                            : apiKey
-                                ? 'bg-ink text-parchment hover:bg-gold'
-                                : 'bg-ink/30 text-ink/50 cursor-not-allowed'
-                            }`}
+                        className={`flex items-center gap-2 px-6 py-2 font-mono font-bold text-sm uppercase transition-all
+                            ${isSaved ? 'bg-ink text-paper'
+                                : apiKey ? 'bg-ink text-paper hover:bg-crimson'
+                                    : 'bg-ink/30 text-paper/50 cursor-not-allowed'}`}
                     >
                         {isSaved ? <Check className="w-4 h-4" /> : <Save className="w-4 h-4" />}
-                        {isSaved ? '已保存' : '保存设置'}
+                        {isSaved ? 'Saved' : 'Save'}
                     </button>
 
                     <button
                         onClick={handleDelete}
                         disabled={!apiKey}
-                        className={`flex items-center gap-2 px-4 py-2 border-2 font-display font-bold text-sm transition-all ${apiKey
-                                ? 'border-crimson text-crimson hover:bg-crimson hover:text-white'
-                                : 'border-ink/20 text-ink/30 cursor-not-allowed'
-                            }`}
+                        className={`flex items-center gap-2 px-4 py-2 border-2 font-mono font-bold text-sm uppercase transition-all
+                            ${apiKey ? 'border-crimson text-crimson hover:bg-crimson hover:text-paper'
+                                : 'border-ink/20 text-ink/30 cursor-not-allowed'}`}
                     >
                         <Trash2 className="w-4 h-4" />
-                        删除配置
+                        Delete
                     </button>
                 </div>
             </div>
 
-            {/* 使用说明 */}
-            <div className="bg-gold/5 border border-gold/30 p-4">
-                <h4 className="font-display font-bold text-sm text-ink mb-2">📖 如何获取 API Key？</h4>
-                <ol className="text-sm text-ink/70 space-y-1 list-decimal list-inside">
-                    <li>访问 <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" className="text-gold underline hover:text-crimson">Google AI Studio</a></li>
-                    <li>登录您的 Google 账户</li>
-                    <li>点击 "Create API key" 创建新的 API Key</li>
-                    <li>复制生成的 Key 并粘贴到上方输入框</li>
+            {/* Instructions */}
+            <div className="bg-paper-contrast border-2 border-ink/30 p-4">
+                <h4 className="font-headline font-bold text-sm uppercase mb-2">📖 How to Get an API Key</h4>
+                <ol className="text-sm font-serif text-ink/70 space-y-1 list-decimal list-inside">
+                    <li>Visit <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" className="text-ink underline hover:text-crimson">Google AI Studio</a></li>
+                    <li>Sign in with your Google account</li>
+                    <li>Click "Create API key" to generate a new key</li>
+                    <li>Copy the generated key and paste it above</li>
                 </ol>
             </div>
 
-            {/* 当前状态 */}
+            {/* Current Status */}
             {apiKey && (
-                <div className="bg-ink/5 border border-ink/10 p-4 flex items-center justify-between">
+                <div className="bg-ink/5 border-2 border-ink/20 p-4 flex items-center justify-between">
                     <div>
-                        <p className="text-sm font-bold text-ink">当前配置</p>
+                        <p className="text-sm font-mono font-bold uppercase">Current Configuration</p>
                         <p className="text-xs text-ink/60 font-mono mt-1">
                             API Key: {maskedApiKey}
                         </p>
                         <p className="text-xs text-ink/60 font-mono">
-                            模型: {LLM_MODELS.find(m => m.id === selectedModel)?.name || selectedModel}
+                            Model: {LLM_MODELS.find(m => m.id === selectedModel)?.name || selectedModel}
                         </p>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className={`w-2 h-2 rounded-full ${apiKey ? 'bg-green-500' : 'bg-crimson'}`}></div>
-                        <span className="text-xs text-ink/60">{apiKey ? '已配置' : '未配置'}</span>
+                        <div className={`w-3 h-3 ${apiKey ? 'bg-ink' : 'bg-crimson'}`}></div>
+                        <span className="text-xs font-mono uppercase">{apiKey ? 'Configured' : 'Not Set'}</span>
                     </div>
                 </div>
             )}
 
-            {/* 底部装饰 */}
-            <div className="text-center text-ink/30 text-sm font-mono pt-4 border-t border-ink/10">
-                ❖ BABEL CONFIGURATION SYSTEM ❖
+            {/* Footer */}
+            <div className="text-center text-ink/30 text-[10px] font-mono uppercase tracking-widest pt-4 border-t border-ink/20">
+                ❖ Babel Configuration System ❖
             </div>
         </div>
     );

@@ -9,37 +9,28 @@ import { GameEvent } from '../types';
 const EVENT_TYPE_CONFIG = {
     headline: {
         icon: Newspaper,
-        label: '头条新闻',
-        color: 'text-crimson',
-        bgColor: 'bg-crimson/10',
-        borderColor: 'border-crimson'
+        label: 'HEADLINE',
+        labelCn: '头条'
     },
     social: {
         icon: Users,
-        label: '社会版',
-        color: 'text-academy',
-        bgColor: 'bg-academy/10',
-        borderColor: 'border-academy'
+        label: 'SOCIETY',
+        labelCn: '社会'
     },
     secret: {
         icon: Lock,
-        label: '密报',
-        color: 'text-green-700',
-        bgColor: 'bg-green-50',
-        borderColor: 'border-green-500'
+        label: 'CLASSIFIED',
+        labelCn: '密报'
     },
     system: {
         icon: Bell,
-        label: '系统提示',
-        color: 'text-gold',
-        bgColor: 'bg-gold/10',
-        borderColor: 'border-gold'
+        label: 'NOTICE',
+        labelCn: '通知'
     }
 };
 
-// 示例事件数据 - 与初始场景同步 (1830年9月2日 09:00)
+// 示例事件数据
 const SAMPLE_EVENTS: GameEvent[] = [
-    // === 9月2日早报 (4条) ===
     {
         id: '1',
         type: 'headline',
@@ -53,7 +44,7 @@ const SAMPLE_EVENTS: GameEvent[] = [
         type: 'headline',
         timestamp: '1830年9月2日 · 早报',
         title: '威廉·诺曼教授发表开学第一课',
-        content: '诺曼教授在教室中强调："语言是帝国的基石，翻译是文明的桥梁。"他演示了基础刻银术，银条在他手中泛着冷冽的光芒。全体新生屏息凝神，窗外的雷声也压不住他的声音。',
+        content: '诺曼教授在教室中强调："语言是帝国的基石，翻译是文明的桥梁。"他演示了基础刻银术，银条在他手中泛着冷冽的光芒。',
         isNew: true
     },
     {
@@ -61,7 +52,7 @@ const SAMPLE_EVENTS: GameEvent[] = [
         type: 'social',
         timestamp: '1830年9月2日 · 早报',
         title: '今年新生阵容豪华，多国贵族子弟云集',
-        content: '本届巴别塔新生堪称"万国博览"：关祁是大清两广总督之子，海因里希曾是普鲁士军官，索菲亚来自俄国流亡贵族家庭，源结月据说与日本源氏有血缘关系。这些年轻人将在同一间教室里学习刻银术。',
+        content: '本届巴别塔新生堪称"万国博览"：关祁是大清两广总督之子，海因里希曾是普鲁士军官，索菲亚来自俄国流亡贵族家庭。',
         isNew: false
     },
     {
@@ -69,10 +60,9 @@ const SAMPLE_EVENTS: GameEvent[] = [
         type: 'social',
         timestamp: '1830年9月2日 · 早报',
         title: '源结月小姐的和服引发课堂侧目',
-        content: '尽管穿着学院制服，但源结月腰间系着的熏香袋引起了不少同学的好奇。这位来自东方的少女正专注地练习发音，追求完美的语调，似乎对周围的目光毫不在意。',
+        content: '尽管穿着学院制服，但源结月腰间系着的熏香袋引起了不少同学的好奇。',
         isNew: false
     },
-    // === 9月1日晚报 (4条) ===
     {
         id: '5',
         type: 'secret',
@@ -96,7 +86,7 @@ const SAMPLE_EVENTS: GameEvent[] = [
         type: 'system',
         timestamp: '1830年9月1日 · 系统',
         title: '开学典礼已结束，请前往教室报到',
-        content: '欢迎加入皇家翻译学院。开学典礼已于昨日圆满结束，请于明日上午九时前往六楼教室参加新学期第一课。请携带学院发放的教学用银条和语法词典。',
+        content: '欢迎加入皇家翻译学院。请于明日上午九时前往六楼教室参加新学期第一课。',
         isNew: false
     },
     {
@@ -104,7 +94,7 @@ const SAMPLE_EVENTS: GameEvent[] = [
         type: 'system',
         timestamp: '1830年9月1日 · 系统',
         title: '学院制服已发放，请注意仪容规范',
-        content: '您的学院制服长袍已放置于宿舍衣柜。请注意：巴别塔学生在校园内必须穿着正式学院制服。任何对制服的随意改动都可能引起教务处的注意。',
+        content: '您的学院制服长袍已放置于宿舍衣柜。巴别塔学生在校园内必须穿着正式学院制服。',
         isNew: false
     }
 ];
@@ -120,64 +110,64 @@ const EventCard: React.FC<{
 
     return (
         <div
-            className={`border-l-4 ${config.borderColor} bg-white/50 shadow-sm transition-all hover:shadow-md cursor-pointer ${event.isLocked ? 'opacity-60' : ''
-                }`}
+            className={`border-l-3 border-ink bg-paper hover:bg-paper-contrast transition-all cursor-pointer
+                ${event.isLocked ? 'opacity-60' : ''}`}
             onClick={onToggle}
         >
-            {/* 头部 */}
+            {/* Header */}
             <div className="p-3 flex items-start gap-3">
-                {/* 类型图标 */}
-                <div className={`p-2 rounded-sm ${config.bgColor} ${config.color} shrink-0`}>
+                {/* Type Icon */}
+                <div className="p-2 bg-ink text-paper shrink-0">
                     <Icon className="w-4 h-4" />
                 </div>
 
-                {/* 内容 */}
+                {/* Content */}
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
                         {event.isNew && (
-                            <span className="px-1.5 py-0.5 bg-crimson text-white text-[9px] font-bold uppercase">
+                            <span className="px-2 py-0.5 bg-crimson text-paper text-[9px] font-mono font-bold uppercase">
                                 NEW
                             </span>
                         )}
-                        <span className={`text-[10px] font-bold uppercase ${config.color}`}>
+                        <span className="text-[10px] font-mono font-bold uppercase text-ink/60">
                             {config.label}
                         </span>
                     </div>
 
-                    <h3 className={`font-display font-bold text-ink ${event.isLocked ? 'blur-sm' : ''}`}>
+                    <h3 className={`font-headline font-bold text-ink uppercase tracking-wide ${event.isLocked ? 'blur-sm' : ''}`}>
                         {event.title}
                     </h3>
 
-                    <div className="flex items-center gap-2 mt-1 text-[10px] text-ink/50">
+                    <div className="flex items-center gap-2 mt-1 text-[10px] text-ink/50 font-mono">
                         <Clock className="w-3 h-3" />
-                        <span className="font-mono">{event.timestamp}</span>
+                        <span>{event.timestamp}</span>
                     </div>
                 </div>
 
-                {/* 展开图标 */}
+                {/* Expand Icon */}
                 <div className="text-ink/30 shrink-0">
                     {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </div>
             </div>
 
-            {/* 展开的详细内容 */}
+            {/* Expanded Content */}
             {isExpanded && !event.isLocked && (
                 <div className="px-3 pb-3 pt-0 animate-in slide-in-from-top-1 duration-200">
-                    <div className="pl-11 border-t border-ink/10 pt-3">
-                        <p className="text-sm text-ink/80 leading-relaxed font-serif">
+                    <div className="pl-11 border-t border-ink/20 pt-3">
+                        <p className="text-sm text-ink/80 leading-relaxed font-serif text-justify">
                             {event.content}
                         </p>
                     </div>
                 </div>
             )}
 
-            {/* 锁定提示 */}
+            {/* Locked Notice */}
             {isExpanded && event.isLocked && (
                 <div className="px-3 pb-3 pt-0">
-                    <div className="pl-11 border-t border-ink/10 pt-3">
-                        <p className="text-sm text-crimson italic flex items-center gap-2">
+                    <div className="pl-11 border-t border-ink/20 pt-3">
+                        <p className="text-sm text-crimson font-mono uppercase flex items-center gap-2">
                             <Lock className="w-4 h-4" />
-                            需要更高的社团贡献度才能查看此密报
+                            Higher club contribution required to view
                         </p>
                     </div>
                 </div>
@@ -202,36 +192,34 @@ export const EventLog: React.FC<EventLogProps> = ({ events = SAMPLE_EVENTS }) =>
     const newCount = events.filter(e => e.isNew).length;
 
     return (
-        <div className="w-full space-y-6 animate-in slide-in-from-bottom-4 duration-500">
-            {/* 报纸风格标题 */}
-            <div className="text-center border-b-4 border-double border-ink pb-4">
-                <div className="flex justify-between items-end border-b border-ink mb-2 pb-1 text-[10px] font-bold tracking-widest uppercase text-ink/60">
-                    <span>Est. 1842</span>
-                    <span>Vol. XCII</span>
+        <div className="w-full space-y-6">
+            {/* Newspaper Masthead */}
+            <div className="text-center border-b-3 border-double border-ink pb-4">
+                <div className="flex justify-between items-end border-b border-ink mb-3 pb-1">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-ink/60">Est. 1842</span>
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-ink/60">Vol. XCII</span>
                 </div>
-                <h1 className="font-display text-4xl font-black text-ink tracking-tight uppercase leading-[0.9] mb-2">
-                    The Babel<br /><span className="text-3xl">Daily</span>
+                <h1 className="font-masthead text-4xl md:text-5xl text-ink tracking-wide mb-2">
+                    The Babel Daily
                 </h1>
-                <p className="text-sm text-ink/60 font-serif italic">事件日志 · Event Chronicle</p>
+                <p className="text-sm font-serif italic text-ink/60">事件日志 · Event Chronicle</p>
                 {newCount > 0 && (
-                    <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 bg-crimson text-white text-xs font-bold">
+                    <div className="mt-3 inline-flex items-center gap-2 px-3 py-1 bg-crimson text-paper text-xs font-mono uppercase">
                         <Bell className="w-3 h-3" />
-                        {newCount} 条新消息
+                        {newCount} New {newCount === 1 ? 'Article' : 'Articles'}
                     </div>
                 )}
             </div>
 
-            {/* 过滤器 */}
+            {/* Filters */}
             <div className="flex items-center gap-2 flex-wrap">
                 <Filter className="w-4 h-4 text-ink/50" />
                 <button
                     onClick={() => setFilterType('all')}
-                    className={`px-3 py-1 text-xs font-bold border transition-colors ${filterType === 'all'
-                        ? 'bg-ink text-parchment border-ink'
-                        : 'bg-transparent text-ink border-ink/20 hover:border-ink'
-                        }`}
+                    className={`px-3 py-1.5 text-xs font-mono uppercase tracking-wider border-2 transition-colors
+                        ${filterType === 'all' ? 'bg-ink text-paper border-ink' : 'bg-paper text-ink border-ink/30 hover:border-ink'}`}
                 >
-                    全部
+                    All
                 </button>
                 {Object.entries(EVENT_TYPE_CONFIG).map(([key, config]) => {
                     const Icon = config.icon;
@@ -240,20 +228,18 @@ export const EventLog: React.FC<EventLogProps> = ({ events = SAMPLE_EVENTS }) =>
                         <button
                             key={key}
                             onClick={() => setFilterType(key as any)}
-                            className={`px-3 py-1 text-xs font-bold border transition-colors flex items-center gap-1 ${filterType === key
-                                ? `${config.bgColor} ${config.color} ${config.borderColor}`
-                                : 'bg-transparent text-ink border-ink/20 hover:border-ink'
-                                }`}
+                            className={`px-3 py-1.5 text-xs font-mono uppercase tracking-wider border-2 transition-colors flex items-center gap-1
+                                ${filterType === key ? 'bg-ink text-paper border-ink' : 'bg-paper text-ink border-ink/30 hover:border-ink'}`}
                         >
                             <Icon className="w-3 h-3" />
-                            {config.label} ({count})
+                            {config.labelCn} ({count})
                         </button>
                     );
                 })}
             </div>
 
-            {/* 事件列表 */}
-            <div className="space-y-3">
+            {/* Event List */}
+            <div className="space-y-2">
                 {filteredEvents.map(event => (
                     <EventCard
                         key={event.id}
@@ -267,13 +253,13 @@ export const EventLog: React.FC<EventLogProps> = ({ events = SAMPLE_EVENTS }) =>
             {filteredEvents.length === 0 && (
                 <div className="text-center py-8 text-ink/40">
                     <Newspaper className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                    <p className="font-serif italic">暂无此类事件记录</p>
+                    <p className="font-serif italic">No events of this type</p>
                 </div>
             )}
 
-            {/* 底部装饰 */}
-            <div className="text-center text-ink/30 text-sm font-mono pt-4 border-t border-ink/10">
-                ❖ FIN ❖
+            {/* Footer */}
+            <div className="text-center text-ink/30 text-[10px] font-mono uppercase tracking-widest pt-4 border-t border-ink/20">
+                ❖ Fin ❖
             </div>
         </div>
     );

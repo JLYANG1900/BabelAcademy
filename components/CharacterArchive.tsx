@@ -4,7 +4,6 @@ import { CharacterDynamicData } from '../types';
 
 /**
  * 角色基本信息配置 - 静态数据，不由LLM更新
- * Character base info config - Static data, not updated by LLM
  */
 interface CharacterConfig {
     id: string;
@@ -86,30 +85,23 @@ const CHARACTER_CONFIG: CharacterConfig[] = [
 const FACTION_CONFIG = {
     empire: {
         icon: Crown,
-        label: '帝国派',
-        labelEn: 'Empire',
-        color: 'text-blue-700',
-        bgColor: 'bg-blue-50'
+        label: 'EMPIRE',
+        labelCn: '帝国派'
     },
     revolution: {
         icon: Flame,
-        label: '革命派',
-        labelEn: 'Revolution',
-        color: 'text-red-700',
-        bgColor: 'bg-red-50'
+        label: 'REVOLUTION',
+        labelCn: '革命派'
     },
     neutral: {
         icon: Scale,
-        label: '中立派',
-        labelEn: 'Neutral',
-        color: 'text-slate-600',
-        bgColor: 'bg-slate-50'
+        label: 'NEUTRAL',
+        labelCn: '中立派'
     }
 };
 
 /**
- * 单个角色卡片组件 - 报纸风格
- * Individual character card - newspaper style
+ * 单个角色卡片组件 - 报纸档案风格
  */
 interface CharacterEntryProps {
     config: CharacterConfig;
@@ -120,7 +112,6 @@ const CharacterEntry: React.FC<CharacterEntryProps> = ({ config, dynamicData }) 
     const faction = FACTION_CONFIG[config.faction];
     const FactionIcon = faction.icon;
 
-    // 使用动态数据或默认值
     const location = dynamicData?.location || '未知';
     const clothing = dynamicData?.clothing || '---';
     const activity = dynamicData?.activity || '---';
@@ -128,68 +119,66 @@ const CharacterEntry: React.FC<CharacterEntryProps> = ({ config, dynamicData }) 
     const affection = dynamicData?.affection ?? 50;
 
     return (
-        <div className="break-inside-avoid mb-6 pb-5 border-b border-ink/20 flex gap-4 items-start">
-            {/* 头像 - 报纸mugshot风格 */}
-            <div className="flex-shrink-0 w-16 h-16 md:w-20 md:h-20 border-[3px] border-ink p-0.5 bg-paper-contrast shadow-[3px_3px_0_rgba(0,0,0,0.2)] -rotate-1">
+        <div className="break-inside-avoid mb-6 pb-5 border-b-2 border-ink/20 flex gap-4 items-start">
+            {/* Portrait - Newspaper mugshot style */}
+            <div className="flex-shrink-0 w-20 h-20 md:w-24 md:h-24 border-3 border-ink p-0.5 bg-paper shadow-newspaper">
                 <img
                     src={config.portrait}
                     alt={config.name}
-                    className="w-full h-full object-cover sepia-[0.3] contrast-110 hover:sepia-0 hover:contrast-100 transition-all duration-300"
+                    className="w-full h-full object-cover grayscale contrast-110 hover:grayscale-0 hover:contrast-100 transition-all duration-300"
                     onError={(e) => {
                         (e.target as HTMLImageElement).src = 'https://via.placeholder.com/80?text=?';
                     }}
                 />
             </div>
 
-            {/* 信息列 */}
+            {/* Info Column */}
             <div className="flex-1 min-w-0">
-                {/* 标题行：名字 + 好感度贴纸 */}
+                {/* Name + Affection Badge */}
                 <div className="flex items-center flex-wrap gap-2 mb-1">
-                    <h3 className="font-display text-xl md:text-2xl font-normal leading-tight">
+                    <h3 className="font-headline text-xl md:text-2xl font-bold uppercase tracking-wide leading-tight">
                         {config.name}
                     </h3>
-                    {/* 好感度贴纸 - 红色斜角标签 */}
-                    <span
-                        className="inline-block bg-crimson text-white font-mono text-xs px-2 py-0.5 -rotate-3 shadow-[2px_2px_0_rgba(0,0,0,0.2)] border border-dashed border-white/40"
-                    >
-                        LOVE: {affection}%
+                    {/* Affection Badge - Newspaper stamp style */}
+                    <span className="inline-block bg-crimson text-paper font-mono text-[10px] px-2 py-0.5 uppercase tracking-wider shadow-newspaper border border-paper/30">
+                        ♥ {affection}%
                     </span>
                 </div>
 
-                {/* 副标题：身份 + 阵营 */}
+                {/* Subtitle: Identity + Faction */}
                 <div className="flex items-center gap-2 mb-3 text-ink/60">
-                    <span className="text-sm italic">{config.identity}</span>
+                    <span className="text-sm font-serif italic">{config.identity}</span>
                     <span className="text-xs">·</span>
-                    <span className={`flex items-center gap-1 text-xs ${faction.color}`}>
+                    <span className="flex items-center gap-1 text-[10px] font-mono uppercase">
                         <FactionIcon className="w-3 h-3" />
                         {faction.label}
                     </span>
                 </div>
 
-                {/* 动态状态行 */}
+                {/* Dynamic Status Rows */}
                 <div className="space-y-1.5 text-sm">
                     <div className="flex items-start gap-2">
-                        <span className="flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-ink/50 w-16 flex-shrink-0">
-                            <MapPin className="w-3 h-3" /> Seen At
+                        <span className="flex items-center gap-1 text-[10px] font-mono font-bold uppercase tracking-wider text-ink/50 w-16 flex-shrink-0">
+                            <MapPin className="w-3 h-3" /> SEEN
                         </span>
-                        <span className="text-ink/80">{location}</span>
+                        <span className="text-ink/80 font-serif">{location}</span>
                     </div>
                     <div className="flex items-start gap-2">
-                        <span className="flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-ink/50 w-16 flex-shrink-0">
-                            <Shirt className="w-3 h-3" /> Wearing
+                        <span className="flex items-center gap-1 text-[10px] font-mono font-bold uppercase tracking-wider text-ink/50 w-16 flex-shrink-0">
+                            <Shirt className="w-3 h-3" /> ATTIRE
                         </span>
-                        <span className="text-ink/80">{clothing}</span>
+                        <span className="text-ink/80 font-serif">{clothing}</span>
                     </div>
                     <div className="flex items-start gap-2">
-                        <span className="flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-ink/50 w-16 flex-shrink-0">
-                            <Activity className="w-3 h-3" /> Activity
+                        <span className="flex items-center gap-1 text-[10px] font-mono font-bold uppercase tracking-wider text-ink/50 w-16 flex-shrink-0">
+                            <Activity className="w-3 h-3" /> DOING
                         </span>
-                        <span className="text-ink/80">{activity}</span>
+                        <span className="text-ink/80 font-serif">{activity}</span>
                     </div>
                 </div>
 
-                {/* 引语框 - 角色当前想法 */}
-                <div className="mt-3 p-2 bg-ink/5 border-l-[3px] border-ink/30 italic text-sm text-ink/70">
+                {/* Quote Box - Character thought */}
+                <div className="mt-3 p-3 bg-paper-contrast border-l-3 border-ink font-serif italic text-sm text-ink/70">
                     <MessageCircle className="w-3 h-3 inline mr-1 opacity-50" />
                     "{thought}"
                 </div>
@@ -200,7 +189,6 @@ const CharacterEntry: React.FC<CharacterEntryProps> = ({ config, dynamicData }) 
 
 /**
  * 主组件：角色档案 - 报纸"社交版"风格
- * Main component: Character Archive - Newspaper "Society" section style
  */
 interface CharacterArchiveProps {
     characterDynamics?: Record<string, CharacterDynamicData>;
@@ -209,28 +197,33 @@ interface CharacterArchiveProps {
 export const CharacterArchive: React.FC<CharacterArchiveProps> = ({ characterDynamics = {} }) => {
     return (
         <div className="w-full h-full overflow-y-auto bg-paper p-4 md:p-6">
-            {/* 报纸标题区 */}
-            <div className="text-center mb-6 pb-4 border-b-2 border-double border-ink">
-                <h1 className="font-display text-3xl md:text-4xl tracking-wider mb-2">
-                    SOCIETY & RUMORS
+            {/* Newspaper Masthead */}
+            <div className="text-center mb-6 pb-4 border-b-3 border-double border-ink">
+                <div className="flex items-center gap-3 mb-3">
+                    <div className="flex-1 h-px bg-ink"></div>
+                    <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-ink/60">Special Edition</span>
+                    <div className="flex-1 h-px bg-ink"></div>
+                </div>
+                <h1 className="font-masthead text-4xl md:text-5xl text-ink tracking-wide mb-2">
+                    Society & Rumors
                 </h1>
-                <p className="text-sm italic text-ink/60">
+                <p className="text-sm font-serif italic text-ink/60">
                     社交动态与流言蜚语 · Who's Who in the Tower
                 </p>
             </div>
 
-            {/* 引言 */}
+            {/* Introduction */}
             <div className="mb-6 pb-4 border-b border-ink/30">
-                <p className="text-base italic text-ink/70 leading-relaxed">
+                <p className="text-base font-serif italic text-ink/70 leading-relaxed text-justify">
                     "牛津城内最引人注目的面孔们正在塔内穿行。本版追踪他们的行踪，记录他们的风采。请注意，所有信息均来自可靠线人。"
                 </p>
-                <p className="text-xs text-ink/50 mt-2 italic">
-                    — The most notable faces in Oxford are traversing the Tower. This section tracks their movements and records their elegance.
+                <p className="text-xs text-ink/50 mt-2 font-serif italic">
+                    — The most notable faces in Oxford traverse the Tower. This section tracks their movements and records their elegance.
                 </p>
             </div>
 
-            {/* 双栏布局 - 报纸风格 */}
-            <div className="columns-1 md:columns-2 gap-6 md:gap-8" style={{ columnRule: '1px solid rgba(0,0,0,0.2)' }}>
+            {/* Two-column Layout - Newspaper style */}
+            <div className="columns-1 md:columns-2 gap-6 md:gap-8" style={{ columnRule: '2px solid rgba(21, 21, 21, 0.15)' }}>
                 {CHARACTER_CONFIG.map((config) => (
                     <CharacterEntry
                         key={config.id}
@@ -240,13 +233,13 @@ export const CharacterArchive: React.FC<CharacterArchiveProps> = ({ characterDyn
                 ))}
             </div>
 
-            {/* 页脚 */}
-            <div className="mt-8 pt-4 border-t border-ink/30 text-center">
-                <p className="text-xs text-ink/40 uppercase tracking-widest">
+            {/* Footer */}
+            <div className="mt-8 pt-4 border-t-2 border-ink/30 text-center">
+                <p className="text-[10px] text-ink/40 font-mono uppercase tracking-widest">
                     — End of Society Section —
                 </p>
-                <p className="text-[10px] text-ink/30 mt-1 italic">
-                    Character data updated dynamically by LLM each turn · 角色数据由LLM每回合动态更新
+                <p className="text-[9px] text-ink/30 mt-1 font-serif italic">
+                    Character data updated dynamically by LLM each turn
                 </p>
             </div>
         </div>

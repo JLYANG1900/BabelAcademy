@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
     Scale, Globe, Feather, Hammer,
-    AlertTriangle, Coins, Zap, Users, Lock,
+    AlertTriangle, Lock,
     ChevronRight, Send, Crown, Flame
 } from 'lucide-react';
 
@@ -24,9 +24,6 @@ interface Department {
     rewardType: string;
     rewardDescription: string;
     riskLevel: 'low' | 'medium' | 'high' | 'extreme';
-    color: string;
-    bgColor: string;
-    borderColor: string;
     tasks: InternshipTask[];
     isLocked?: boolean;
     lockReason?: string;
@@ -34,53 +31,50 @@ interface Department {
 
 // 风险等级配置
 const RISK_CONFIG = {
-    low: { label: '低风险', color: 'text-green-600', icon: '●' },
-    medium: { label: '中风险', color: 'text-yellow-600', icon: '●●' },
-    high: { label: '高风险', color: 'text-orange-500', icon: '●●●' },
-    extreme: { label: '极高风险', color: 'text-crimson', icon: '●●●●' }
+    low: { label: 'LOW RISK', dots: '●' },
+    medium: { label: 'MED RISK', dots: '●●' },
+    high: { label: 'HIGH RISK', dots: '●●●' },
+    extreme: { label: 'EXTREME', dots: '●●●●' }
 };
 
 // 阵营倾向配置
 const FACTION_TENDENCY = {
-    empire: { label: '帝国导向', icon: Crown, color: 'text-gold' },
-    revolution: { label: '革命导向', icon: Flame, color: 'text-crimson' },
-    neutral: { label: '中立', icon: Scale, color: 'text-academy' }
+    empire: { label: 'EMPIRE', icon: Crown },
+    revolution: { label: 'REVOLT', icon: Flame },
+    neutral: { label: 'NEUTRAL', icon: Scale }
 };
 
-// 基于校园生活.xyaml的部门数据
+// 部门数据
 const DEPARTMENTS: Department[] = [
     {
         id: 'legal',
         name: '法务部',
         englishName: 'Legal Department',
         floor: 2,
-        icon: <Scale className="w-6 h-6" />,
+        icon: <Scale className="w-5 h-5" />,
         coreExperience: '起草贸易条约，解决跨国纠纷。这里是帝国商业运作的核心枢纽。',
         rewardType: '💰 金钱与佣金',
-        rewardDescription: '学生在学院获得额外资金的主要来源。资金可用于购买奢侈品……或资助革命。',
+        rewardDescription: '学生在学院获得额外资金的主要来源。',
         riskLevel: 'low',
-        color: 'text-blue-700',
-        bgColor: 'bg-blue-50',
-        borderColor: 'border-blue-300',
         tasks: [
             {
                 id: 'legal_1',
                 title: '起草对华贸易条款',
-                description: '为帝国东印度公司起草新的广州港口贸易条款，确保帝国利益最大化。',
+                description: '为帝国东印度公司起草新的广州港口贸易条款。',
                 riskLevel: 'low',
                 factionTendency: 'empire'
             },
             {
                 id: 'legal_2',
                 title: '殖民地纠纷调解',
-                description: '处理印度殖民地港口的银矿开采权纠纷，双方都在暗中行贿。',
+                description: '处理印度殖民地港口的银矿开采权纠纷。',
                 riskLevel: 'medium',
                 factionTendency: 'neutral'
             },
             {
                 id: 'legal_3',
                 title: '条约漏洞分析',
-                description: '秘密分析帝国与清朝签订条约中的漏洞，为赫耳墨斯社提供情报。',
+                description: '秘密分析帝国条约中的漏洞，为赫耳墨斯社提供情报。',
                 riskLevel: 'high',
                 factionTendency: 'revolution'
             }
@@ -89,74 +83,54 @@ const DEPARTMENTS: Department[] = [
     {
         id: 'interpretation',
         name: '口译部',
-        englishName: 'Interpretation Department',
+        englishName: 'Interpretation Dept',
         floor: 3,
-        icon: <Globe className="w-6 h-6" />,
-        coreExperience: '随皇家海军和商船出海，作为不同文明沟通的桥梁。你需要面对风暴、海盗、瘟疫以及当地人的敌意。',
+        icon: <Globe className="w-5 h-5" />,
+        coreExperience: '随皇家海军出海，作为文明沟通的桥梁。',
         rewardType: '⚡ 经验与技能',
-        rewardDescription: '在生死边缘磨练你的翻译能力和应变能力。每一次任务都是一次成长。',
+        rewardDescription: '在生死边缘磨练翻译能力。',
         riskLevel: 'extreme',
-        color: 'text-teal-700',
-        bgColor: 'bg-teal-50',
-        borderColor: 'border-teal-300',
         isLocked: true,
         lockReason: '需要达到二年级或以上',
         tasks: [
             {
                 id: 'interp_1',
                 title: '随舰出航广州',
-                description: '作为皇家海军翻译官随舰前往广州，在双方持枪对峙的谈判桌上进行同声传译。',
+                description: '作为皇家海军翻译官随舰前往广州。',
                 riskLevel: 'extreme',
                 factionTendency: 'empire'
-            },
-            {
-                id: 'interp_2',
-                title: '海盗船谈判',
-                description: '被派往被海盗劫持的商船进行赎金谈判。你是唯一能与加勒比海盗沟通的人。',
-                riskLevel: 'extreme',
-                factionTendency: 'neutral'
-            },
-            {
-                id: 'interp_3',
-                title: '秘密接触殖民地起义军',
-                description: '以官方翻译身份掩护，与南美殖民地的独立运动领袖秘密会面。',
-                riskLevel: 'extreme',
-                factionTendency: 'revolution'
             }
         ]
     },
     {
         id: 'literature',
         name: '文学系',
-        englishName: 'Literature Department',
+        englishName: 'Literature Dept',
         floor: 4,
-        icon: <Feather className="w-6 h-6" />,
-        coreExperience: '这里是享乐主义的温床。你的战场是舞厅和沙龙，武器是魅力、诗歌和八卦。',
+        icon: <Feather className="w-5 h-5" />,
+        coreExperience: '享乐主义的温床。你的战场是舞厅和沙龙。',
         rewardType: '🕵️ 情报与人脉',
-        rewardDescription: '你知道谁和谁在偷情，谁面临破产，谁手里有黑市的银条。这些信息价值连城。',
+        rewardDescription: '获取八卦和机密情报。',
         riskLevel: 'medium',
-        color: 'text-purple-700',
-        bgColor: 'bg-purple-50',
-        borderColor: 'border-purple-300',
         tasks: [
             {
                 id: 'lit_1',
                 title: '科莱特的私人沙龙',
-                description: '参加科莱特教授周五晚的私人沙龙，从红酒与致幻烟雾中套取外国贵族的机密。',
+                description: '参加科莱特教授周五晚的私人沙龙。',
                 riskLevel: 'low',
                 factionTendency: 'neutral'
             },
             {
                 id: 'lit_2',
                 title: '诺曼庄园晚宴',
-                description: '受邀参加威廉教授的私人晚宴，在觥筹交错中探听政治内幕和家族丑闻。',
+                description: '受邀参加威廉教授的私人晚宴。',
                 riskLevel: 'medium',
                 factionTendency: 'empire'
             },
             {
                 id: 'lit_3',
                 title: '秘密情报交接',
-                description: '在德罗切尔夫人的高级定制店，以试衣为掩护将加密情报缝进衣物裙摆。',
+                description: '在定制店以试衣为掩护传递加密情报。',
                 riskLevel: 'high',
                 factionTendency: 'revolution'
             }
@@ -165,65 +139,52 @@ const DEPARTMENTS: Department[] = [
     {
         id: 'silver_working',
         name: '刻银部',
-        englishName: 'Silver-working Department',
+        englishName: 'Silver-Working',
         floor: 8,
-        icon: <Hammer className="w-6 h-6" />,
-        coreExperience: '这是游戏的终局。你终于获得了接触最高机密的资格——"自己制作银条"。',
+        icon: <Hammer className="w-5 h-5" />,
+        coreExperience: '游戏的终局——自己制作银条。',
         rewardType: '🔮 银条制作',
-        rewardDescription: '在封闭的实验室里，你需要决定：将什么词刻上去？以及——为了谁而刻？',
+        rewardDescription: '在封闭实验室决定刻什么词。',
         riskLevel: 'high',
-        color: 'text-gray-700',
-        bgColor: 'bg-gray-100',
-        borderColor: 'border-gray-400',
         isLocked: true,
         lockReason: '需要达到三年级或以上',
         tasks: [
             {
                 id: 'silver_1',
                 title: '帝国军工合同',
-                description: '为帝国海军制作增强船体结构的银条。你的作品将被用于征服更多殖民地。',
+                description: '为帝国海军制作增强船体的银条。',
                 riskLevel: 'medium',
                 factionTendency: 'empire'
-            },
-            {
-                id: 'silver_2',
-                title: '秘密武器研发',
-                description: '在无人监管的深夜，为赫耳墨斯社制作禁忌的战斗类银条。',
-                riskLevel: 'extreme',
-                factionTendency: 'revolution'
             }
         ]
     }
 ];
 
-// 任务卡片组件
-const TaskCard: React.FC<{
-    task: InternshipTask;
-    onSelect: () => void;
-}> = ({ task, onSelect }) => {
+// 任务卡片
+const TaskCard: React.FC<{ task: InternshipTask; onSelect: () => void }> = ({ task, onSelect }) => {
     const risk = RISK_CONFIG[task.riskLevel];
     const tendency = FACTION_TENDENCY[task.factionTendency];
     const TendencyIcon = tendency.icon;
 
     return (
         <div
-            className="p-3 bg-white/50 border border-ink/10 hover:border-ink/30 transition-all cursor-pointer group"
+            className="p-3 bg-paper border-2 border-ink/20 hover:border-ink transition-all cursor-pointer group"
             onClick={onSelect}
         >
             <div className="flex items-start justify-between gap-2">
                 <div className="flex-1">
-                    <h4 className="font-display font-bold text-sm text-ink group-hover:text-crimson transition-colors">
+                    <h4 className="font-headline font-bold text-sm uppercase group-hover:text-crimson transition-colors">
                         {task.title}
                     </h4>
-                    <p className="text-xs text-ink/60 mt-1 line-clamp-2">{task.description}</p>
+                    <p className="text-xs text-ink/60 font-serif mt-1 line-clamp-2">{task.description}</p>
                 </div>
                 <ChevronRight className="w-4 h-4 text-ink/30 group-hover:text-crimson shrink-0 mt-1" />
             </div>
-            <div className="flex items-center gap-3 mt-2">
-                <span className={`text-[10px] font-bold ${risk.color}`}>
-                    {risk.icon} {risk.label}
+            <div className="flex items-center gap-4 mt-2 text-[10px] font-mono uppercase">
+                <span className={task.riskLevel === 'high' || task.riskLevel === 'extreme' ? 'text-crimson' : 'text-ink/60'}>
+                    {risk.dots} {risk.label}
                 </span>
-                <span className={`flex items-center gap-1 text-[10px] font-bold ${tendency.color}`}>
+                <span className="flex items-center gap-1 text-ink/60">
                     <TendencyIcon className="w-3 h-3" />
                     {tendency.label}
                 </span>
@@ -232,7 +193,7 @@ const TaskCard: React.FC<{
     );
 };
 
-// 部门卡片组件
+// 部门卡片
 const DepartmentCard: React.FC<{
     department: Department;
     isSelected: boolean;
@@ -242,44 +203,42 @@ const DepartmentCard: React.FC<{
 
     return (
         <div
-            className={`relative p-4 border-2 transition-all cursor-pointer ${isSelected
-                ? `${department.borderColor} ${department.bgColor} shadow-gothic`
-                : 'border-ink/20 bg-parchment hover:border-ink/40'
-                } ${department.isLocked ? 'opacity-60' : ''}`}
+            className={`relative p-4 border-2 transition-all cursor-pointer
+                ${isSelected ? 'border-ink bg-paper-contrast shadow-newspaper' : 'border-ink/30 bg-paper hover:border-ink'}
+                ${department.isLocked ? 'opacity-60' : ''}`}
             onClick={onSelect}
         >
-            {/* 锁定标识 */}
+            {/* Lock Badge */}
             {department.isLocked && (
-                <div className="absolute top-2 right-2 flex items-center gap-1 text-[10px] font-bold text-ink/50 bg-ink/10 px-2 py-1 rounded-sm">
-                    <Lock className="w-3 h-3" />
-                    已锁定
+                <div className="absolute top-2 right-2 flex items-center gap-1 text-[9px] font-mono uppercase text-ink/60 bg-ink/10 px-2 py-1">
+                    <Lock className="w-3 h-3" /> LOCKED
                 </div>
             )}
 
             <div className="flex items-start gap-3">
-                <div className={`p-2 rounded-sm ${department.bgColor} ${department.color}`}>
+                <div className="p-2 bg-ink text-paper">
                     {department.icon}
                 </div>
                 <div className="flex-1">
                     <div className="flex items-center gap-2">
-                        <h3 className="font-display font-bold text-ink">{department.name}</h3>
+                        <h3 className="font-headline font-bold uppercase">{department.name}</h3>
                         <span className="text-[10px] font-mono text-ink/50">F{department.floor}</span>
                     </div>
-                    <p className="text-xs text-ink/60 font-mono">{department.englishName}</p>
+                    <p className="text-xs text-ink/60 font-mono uppercase">{department.englishName}</p>
                 </div>
             </div>
 
-            <p className="text-sm text-ink/80 mt-3 leading-relaxed">{department.coreExperience}</p>
+            <p className="text-sm text-ink/80 font-serif mt-3">{department.coreExperience}</p>
 
-            <div className="mt-3 pt-3 border-t border-ink/10 flex items-center justify-between">
-                <span className="text-sm font-bold">{department.rewardType}</span>
-                <span className={`text-[10px] font-bold ${risk.color}`}>
-                    {risk.icon} {risk.label}
+            <div className="mt-3 pt-3 border-t border-ink/20 flex items-center justify-between text-sm">
+                <span className="font-bold">{department.rewardType}</span>
+                <span className={`text-[10px] font-mono uppercase ${department.riskLevel === 'extreme' ? 'text-crimson' : 'text-ink/60'}`}>
+                    {risk.dots} {risk.label}
                 </span>
             </div>
 
             {department.isLocked && (
-                <p className="text-[10px] text-crimson mt-2 flex items-center gap-1">
+                <p className="text-[10px] text-crimson font-mono mt-2 flex items-center gap-1 uppercase">
                     <AlertTriangle className="w-3 h-3" />
                     {department.lockReason}
                 </p>
@@ -306,16 +265,21 @@ export const QuestPanel: React.FC<QuestPanelProps> = ({ onSelectQuest }) => {
     };
 
     return (
-        <div className="w-full space-y-6 animate-in slide-in-from-bottom-4 duration-500">
-            {/* 标题 */}
-            <div className="text-center">
-                <h2 className="font-display text-2xl font-bold text-ink tracking-wider uppercase">
-                    实习任务委托
-                </h2>
-                <p className="text-sm text-ink/60 font-serif italic mt-1">Internship Quests</p>
+        <div className="w-full space-y-6">
+            {/* Newspaper Masthead */}
+            <div className="text-center border-b-3 border-ink pb-4">
+                <div className="flex items-center gap-3 mb-3">
+                    <div className="flex-1 h-px bg-ink"></div>
+                    <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-ink/60">Employment Board</span>
+                    <div className="flex-1 h-px bg-ink"></div>
+                </div>
+                <h1 className="font-headline text-3xl md:text-4xl font-bold text-ink uppercase tracking-wider">
+                    Internship Notices
+                </h1>
+                <p className="text-sm font-serif italic text-ink/60 mt-2">实习任务委托</p>
             </div>
 
-            {/* 部门选择 */}
+            {/* Department Selection */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {DEPARTMENTS.map(dept => (
                     <DepartmentCard
@@ -332,14 +296,14 @@ export const QuestPanel: React.FC<QuestPanelProps> = ({ onSelectQuest }) => {
                 ))}
             </div>
 
-            {/* 任务列表 */}
+            {/* Task List */}
             {currentDept && !currentDept.isLocked && (
-                <div className="border-2 border-ink/20 bg-white/30 p-4 animate-in slide-in-from-top-2 duration-300">
-                    <div className="flex items-center justify-between mb-4">
-                        <h3 className="font-display font-bold text-ink">
-                            {currentDept.name} - 可选任务
+                <div className="border-3 border-ink bg-paper-contrast p-4 animate-in slide-in-from-top-2 duration-300">
+                    <div className="flex items-center justify-between mb-4 pb-3 border-b border-ink/20">
+                        <h3 className="font-headline font-bold uppercase">
+                            {currentDept.name} — Available Tasks
                         </h3>
-                        <span className="text-sm text-ink/60">{currentDept.rewardDescription}</span>
+                        <span className="text-xs font-serif text-ink/60 italic">{currentDept.rewardDescription}</span>
                     </div>
 
                     <div className="space-y-2">
@@ -352,28 +316,28 @@ export const QuestPanel: React.FC<QuestPanelProps> = ({ onSelectQuest }) => {
                         ))}
                     </div>
 
-                    {/* 确认按钮 */}
+                    {/* Confirm Button */}
                     {selectedTask && (
-                        <div className="mt-4 pt-4 border-t border-ink/20 flex items-center justify-between">
-                            <div>
-                                <p className="text-sm font-bold text-ink">已选择：{selectedTask.title}</p>
-                                <p className="text-xs text-ink/60">{selectedTask.description}</p>
+                        <div className="mt-4 pt-4 border-t-2 border-ink flex items-center justify-between gap-4">
+                            <div className="flex-1">
+                                <p className="text-sm font-headline font-bold uppercase">{selectedTask.title}</p>
+                                <p className="text-xs text-ink/60 font-serif">{selectedTask.description}</p>
                             </div>
                             <button
                                 onClick={handleConfirmTask}
-                                className="flex items-center gap-2 px-4 py-2 bg-ink text-parchment font-display font-bold text-sm hover:bg-crimson transition-colors"
+                                className="flex items-center gap-2 px-6 py-3 bg-ink text-paper font-headline font-bold text-sm uppercase tracking-wider hover:bg-crimson transition-colors"
                             >
                                 <Send className="w-4 h-4" />
-                                接受任务
+                                Accept
                             </button>
                         </div>
                     )}
                 </div>
             )}
 
-            {/* 底部装饰 */}
-            <div className="text-center text-ink/30 text-sm font-mono pt-4 border-t border-ink/10">
-                ❖ BABEL QUEST BOARD ❖
+            {/* Footer */}
+            <div className="text-center text-ink/30 text-[10px] font-mono uppercase tracking-widest pt-4 border-t border-ink/20">
+                ❖ Babel Quest Board ❖
             </div>
         </div>
     );
