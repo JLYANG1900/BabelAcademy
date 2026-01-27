@@ -259,7 +259,7 @@ const WorldMapView: React.FC<{
             <img
                 src="https://i.ibb.co/SDpXxz9G/image.png"
                 alt="Oxford Map"
-                className="w-full h-full object-cover grayscale contrast-110 opacity-90"
+                className="w-full h-full object-cover"
             />
 
             {/* Map Overlay */}
