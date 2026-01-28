@@ -99,9 +99,12 @@ const MAGIC_DATA = [
         description: '日常生活辅助、工业应用与物理性质改变。',
         descEn: 'Daily life assistance, industrial applications and physical property changes.',
         pairs: [
-            { lang: '中英', words: '"稳" (Wěn) / "Stable"', diff: '"稳"含禾与急，引申为沉着、靠得住。', effect: '重心锚定：交通工具如被钉在地面般平稳。' },
-            { lang: '日英', words: '"道" (Dō) / "Way"', diff: '"道"包含技艺修行的精神境界。', effect: '自动导航：心中想着目的地，双脚自动选择正确路径。' },
-            { lang: '法英', words: '"Clef" / "Key"', diff: '"Clef"亦指乐谱中的谱号。', effect: '声波开锁：哼出特定音调即可开锁。' },
+            { lang: '中英', words: '"稳" (Wěn) / "Stable"', diff: '"稳"含禾与急，引申为沉着、靠得住。', effect: '重心锚定：交通工具如被钉在地面般平稳，无视风浪颠簸。' },
+            { lang: '日英', words: '"道" (Dō) / "Way"', diff: '"道"包含技艺修行的精神境界。', effect: '自动导航：心中想着目的地，双脚或车轮自动选择正确路径。' },
+            { lang: '法英', words: '"Clef" / "Key"', diff: '"Clef"亦指乐谱中的谱号。', effect: '声波开锁：哼出特定音调（共振频率）即可开锁。' },
+            { lang: '德英', words: '"Schloss" / "Lock"', diff: '"Schloss"亦指城堡/宫殿。', effect: '堡垒化防御：普通门锁获得城墙般坚不可摧的物理强度。' },
+            { lang: '俄英', words: '"Sputnik" / "Satellite"', diff: '原意为"旅伴、同行者"。', effect: '自动跟随行李：箱子悬浮并紧随主人脚步。' },
+            { lang: '葡英', words: '"Jeito" / "Knack"', diff: '"Jeito"指巴西式的变通、即兴解决难题的特质。', effect: '万能润滑：强行让尺寸不合或生锈的零件凑合运作。' },
         ]
     },
     {
@@ -110,7 +113,11 @@ const MAGIC_DATA = [
         descEn: 'Tricks for social events, performances and sensory pleasure.',
         pairs: [
             { lang: '中英', words: '"韵" (Yùn) / "Rhyme"', diff: '"韵"指余韵、风度、悠长回味。', effect: '余音绕梁：旋律在听众脑海中清晰回荡数日。' },
-            { lang: '日英', words: '"花火" (Hanabi) / "Fireworks"', diff: '字面意为"火之花"，赋予植物般生命力。', effect: '火树银花：烟花如真花般在空中盛开。' },
+            { lang: '日英', words: '"花火" (Hanabi) / "Fireworks"', diff: '字面意为"火之花"，赋予植物般生命力。', effect: '火树银花：烟花如真花般在空中盛开、悬浮并散发香气。' },
+            { lang: '法英', words: '"Encore" / "Again"', diff: '"Encore"指还、仍然、更多（加演）。', effect: '体能透支：只要有掌声，表演者就能不知疲倦地继续。' },
+            { lang: '德英', words: '"Ohrwurm" / "Catchy tune"', diff: '字面意为"耳虫"，钻进耳朵不出来。', effect: '听觉植入：将旋律强行植入潜意识，让人不由自主哼唱。' },
+            { lang: '俄英', words: '"Balagur" / "Joker"', diff: '指善于活跃气氛、滔滔不绝的民间幽默大师。', effect: '欢笑力场：开口即让周围人发笑并放松警惕。' },
+            { lang: '葡英', words: '"Festa" / "Party"', diff: '对应宗教节日，含神圣的集体庆祝感。', effect: '狂欢光环：消除隔阂，让人陷入不知疲倦的集体狂喜。' },
         ]
     },
     {
@@ -118,8 +125,12 @@ const MAGIC_DATA = [
         description: '针对肉体创伤与精神状态的干涉与治愈。',
         descEn: 'Intervention and healing for physical trauma and mental states.',
         pairs: [
-            { lang: '中英', words: '"安" (Ān) / "Peace"', diff: '"安"字形含屋顶与女，意指家宅稳固。', effect: '精神镇静剂：创造极致安全感。' },
-            { lang: '德英', words: '"Gestalt" / "Shape"', diff: '"Gestalt"指完形，整体大于部分之和。', effect: '肢体重塑：引导碎骨按原本结构自动归位。' },
+            { lang: '中英', words: '"安" (Ān) / "Peace"', diff: '"安"字形含屋顶与女，意指家宅稳固、安全感。', effect: '精神镇静剂：创造如同处于堡垒或母亲怀抱般的极致安全感。' },
+            { lang: '日英', words: '"癒し" (Iyashi) / "Healing"', diff: '"Iyashi"侧重心理慰藉与精神疲劳消除。', effect: '疲劳洗涤：瞬间驱散精神重压，恢复神清气爽。' },
+            { lang: '法英', words: '"Panacée" / "Panacea"', diff: '法文保留了古典药学的神圣感，不同于英文的贬义。', effect: '广谱解毒：中和绝大多数未知毒素的通用血清。' },
+            { lang: '德英', words: '"Gestalt" / "Shape"', diff: '"Gestalt"指完形，整体大于部分之和。', effect: '肢体重塑：引导碎骨按原本完美的整体结构自动归位。' },
+            { lang: '俄英', words: '"Zhivoy" / "Alive"', diff: '"Zhivoy"指生机勃勃、鲜活的生命力。', effect: '生命力灌注：强行透支潜能，让垂死之人回光返照。' },
+            { lang: '葡英', words: '"Curar" / "Cure"', diff: '"Curar"亦指腌制、防腐。', effect: '防腐静滞：将伤势"腌制/锁定"，防止恶化，争取时间。' },
         ]
     },
     {
@@ -127,9 +138,12 @@ const MAGIC_DATA = [
         description: '具有直接破坏力或战术优势的攻击性刻银术。',
         descEn: 'Offensive silver-work with direct destructive power.',
         pairs: [
-            { lang: '中英', words: '"煞" (Shà) / "Fiend"', diff: '"煞"指凶恶终结的气数或凶神。', effect: '生机断绝：伤口周围细胞坏死，极难愈合。' },
-            { lang: '日英', words: '"斬る" (Kiru) / "Cut"', diff: '"斬る"带有武士道的决绝杀意。', effect: '锋利度增幅：将"杀意"转化为物理锋利度。' },
-            { lang: '德英', words: '"Blitz" / "Lightning"', diff: '"Blitz"带有"闪电战"的军事突袭含义。', effect: '极速突袭：赋予超常反应速度与爆发力。' },
+            { lang: '中英', words: '"煞" (Shà) / "Fiend"', diff: '"Fiend"指恶魔；"煞"指凶恶终结的气数或凶神。', effect: '生机断绝：伤口周围细胞活性坏死（坏疽），极难愈合。' },
+            { lang: '日英', words: '"斬る" (Kiru) / "Cut"', diff: '"Cut"是切；"斬る"带有武士道的决绝杀意。', effect: '锋利度增幅：将"杀意"转化为物理锋利度，切开坚硬物体。' },
+            { lang: '法英', words: '"Sabotage" / "Damage"', diff: '"Damage"是损害；"Sabotage"特指内部破坏阻碍运作。', effect: '机械故障诅咒：引发枪械、车辆的连环机械故障与卡死。' },
+            { lang: '德英', words: '"Blitz" / "Lightning"', diff: '"Blitz"带有"闪电战"的军事突袭含义。', effect: '极速突袭：赋予超常反应速度与爆发力，视觉进入慢动作。' },
+            { lang: '俄英', words: '"Pogrom" / "Riot"', diff: '"Riot"是骚乱；"Pogrom"指针对特定群体的毁灭性浩劫。', effect: '群体恐惧与混乱：引发雷鸣般的精神震慑，诱发敌军恐慌。' },
+            { lang: '葡英', words: '"Luta" / "Fight"', diff: '"Luta"包含生活中的挣扎与劣势中的韧性。', effect: '绝境反击：受伤越重，力量与敏捷度反而越强。' },
         ]
     },
     {
@@ -137,8 +151,12 @@ const MAGIC_DATA = [
         description: '用于隐蔽行动、藏匿与消除踪迹的刻银术。',
         descEn: 'Silver-work for covert operations and concealment.',
         pairs: [
-            { lang: '中英', words: '"潜" (Qián) / "Submerge"', diff: '"潜"含"潜伏、隐蔽、深藏不露"之意。', effect: '介质同化：融入环境，消除摩擦声与阻力。' },
-            { lang: '日英', words: '"気配" (Kehai) / "Sign"', diff: '"気配"指第六感般的"气息"或氛围。', effect: '气息遮断：抹除存在感，让人下意识忽略。' },
+            { lang: '中英', words: '"潜" (Qián) / "Submerge"', diff: '"Submerge"主要指物理上进入水下；"潜"含"潜伏、隐蔽、深藏不露"之意。', effect: '介质同化：像融入水中一样融入环境，移动时消除摩擦声与阻力。' },
+            { lang: '日英', words: '"気配" (Kehai) / "Sign"', diff: '"Sign"指具体迹象；"気配"指第六感般的"气息"或氛围。', effect: '气息遮断：抹除存在感与生物电信号，让人下意识忽略使用者。' },
+            { lang: '法英', words: '"Oubliette" / "Dungeon"', diff: '"Dungeon"指地牢；"Oubliette"源于"忘记"，指让人被彻底遗忘的密牢。', effect: '认知遗忘场：外界不仅找不到你，甚至会暂时"忘记"要去寻找你。' },
+            { lang: '德英', words: '"Tarnkappe" / "Camouflage"', diff: '"Camouflage"指伪装；"Tarnkappe"源于神话隐身斗篷。', effect: '神话级隐形：折射光线并扭曲空间，避开视觉与红外探测。' },
+            { lang: '俄英', words: '"Tishina" / "Silence"', diff: '"Silence"指无声；"Tishina"包含自然界的宁静厚重感。', effect: '绝对静默领域：创造厚重力场，瞬间吸收所有声波振动。' },
+            { lang: '葡英', words: '"Sumir" / "Vanish"', diff: '"Vanish"指突然消失；"Sumir"指迷失、渐渐隐没。', effect: '存在感稀释：变得极度不引人注目，像丢失的物品一样被视而不见。' },
         ]
     },
 ];
@@ -147,32 +165,44 @@ const MAGIC_DATA = [
 const INTERNSHIP_DATA = [
     {
         id: 'legal', title: '法务部 (Legal Department)', scenarioName: '法务部实习',
-        subtitle: '帝国的掠夺之手 The Hand of Plunder', icon: Scale,
+        subtitle: '帝国的掠夺之手 (The Hand of Plunder)', icon: Scale,
         tags: ['现实主义商战', '律政惊悚', '资源管理'],
-        core: { desc: '起草贸易条约，解决跨国纠纷。', tasks: '起草对外贸易条款；通过翻译为帝国赢得银矿开采权。', rewards: '金钱与佣金。' },
+        core: {
+            desc: '起草贸易条约，解决跨国纠纷。Draft trade treaties and resolve international disputes.',
+            tasks: '起草对外贸易条款；通过翻译为帝国赢得银矿开采权；处理殖民地港口纠纷。',
+            rewards: '金钱与佣金（购买奢侈品或资助革命的主要来源）。Money and commissions.'
+        },
         paths: {
-            imperialist: { title: '帝国精英路线 Imperial Elite', desc: '用法律构建和平框架，获得权贵赏识。' },
-            resistance: { title: '反抗潜伏路线 Resistance Spy', desc: '在条约中寻找漏洞，传递情报给赫耳墨斯社。' }
+            imperialist: { title: '帝国精英路线 Imperial Elite', desc: '你用法律构建和平框架，通过条约避免直接战争。利用语言的模糊性为帝国争取最大利益，获得权贵赏识。' },
+            resistance: { title: '反抗潜伏路线 Resistance Spy', desc: '在条约中寻找漏洞，试图让弱国在霸权下保留主权。利用职务之便获知帝国目标，传递情报给赫耳墨斯社。' }
         }
     },
     {
         id: 'literature', title: '文学部 (Literature)', scenarioName: '文学部实习',
-        subtitle: '白银时代的社交场 The Socialite', icon: Feather,
+        subtitle: '白银时代的社交场 (The Socialite)', icon: Feather,
         tags: ['恋爱模拟', '宫廷权谋', '上流社会'],
-        core: { desc: '享乐主义的温床。武器是魅力、诗歌和八卦。', tasks: '参加精英沙龙；追求或被追求。', rewards: '情报与人脉。' },
+        core: {
+            desc: '享乐主义的温床。战场是舞厅和沙龙，武器是魅力、诗歌和八卦。The hotbed of hedonism.',
+            tasks: '参加精英沙龙；追求或被追求；通过艺术品味获得进入核心圈子的入场券。',
+            rewards: '情报与人脉（偷情丑闻、破产内幕、黑市银条线索）。Intel and connections.'
+        },
         paths: {
-            imperialist: { title: '帝国精英路线 Imperial Elite', desc: '社交界的宠儿，巩固阶级地位。' },
-            resistance: { title: '反抗潜伏路线 Resistance Spy', desc: '戴着面具的间谍，套取机密。' }
+            imperialist: { title: '帝国精英路线 Imperial Elite', desc: '社交界的宠儿。享受奢靡生活，与权贵往来，巩固阶级地位，用社交走向帝国的权力核心。' },
+            resistance: { title: '反抗潜伏路线 Resistance Spy', desc: '戴着面具的间谍。利用外貌和才华接近权力核心，在枕边细语中套取机密，在诗歌探讨中传播革命火种。' }
         }
     },
     {
         id: 'interpretation', title: '口译部 (Interpretation)', scenarioName: '口译部实习',
-        subtitle: '悬崖上的冒险家 The Adventurer', icon: Globe,
+        subtitle: '悬崖上的冒险家 (The Adventurer)', icon: Globe,
         tags: ['全球探险', '危机生存', '公路电影'],
-        core: { desc: '随皇家海军和商船出海，作为沟通的桥梁。', tasks: '在持枪对峙的谈判桌上进行同声传译。', rewards: '风险极高，但能亲历世界。' },
+        core: {
+            desc: '随皇家海军和商船出海，作为不同文明沟通的桥梁。Bridge between civilizations.',
+            tasks: '随军/商出海；在持枪对峙的谈判桌上进行同声传译；在充满敌意的异国城市中充当向导。',
+            rewards: '风险极高。但能亲历世界的广阔与残酷。High risk, but you witness the world.'
+        },
         paths: {
-            imperialist: { title: '帝国精英路线 Imperial Elite', desc: '象征帝国的理性声音，保护军队安全。' },
-            resistance: { title: '反抗潜伏路线 Resistance Spy', desc: '赫耳墨斯社的地下联络人。' }
+            imperialist: { title: '帝国精英路线 Imperial Elite', desc: '你是象征帝国的理性声音。通过语言化解危机，保护军队安全，向世界传播帝国的先进理念。' },
+            resistance: { title: '反抗潜伏路线 Resistance Spy', desc: '赫耳墨斯社的地下联络人。在翻译中夹带私货警告当地人，利用方言暗中与当地反抗组织建立联系网络。' }
         }
     }
 ];
@@ -359,53 +389,61 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onStartGame }) => {
                             <Card title="帝国背景与魔法源泉" subtitle="Imperial Background">
                                 <div className="space-y-4 text-slate-800">
                                     <p>架空世界的19世纪初，不列颠尼亚帝国率先发动了工业革命，一跃成为世界霸主，并向全世界发起殖民。</p>
-                                    <p className="text-sm text-slate-600 italic">In the early 19th century of an alternate world, the Britannia Empire led the Industrial Revolution, becoming the world's hegemon.</p>
-                                    <p>工业的力量源泉是白银、语言和魔法。刻有两种语言的银条能产生魔法、驱动工业。</p>
-                                    <p className="text-sm text-slate-600 italic">The source of industrial power is silver, language, and magic. Silver bars inscribed with two languages can produce magic.</p>
-                                    <p>牛津的巴别塔是帝国培养全世界多语言人才的根据地。</p>
+                                    <p className="text-sm text-slate-600 italic">In the early 19th century of an alternate world, the Britannia Empire led the Industrial Revolution, becoming the world's hegemon and launching colonization worldwide.</p>
+                                    <p>在这个世界观中，工业的力量源泉是白银、语言和魔法。刻有两种语言的银条能产生魔法、驱动工业，让不列颠尼亚帝国的军队所向披靡，进一步将全世界的白银和人才卷入囊中。</p>
+                                    <p className="text-sm text-slate-600 italic">In this world, the source of industrial power is silver, language, and magic. Silver bars inscribed with two languages can produce magic, driving industry and making the Empire's armies invincible.</p>
+                                    <p>而牛津的巴别塔（又称"皇家翻译学院"）则是帝国笼络及培养全世界多语言人才，将他们打造为帝国武器的根据地。</p>
+                                    <p className="text-sm text-slate-600 italic">Oxford's Babel (aka "Royal Institute of Translation") is the Empire's base for recruiting and training multilingual talents worldwide, forging them into imperial weapons.</p>
+                                    <p>但这些掌握魔法、身为外族的人才们是否愿意为他人做嫁衣？一个隐秘的反抗组织，赫尔墨斯社，同样以巴别塔为中心诞生了。</p>
+                                    <p className="text-sm text-slate-600 italic">But will these magic-wielding foreign talents willingly serve others? A secret resistance organization, the Hermes Society, was born centered around Babel.</p>
                                 </div>
                             </Card>
                             <Card title="刻银术 (Silver-work)" subtitle="Core Magic System">
                                 <div className="space-y-4">
                                     <p><strong>核心媒介 Core Medium：</strong>银条 (Silver Bar)</p>
-                                    <p><strong>运作原理 Mechanism：</strong>配对 (Match-pair) 与蚀刻 (Etch)。利用语言间的"意义缺失" (Meaning Gap) 产生魔法。</p>
-                                    <div className="grid grid-cols-2 gap-3 mt-4">
+                                    <p><strong>运作原理 Mechanism：</strong>配对 (Match-pair) 与蚀刻 (Etch)。通过在银条上刻写词汇，利用语言间的"意义缺失" (Meaning Gap) 产生魔法效应。</p>
+                                    <p className="text-sm text-slate-600 italic">By inscribing words on silver bars, the "Meaning Gap" between languages produces magical effects.</p>
+                                    <p><strong>关键概念 Key Concepts：</strong></p>
+                                    <div className="grid grid-cols-2 gap-3 mt-2">
                                         <SilverBar label="TRANSLATION" description="翻译即背叛 Traduire c'est trahir" />
                                         <SilverBar label="ETYMOLOGY" description="词源溯源 Root of Words" />
                                     </div>
                                 </div>
                             </Card>
                             <Card title="势力阵营 (Factions)" subtitle="The Conflict" className="md:col-span-2">
-                                <div className="grid md:grid-cols-3 gap-4">
-                                    <div className="flex items-start gap-2">
+                                <ul className="space-y-4">
+                                    <li className="flex items-start gap-3">
                                         <Crown className="w-5 h-5 text-blue-700 mt-1 flex-shrink-0" />
                                         <div>
-                                            <strong className="text-slate-800">不列颠尼亚帝国 Britannia Empire</strong>
-                                            <p className="text-sm text-slate-600">利用翻译学院扩张殖民霸权。Uses the translation academy to expand colonial hegemony.</p>
+                                            <strong className="text-slate-800">不列颠尼亚帝国 (Britannia Empire)</strong>
+                                            <p className="text-sm text-slate-600 mt-1">利用翻译学院扩张殖民霸权。核心场景为牛津(Oxford)与皇家翻译学院(Royal Institute of Translation)。</p>
+                                            <p className="text-xs text-slate-500 italic">Uses the translation academy to expand colonial hegemony. Core locations: Oxford and the Royal Institute.</p>
                                         </div>
-                                    </div>
-                                    <div className="flex items-start gap-2">
+                                    </li>
+                                    <li className="flex items-start gap-3">
                                         <Flame className="w-5 h-5 text-red-700 mt-1 flex-shrink-0" />
                                         <div>
-                                            <strong className="text-slate-800">赫耳墨斯社 Hermes Society</strong>
-                                            <p className="text-sm text-slate-600">地下抵抗组织，从事破坏活动。Underground resistance, engaging in sabotage.</p>
+                                            <strong className="text-slate-800">赫耳墨斯社 (Hermes Society)</strong>
+                                            <p className="text-sm text-slate-600 mt-1">地下抵抗组织 (Resistance)，从事破坏活动 (Sabotage)。</p>
+                                            <p className="text-xs text-slate-500 italic">Underground resistance organization engaging in sabotage operations.</p>
                                         </div>
-                                    </div>
-                                    <div className="flex items-start gap-2">
+                                    </li>
+                                    <li className="flex items-start gap-3">
                                         <Scale className="w-5 h-5 text-slate-600 mt-1 flex-shrink-0" />
                                         <div>
-                                            <strong className="text-slate-800">忠诚的破坏者 Loyal Saboteur</strong>
-                                            <p className="text-sm text-slate-600">处于夹缝中的潜伏者身份。A double agent caught between worlds.</p>
+                                            <strong className="text-slate-800">忠诚的破坏者 (Loyal Saboteur)</strong>
+                                            <p className="text-sm text-slate-600 mt-1">处于夹缝中的身份，不仅是学者，更是潜伏者。</p>
+                                            <p className="text-xs text-slate-500 italic">A double agent caught between worlds—not just a scholar, but an infiltrator.</p>
                                         </div>
-                                    </div>
-                                </div>
+                                    </li>
+                                </ul>
                             </Card>
                         </div>
                         {/* Quote Block */}
                         <div className="bg-slate-800 text-[#e6ded1] p-8 rounded-sm shadow-xl border border-[#bfa67a]">
                             <h3 className="text-xl font-bold mb-4 flex items-center gap-2"><Eye className="w-5 h-5" /> 表象与真相 (Facade vs. Truth)</h3>
                             <p className="leading-relaxed italic opacity-90">
-                                "巴别塔不仅是一座塔，它是帝国的心脏，也是谎言的堡垒。在这里，不可见之物往往比可见之物更加致命。"
+                                "巴别塔不仅是一座塔，它是帝国的心脏，也是谎言的堡垒。在这里，不可见之物 (Formless/Invisible) 往往比可见之物更加致命。"
                             </p>
                             <p className="leading-relaxed italic opacity-70 text-sm mt-2">
                                 "Babel is not just a tower—it is the heart of the Empire, and a fortress of lies. Here, the invisible is often more deadly than the visible."
@@ -423,30 +461,34 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onStartGame }) => {
                         </div>
                         <div className="grid md:grid-cols-3 gap-6">
                             <Card className="md:col-span-2" title="学术氛围" subtitle="Ivory Tower & Privilege">
-                                <p className="mb-4">学院被描述为"象牙塔"，充满了特权与隔绝感。学生们穿梭于学术研究与Buttery闲谈之间。</p>
+                                <p className="mb-2">学院被描述为"象牙塔"，充满了特权与隔绝感。学生们的生活穿梭于学术研究与Buttery（学院小卖部/餐吧）的闲谈之间。</p>
+                                <p className="text-sm text-slate-600 italic mb-4">The academy is described as an "Ivory Tower", filled with privilege and isolation. Students' lives revolve between academic research and casual chats at the Buttery (college canteen/bar).</p>
                                 <div className="bg-[#e0d6c5] p-4 rounded border border-[#c9bb9e]">
                                     <h4 className="font-bold text-slate-800 mb-2">Town and Gown</h4>
-                                    <p className="text-sm text-slate-700">"市井与长袍"的对立。学院是与外界市民阶层隔离的堡垒。</p>
+                                    <p className="text-sm text-slate-700">"市井与长袍"的对立。学院不仅是学术场所，更是与外界市民阶层隔离的堡垒。</p>
+                                    <p className="text-xs text-slate-500 italic mt-1">The conflict between "Town and Gown". The academy is not just an academic institution, but a fortress isolated from the outside world.</p>
                                 </div>
                             </Card>
                             <Card title="核心课程" subtitle="Curriculum">
                                 <ul className="space-y-3 text-sm">
-                                    <li className="flex items-center gap-2"><Book className="w-4 h-4" /> 语言研究</li>
-                                    <li className="flex items-center gap-2"><Book className="w-4 h-4" /> 语音学</li>
-                                    <li className="flex items-center gap-2"><Book className="w-4 h-4" /> 翻译工坊</li>
-                                    <li className="flex items-center gap-2"><Book className="w-4 h-4" /> 解谜 - 寻找词义的缝隙</li>
+                                    <li className="flex items-center gap-2"><Book className="w-4 h-4" /> 语言研究 Language Studies</li>
+                                    <li className="flex items-center gap-2"><Book className="w-4 h-4" /> 语音学 Phonetics</li>
+                                    <li className="flex items-center gap-2"><Book className="w-4 h-4" /> 翻译工坊 Translation Workshops</li>
+                                    <li className="flex items-center gap-2"><Book className="w-4 h-4" /> 解谜 - 寻找词义的缝隙 Puzzle - Meaning Gaps</li>
                                 </ul>
                             </Card>
                         </div>
                         <Card title="管制与安全" subtitle="Control & Safety">
                             <div className="flex flex-col md:flex-row gap-6">
                                 <div className="flex-1">
-                                    <h4 className="font-bold text-red-800 mb-2 flex items-center gap-2"><Shield className="w-4 h-4" /> 银条管制</h4>
-                                    <p className="text-sm text-slate-700">所有刻银术的使用都受到严格监控。必须遵守学术规则与安全协议。</p>
+                                    <h4 className="font-bold text-red-800 mb-2 flex items-center gap-2"><Shield className="w-4 h-4" /> 银条管制 Silver Bar Control</h4>
+                                    <p className="text-sm text-slate-700">所有刻银术的使用都受到严格监控。必须遵守《学术规则》(Academic Rules)与《安全协议》(Safety Protocol)。</p>
+                                    <p className="text-xs text-slate-500 italic mt-1">All silver-work usage is strictly monitored. Academic Rules and Safety Protocols must be followed.</p>
                                 </div>
                                 <div className="flex-1 md:border-l border-slate-300 md:pl-6">
-                                    <h4 className="font-bold text-red-800 mb-2">触发机制</h4>
-                                    <p className="text-sm text-slate-700">若在课堂外非法施法，将触发[怀疑/没收]事件。</p>
+                                    <h4 className="font-bold text-red-800 mb-2">触发机制 Trigger Mechanism</h4>
+                                    <p className="text-sm text-slate-700">若在课堂外非法施法，将触发 [怀疑/没收] (Suspicion/Confiscation) 事件。</p>
+                                    <p className="text-xs text-slate-500 italic mt-1">Illegal casting outside class triggers [Suspicion/Confiscation] events.</p>
                                 </div>
                             </div>
                         </Card>
@@ -583,14 +625,23 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onStartGame }) => {
                                         <h3 className="text-3xl font-bold text-[#bfa67a] font-serif mb-2">刻银部 (Silver-working)</h3>
                                         <p className="text-slate-400 italic">命运的终极分歧点 The Endgame</p>
                                     </div>
+                                    {/* Core Experience */}
+                                    <div className="mb-6 p-4 bg-slate-800/50 rounded border border-slate-700">
+                                        <p className="text-sm text-slate-300 mb-2"><strong className="text-white">核心体验 Core Experience：</strong>接触最高机密——"自己制作银条"。</p>
+                                        <p className="text-xs text-slate-400 italic">Access top secrets—craft your own silver bars.</p>
+                                        <p className="text-sm text-slate-300 mt-2"><strong className="text-white">机制 Mechanism：</strong>你需要决定将什么词刻上去，以及——为了谁而刻。</p>
+                                        <p className="text-xs text-slate-400 italic">Decide what words to inscribe—and for whom.</p>
+                                    </div>
                                     <div className="grid md:grid-cols-2 gap-4">
                                         <div className="bg-slate-800 border border-blue-900/50 p-5 rounded">
                                             <h4 className="text-blue-400 font-bold mb-2">路线 A：帝国的栋梁 Pillar of Empire</h4>
-                                            <p className="text-sm text-slate-300">你选择了繁荣、秩序和财富。你成为了帝国的守护者。</p>
+                                            <p className="text-sm text-slate-300 mb-2">你选择了繁荣、秩序和财富。你相信只有强大的帝国才能带领世界走出愚昧，并成为了新任巴别塔荣誉教授，化身帝国的守护者。</p>
+                                            <p className="text-xs text-slate-400 italic">You chose prosperity, order and wealth. You became the Empire's guardian.</p>
                                         </div>
                                         <div className="bg-slate-800 border border-red-900/50 p-5 rounded">
                                             <h4 className="text-red-400 font-bold mb-2">路线 B：赫耳墨斯的信徒 Disciple of Hermes</h4>
-                                            <p className="text-sm text-slate-300">你选择了自由、尊严和革命。你点燃了革命火炬。</p>
+                                            <p className="text-sm text-slate-300 mb-2">你选择了自由、尊严和激烈的革命。你相信不破不立。你将具有杀伤力的战斗类银条偷运出路线，交给赫耳墨斯社，点燃革命火炬。</p>
+                                            <p className="text-xs text-slate-400 italic">You chose freedom, dignity and revolution. You lit the torch of revolution.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -809,9 +860,12 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onStartGame }) => {
 
                                 {/* Background */}
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Background Note</label>
-                                    <p className="leading-relaxed text-slate-700 italic border-l-2 border-[#bfa67a] pl-3 text-xs md:text-sm">
-                                        曾任不列颠尼亚帝国驻清外交官的母亲去世后，你被亲戚威廉教授收养。你的母语是你最大的武器，也是你最大的原罪。这是一个关于语言、抗争或荣耀的故事。
+                                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Background Note / 背景档案</label>
+                                    <p className="leading-relaxed text-slate-700 italic border-l-2 border-[#bfa67a] pl-3 text-xs md:text-sm mb-2">
+                                        曾任不列颠尼亚帝国驻清外交官的母亲去世后，你被亲戚威廉教授收养。在诺曼庄园的铁栅栏后，你学习拉丁语、英语和你快要遗忘的母语，只为了通过那扇通往巴别塔的大门。你的母语是你最大的武器，也是你最大的原罪。这是一个关于语言、抗争或荣耀的故事。
+                                    </p>
+                                    <p className="leading-relaxed text-slate-500 italic pl-3 text-[10px] md:text-xs">
+                                        After your mother, a diplomat to Qing China, passed away, you were adopted by your relative Professor William. Behind the iron gates of Norman Manor, you study Latin, English, and your fading mother tongue—all to pass through Babel's gates. Your native language is both your greatest weapon and your greatest sin. This is a story of language, resistance, or glory.
                                     </p>
                                 </div>
                             </div>
@@ -853,7 +907,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onStartGame }) => {
                         </div>
                         <h3 className="text-2xl font-bold text-slate-900 font-serif mb-2">权限受限 (Access Denied)</h3>
                         <p className="text-slate-700 italic mb-6 leading-relaxed border-t border-b border-[#bfa67a]/30 py-4 my-4">
-                            "仅限临近高年级学生进入。请先从开局玩起吧！"<br />
+                            "仅限高年级学生进入。请先从开局玩起吧！"<br />
                             <span className="text-sm opacity-70">"Only final year students may enter. Please start from the beginning!"</span>
                         </p>
                         <button
